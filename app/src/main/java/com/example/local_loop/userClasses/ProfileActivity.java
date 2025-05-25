@@ -55,8 +55,12 @@ public class ProfileActivity extends AppCompatActivity {
             boolean inserted = dbHelper.insertUser(uInput, fInput, lInput, eInput, pInput, rInput);
             if (inserted) {
                 Intent intent = new Intent(getApplicationContext(), WelcomePage.class);
-                startActivityForResult(intent, 0);
+                intent.putExtra("username", fInput);
+                intent.putExtra("userType", rInput);
+                startActivity(intent);
                 Toast.makeText(ProfileActivity.this, "Welcome " + fInput + "! You are logged in as " + rInput + ".", Toast.LENGTH_SHORT).show();
+                //startActivityForResult(intent, 0);
+                //Toast.makeText(ProfileActivity.this, "Welcome " + fInput + "! You are logged in as " + rInput + ".", Toast.LENGTH_SHORT).show();
             } else {
                 Toast.makeText(this, "Username or email already exists.", Toast.LENGTH_SHORT).show();
             }
