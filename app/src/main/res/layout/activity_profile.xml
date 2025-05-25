@@ -6,7 +6,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:layout_gravity="center_horizontal"
-    tools:context=".userClasses.ProfileActivity">
+    tools:context=".ProfileActivity">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -53,10 +53,6 @@
                 android:layout_weight="1"
                 android:textAlignment="textEnd" />
         </LinearLayout>
-
-        <Space
-            android:layout_width="match_parent"
-            android:layout_height="11dp" />
 
         <Space
             android:layout_width="match_parent"
