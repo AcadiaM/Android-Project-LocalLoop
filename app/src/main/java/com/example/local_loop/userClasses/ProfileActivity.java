@@ -1,5 +1,8 @@
 package com.example.local_loop.userClasses;
 
+import com.example.local_loop.database.DatabaseHelper;
+import android.util.Patterns;
+
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
@@ -50,9 +53,15 @@ public class ProfileActivity extends AppCompatActivity {
         password = (EditText) findViewById(R.id.passwordInputEditText);
         pInput = password.getText().toString();
         if (!rInput.isEmpty() && !uInput.isEmpty() && !fInput.isEmpty() && !lInput.isEmpty() && !eInput.isEmpty() && !pInput.isEmpty()) {
-            Intent intent = new Intent(getApplicationContext(), WelcomePage.class);
-            startActivityForResult(intent, 0);
-            Toast.makeText(ProfileActivity.this, "Welcome " + fInput + "! You are logged in as " + rInput + ".", Toast.LENGTH_SHORT).show();
+            DatabaseHelper dbHelper = new DatabaseHelper(this);
+            boolean inserted = dbHelper.insertUser(uInput, fInput, lInput, eInput, pInput, rInput);
+            if (inserted) {
+                Intent intent = new Intent(getApplicationContext(), WelcomePage.class);
+                startActivityForResult(intent, 0);
+                Toast.makeText(ProfileActivity.this, "Welcome " + fInput + "! You are logged in as " + rInput + ".", Toast.LENGTH_SHORT).show();
+            } else {
+                Toast.makeText(this, "Username or email already exists.", Toast.LENGTH_SHORT).show();
+            }
         }
     }
 }
