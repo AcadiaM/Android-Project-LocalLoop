@@ -1,6 +1,7 @@
 /**
  * Abstract User class, extended by all types of users: Admin, Participant and Organizer.
  */
+package com.example.local_loop.userClasses;
 public abstract class User {
 
     private String type;

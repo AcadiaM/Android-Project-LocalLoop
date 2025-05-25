@@ -91,7 +91,8 @@
                     android:textColor="@color/black"
                     android:textColorHighlight="@color/material_dynamic_neutral_variant90"
                     android:textColorHint="@color/black"
-                    android:textColorLink="@color/black" />
+                    android:textColorLink="@color/black"
+                    tools:ignore="VisualLintTextFieldSize" />
 
             </com.google.android.material.textfield.TextInputLayout>
 
@@ -121,7 +122,8 @@
                     android:textColor="@color/black"
                     android:textColorHighlight="@color/material_dynamic_neutral_variant90"
                     android:textColorHint="@color/black"
-                    android:textColorLink="@color/black" />
+                    android:textColorLink="@color/black"
+                    tools:ignore="VisualLintTextFieldSize" />
             </com.google.android.material.textfield.TextInputLayout>
 
         </LinearLayout>
@@ -151,7 +153,8 @@
                 android:textColor="@color/black"
                 android:textColorHighlight="@color/material_dynamic_neutral_variant90"
                 android:textColorHint="@color/black"
-                android:textColorLink="@color/black" />
+                android:textColorLink="@color/black"
+                tools:ignore="VisualLintTextFieldSize" />
         </com.google.android.material.textfield.TextInputLayout>
 
         <com.google.android.material.textfield.TextInputLayout
@@ -182,7 +185,8 @@
                 android:textColor="@color/black"
                 android:textColorHighlight="@color/material_dynamic_neutral_variant90"
                 android:textColorHint="@color/black"
-                android:textColorLink="@color/black" />
+                android:textColorLink="@color/black"
+                tools:ignore="VisualLintTextFieldSize" />
         </com.google.android.material.textfield.TextInputLayout>
 
         <Space
@@ -195,7 +199,8 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="32dp"
             android:layout_marginEnd="32dp"
-            android:text="@string/submit_button" />
+            android:text="@string/submit_button"
+            tools:ignore="VisualLintButtonSize" />
     </LinearLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>
