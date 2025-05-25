@@ -26,7 +26,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                 "lastName TEXT NOT NULL," +
                 "email TEXT UNIQUE NOT NULL, " +
                 "password TEXT NOT NULL, " +
-                "type TEXT NOT NULL)";
+                "role TEXT NOT NULL)";
         db.execSQL(createTable);
     }
 
@@ -57,11 +57,11 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     }
 
     // Check if login credentials are valid
-    public boolean checkLogin(String email, String password) {
+    public boolean checkLogin(String username, String password) {
         SQLiteDatabase db = this.getReadableDatabase();
         Cursor cursor = db.rawQuery(
-                "SELECT * FROM " + TABLE_USERS + " WHERE email = ? AND password = ?",
-                new String[]{email, password}
+                "SELECT * FROM " + TABLE_USERS + " WHERE username = ? AND password = ?",
+                new String[]{username, password}
         );
         boolean exists = cursor.getCount() > 0;
         cursor.close();
