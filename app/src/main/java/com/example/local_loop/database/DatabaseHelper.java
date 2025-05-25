@@ -5,6 +5,7 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.content.ContentValues;
 import android.database.Cursor;
+import android.util.Log;
 
 public class DatabaseHelper extends SQLiteOpenHelper {
 
@@ -43,10 +44,16 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         values.put("lastName", lastName);
         values.put("email", email);
         values.put("password", password);
-        values.put("role", role);
+        values.put("type", role);
 
-        long result = db.insert(TABLE_USERS, null, values);
-        return result != -1;
+        try {
+            long result = db.insert(TABLE_USERS, null, values);
+            Log.d("DB", "Insert result: " + result);
+            return result != -1;
+        } catch (Exception e) {
+            Log.e("DB", "Insert failed", e);
+            return false;
+        }
     }
 
     // Check if login credentials are valid
