@@ -13,6 +13,8 @@ import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
+import com.example.local_loop.userClasses.ProfileActivity;
+
 public class MainActivity extends AppCompatActivity {
 
     @Override
