@@ -9,5 +9,22 @@
     <string name="invalid_username">Not a valid username</string>
     <string name="invalid_password">Password must be >5 characters</string>
     <string name="login_failed">"Login failed"</string>
-    <string name="sign_up">"Sign Up"</string>
+    <string name="sign_up">"Sign Up"</string>>
+
+    <string name="create_button">Create an account</string>
+    <string name="sign_button">Sign in</string>
+    <string-array name="person_position">
+        <item> </item>
+        <item>Organizer</item>
+        <item>Participant</item>
+    </string-array>
+    <string name="user_role">Role</string>
+    <string name="first_name">First Name</string>
+    <string name="last_name">Last Name</string>
+    <string name="email">Email</string>
+    <string name="password">Password</string>
+    <string name="name">Name</string>
+    <string name="account_creation">Create an Account</string>
+    <string name="submit_button">Submit</string>
+
 </resources>
