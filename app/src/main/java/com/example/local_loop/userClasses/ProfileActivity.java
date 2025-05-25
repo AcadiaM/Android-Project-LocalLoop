@@ -1,7 +1,7 @@
-package com.example.local_loop;
+package com.example.local_loop.userClasses;
 
+import com.example.local_loop.R;
 import com.example.local_loop.database.DatabaseHelper;
-import android.util.Patterns;
 
 import android.content.Intent;
 import android.os.Bundle;
