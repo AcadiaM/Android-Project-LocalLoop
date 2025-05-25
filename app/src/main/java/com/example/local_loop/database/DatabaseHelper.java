@@ -31,8 +31,8 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                 "role TEXT NOT NULL)";
         db.execSQL(createTable);
 
-        insertUser("admin", "admin", "admin","admin@admin.admin", "XPI76SZUqyCjVxgnUjm0", "Admin");
-        //Hardcoded admin account.
+//        insertUser("admin", "admin", "admin","admin@admin.admin", "XPI76SZUqyCjVxgnUjm0", "Admin");
+//        //Hardcoded admin account.
     }
 
     @Override
@@ -120,5 +120,17 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         cursor.close();
         return null;
     }
+
+    public void insertAdmin() {
+        SQLiteDatabase db = this.getWritableDatabase();
+        Cursor cursor = db.rawQuery("SELECT * FROM users WHERE username = 'admin'", null);
+        if (cursor.getCount() == 0) {
+            insertUser("admin", "admin", "admin","admin@admin.admin", "XPI76SZUqyCjVxgnUjm0", "Admin");
+//        //Hardcoded admin account.
+        }
+        cursor.close();
+    }
+
+
 }
 

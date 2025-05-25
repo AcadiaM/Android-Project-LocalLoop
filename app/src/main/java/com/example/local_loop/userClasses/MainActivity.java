@@ -1,5 +1,6 @@
 package com.example.local_loop.userClasses;
 
+import com.example.local_loop.database.DatabaseHelper;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
@@ -18,6 +19,9 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        DatabaseHelper dbHelper = new DatabaseHelper(this);
+        dbHelper.insertAdmin();
+
         EdgeToEdge.enable(this);
         setContentView(R.layout.activity_main);
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main), (v, insets) -> {
