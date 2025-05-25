@@ -5,12 +5,15 @@ package com.example.local_loop.data.model;
  */
 public class LoggedInUser {
 
+    private String userType;
+
     private String userId;
     private String displayName;
 
-    public LoggedInUser(String userId, String displayName) {
+    public LoggedInUser(String userId, String displayName, String userType) {
         this.userId = userId;
         this.displayName = displayName;
+        this.userType = userType;
     }
 
     public String getUserId() {
@@ -19,5 +22,9 @@ public class LoggedInUser {
 
     public String getDisplayName() {
         return displayName;
+    }
+
+    String getUserType(){
+        return userType;
     }
 }

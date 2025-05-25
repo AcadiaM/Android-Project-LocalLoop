@@ -84,6 +84,22 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         return null;
     }
 
+    //Get role by username
+    public String getRoleByUsername(String username) {
+        SQLiteDatabase db = this.getReadableDatabase();
+        Cursor cursor = db.rawQuery(
+                "SELECT type FROM " + TABLE_USERS + " WHERE username = ?",
+                new String[]{username}
+        );
+        if (cursor.moveToFirst()) {
+            String role = cursor.getString(0);
+            cursor.close();
+            return role;
+        }
+        cursor.close();
+        return null;
+    }
+
     // Get user's username by email
     public String getUserNameByEmail(String email) {
         SQLiteDatabase db = this.getReadableDatabase();

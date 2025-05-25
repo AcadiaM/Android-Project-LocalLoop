@@ -17,8 +17,9 @@ public class LoginDataSource {
     }
 
     public Result<LoggedInUser> login(String username, String password) {
+        String role = dbHelper.getRoleByUsername(username);
         if (dbHelper.checkLogin(username, password)) {
-            return new Result.Success<>(new LoggedInUser(username, username));
+            return new Result.Success<>(new LoggedInUser(username, username, role));
         } else {
             return new Result.Error(new IOException("Invalid credentials"));
         }
