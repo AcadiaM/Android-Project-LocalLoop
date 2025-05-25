@@ -10,6 +10,9 @@ import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
+import com.example.local_loop.R;
+import com.example.local_loop.ui.login.LoginActivity;
+
 public class MainActivity extends AppCompatActivity {
 
     @Override
@@ -23,7 +26,12 @@ public class MainActivity extends AppCompatActivity {
             return insets;
         });
     }
-    public void OnCreateButton(View view){
+
+    public void OnSignButton(View view) {
+        Intent intent = new Intent(getApplicationContext(), LoginActivity.class);
+        startActivityForResult(intent,0);
+    }
+    public void OnCreateButton(View view) {
         // Application Context and Activity
         Intent intent = new Intent(getApplicationContext(), ProfileActivity.class);
         startActivityForResult(intent,0);

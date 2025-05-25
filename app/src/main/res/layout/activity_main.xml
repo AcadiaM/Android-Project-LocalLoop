@@ -39,6 +39,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:backgroundTint="@color/black"
+            android:onClick="OnSignButton"
             android:text="@string/sign_button"
             tools:ignore="VisualLintButtonSize" />
 
