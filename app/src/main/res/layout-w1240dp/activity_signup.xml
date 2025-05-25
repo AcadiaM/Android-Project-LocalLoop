@@ -7,44 +7,30 @@
 
 
     <EditText
-        android:id="@+id/email"
-        android:layout_width="300dp"
+        android:id="@+id/username"
+        android:layout_width="700dp"
         android:layout_height="wrap_content"
-        android:layout_marginTop="92dp"
+        android:layout_marginTop="404dp"
+        android:hint="Username"
+        android:inputType="textPersonName"
+        android:textSize="50px"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.522"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <EditText
+        android:id="@+id/email"
+        android:layout_width="700dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="292dp"
         android:autofillHints="@string/prompt_email"
         android:hint="@string/prompt_email"
         android:inputType="textEmailAddress"
         android:selectAllOnFocus="true"
+        android:textSize="50px"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.495"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
-
-    <EditText
-        android:id="@+id/username"
-        android:layout_width="300dp"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="164dp"
-        android:hint="Username"
-        android:inputType="textPersonName"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.495"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
-
-    <EditText
-        android:id="@+id/password"
-        android:layout_width="300dp"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="236dp"
-        android:autofillHints="@string/prompt_password"
-        android:hint="@string/prompt_password"
-        android:imeActionLabel="@string/action_sign_in_short"
-        android:imeOptions="actionDone"
-        android:inputType="textPassword"
-        android:selectAllOnFocus="true"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.495"
+        app:layout_constraintHorizontal_bias="0.521"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
@@ -52,10 +38,28 @@
         android:id="@+id/signup"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="392dp"
-        android:text="Sign Up"
+        android:layout_marginTop="672dp"
+        android:text="@string/sign_up"
+        android:textSize="75px"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.496"
+        app:layout_constraintHorizontal_bias="0.501"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"  />
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <EditText
+        android:id="@+id/password"
+        android:layout_width="700dp"
+        android:layout_height="wrap_content"
+        android:autofillHints="@string/prompt_password"
+        android:hint="@string/prompt_password"
+        android:imeActionLabel="@string/action_sign_in_short"
+        android:imeOptions="actionDone"
+        android:inputType="textPassword"
+        android:selectAllOnFocus="true"
+        android:textSize="50px"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.522"
+        app:layout_constraintStart_toStartOf="parent"
+        tools:layout_editor_absoluteY="525dp" />
+
 </androidx.constraintlayout.widget.ConstraintLayout>
