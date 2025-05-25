@@ -23,6 +23,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.local_loop.R;
+import com.example.local_loop.database.DatabaseHelper;
 import com.example.local_loop.ui.login.LoginViewModel;
 import com.example.local_loop.ui.login.LoginViewModelFactory;
 import com.example.local_loop.databinding.ActivityLoginBinding;
@@ -127,9 +128,10 @@ public class LoginActivity extends AppCompatActivity {
     }
 
     private void updateUiWithUser(LoggedInUserView loggedInUser) {
-        Intent intent = new Intent(LoginActivity.this, WelcomePage.class);
+        DatabaseHelper db = new DatabaseHelper(this);
+        Intent intent = new Intent(getApplicationContext(), WelcomePage.class);
         intent.putExtra("username", loggedInUser.getDisplayName());// Pass the username to the WelcomePage
-        intent.putExtra("userType", loggedInUser.getUserType()); // Pass the userType to the WelcomePage
+        intent.putExtra("userType", db.getRoleByUsername(loggedInUser.getDisplayName())); // Pass the userType to the WelcomePage
         startActivity(intent);
     }
 

@@ -7,6 +7,8 @@ import android.content.ContentValues;
 import android.database.Cursor;
 import android.util.Log;
 
+import java.io.File;
+
 public class DatabaseHelper extends SQLiteOpenHelper {
 
     private static final String DATABASE_NAME = "LocalLoop.db";
@@ -28,6 +30,9 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                 "password TEXT NOT NULL, " +
                 "role TEXT NOT NULL)";
         db.execSQL(createTable);
+
+        insertUser("admin", "admin", "admin","admin@admin.admin", "XPI76SZUqyCjVxgnUjm0", "Admin");
+        //Hardcoded admin account.
     }
 
     @Override
@@ -44,7 +49,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         values.put("lastName", lastName);
         values.put("email", email);
         values.put("password", password);
-        values.put("type", role);
+        values.put("role", role);
 
         try {
             long result = db.insert(TABLE_USERS, null, values);
@@ -72,7 +77,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     public String getRoleByEmail(String email) {
         SQLiteDatabase db = this.getReadableDatabase();
         Cursor cursor = db.rawQuery(
-                "SELECT type FROM " + TABLE_USERS + " WHERE email = ?",
+                "SELECT role FROM " + TABLE_USERS + " WHERE email = ?",
                 new String[]{email}
         );
         if (cursor.moveToFirst()) {
@@ -88,7 +93,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     public String getRoleByUsername(String username) {
         SQLiteDatabase db = this.getReadableDatabase();
         Cursor cursor = db.rawQuery(
-                "SELECT type FROM " + TABLE_USERS + " WHERE username = ?",
+                "SELECT role FROM " + TABLE_USERS + " WHERE username = ?",
                 new String[]{username}
         );
         if (cursor.moveToFirst()) {
