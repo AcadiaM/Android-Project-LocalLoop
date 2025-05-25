@@ -26,6 +26,8 @@ import com.example.local_loop.R;
 import com.example.local_loop.ui.login.LoginViewModel;
 import com.example.local_loop.ui.login.LoginViewModelFactory;
 import com.example.local_loop.databinding.ActivityLoginBinding;
+import com.example.local_loop.userClasses.WelcomePage;
+import android.content.Intent;
 
 public class LoginActivity extends AppCompatActivity {
 
@@ -124,10 +126,11 @@ public class LoginActivity extends AppCompatActivity {
         });
     }
 
-    private void updateUiWithUser(LoggedInUserView model) {
-        String welcome = getString(R.string.welcome) + model.getDisplayName() + "!";
-        // TODO : initiate successful logged in experience
-        Toast.makeText(getApplicationContext(), welcome, Toast.LENGTH_LONG).show();
+    private void updateUiWithUser(LoggedInUserView loggedInUser) {
+        Intent intent = new Intent(LoginActivity.this, WelcomePage.class);
+        intent.putExtra("username", loggedInUser.getDisplayName());// Pass the username to the WelcomePage
+        intent.putExtra("userType", loggedInUser.getUserType()); // Pass the userType to the WelcomePage
+        startActivity(intent);
     }
 
     private void showLoginFailed(@StringRes Integer errorString) {
