@@ -1,6 +1,12 @@
 package com.example.local_loop.userClasses;
 
+import android.content.Intent;
 import android.os.Bundle;
+import android.view.View;
+import android.widget.ArrayAdapter;
+import android.widget.EditText;
+import android.widget.Spinner;
+import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
@@ -22,5 +28,31 @@ public class ProfileActivity extends AppCompatActivity {
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
             return insets;
         });
+
+        Spinner spinner = (Spinner) findViewById(R.id.spinner);
+        ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(this,R.array.person_position, android.R.layout.simple_spinner_item);
+        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        spinner.setAdapter(adapter);
+    }
+    public void onSubmitButton(View view) {
+        Spinner spinner = (Spinner) findViewById(R.id.spinner);
+        EditText first, user, last, email, password;
+        String rInput, fInput, lInput, uInput, eInput, pInput;
+        rInput = spinner.getSelectedItem().toString();
+        first = (EditText) findViewById(R.id.firstNameInputEditText);
+        fInput = first.getText().toString();
+        last = (EditText) findViewById(R.id.lastNameInputEditText);
+        lInput = last.getText().toString();
+        user = (EditText) findViewById(R.id.userNameInputEditText);
+        uInput = user.getText().toString();
+        email = (EditText) findViewById(R.id.emailInputEditText);
+        eInput = email.getText().toString();
+        password = (EditText) findViewById(R.id.passwordInputEditText);
+        pInput = password.getText().toString();
+        if (!rInput.isEmpty() && !uInput.isEmpty() && !fInput.isEmpty() && !lInput.isEmpty() && !eInput.isEmpty() && !pInput.isEmpty()) {
+            Intent intent = new Intent(getApplicationContext(), WelcomePage.class);
+            startActivityForResult(intent, 0);
+            Toast.makeText(ProfileActivity.this, "Welcome " + fInput + "! You are logged in as " + rInput + ".", Toast.LENGTH_SHORT).show();
+        }
     }
 }
