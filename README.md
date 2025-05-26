@@ -6,3 +6,5 @@ Acadia Marchand - 300340641
 Sajida Mohamed - 300117577
 Rami Mosleh - 300343104
 Simon Paris - 300509880
+
+Github Repo link: https://github.com/AcadiaM/Android-Project-LocalLoop#
