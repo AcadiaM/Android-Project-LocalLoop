@@ -13,6 +13,12 @@
         android:theme="@style/Theme.Local_Loop"
         tools:targetApi="31">
         <activity
+            android:name=".userClasses.OrganizerWelcomePage"
+            android:exported="false" />
+        <activity
+            android:name=".userClasses.AdminWelcomePage"
+            android:exported="false" />
+        <activity
             android:name=".userClasses.WelcomePage"
             android:exported="false" />
         <activity
