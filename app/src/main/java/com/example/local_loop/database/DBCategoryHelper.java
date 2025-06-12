@@ -24,7 +24,7 @@ public class DBCategoryHelper extends SQLiteOpenHelper {
     @Override
     public void onCreate(SQLiteDatabase db) {
         db.execSQL("PRAGMA foreign_keys=ON;");
-        db.execSQL("CREATE TABLE categories (id INTEGER PRIMARY KEY AUTOINCREMENT, name TEXT NOT NULL);");
+        db.execSQL("CREATE TABLE categories (id INTEGER PRIMARY KEY AUTOINCREMENT, name TEXT NOT NULL, description Text NOT NULL);");
 
         db.execSQL("CREATE TABLE events (" +
                 "id INTEGER PRIMARY KEY AUTOINCREMENT, " +
@@ -41,19 +41,21 @@ public class DBCategoryHelper extends SQLiteOpenHelper {
     }
 
     // Add new category
-    public void addCategory(String name) {
+    public void addCategory(String name, String description) {
         SQLiteDatabase db = getWritableDatabase();
         ContentValues values = new ContentValues();
         values.put("name", name);
+        values.put("description", description);
         db.insert("categories", null, values);
     }
 
     // Rename category
-    public void renameCategory(int id, String newName) {
+    public void renameCategory(int id, String newName, String newDescription) {
         SQLiteDatabase db = getWritableDatabase();
         ContentValues values = new ContentValues();
         values.put("name", newName);
-        db.update("categories", values, "id=?", new String[]{String.valueOf(id)});
+        values.put("description", newDescription);
+        db.update("categories", values,"id=?", new String[]{String.valueOf(id)});
     }
 
     // Delete category (and all its events due to ON DELETE CASCADE)
@@ -71,7 +73,8 @@ public class DBCategoryHelper extends SQLiteOpenHelper {
         while (cursor.moveToNext()) {
             int id = cursor.getInt(0);
             String name = cursor.getString(1);
-            categories.add(new Category(id, name));
+            String description = cursor.getString(2);
+            categories.add(new Category(id, name, description));
         }
         cursor.close();
         return categories;
@@ -112,5 +115,13 @@ public class DBCategoryHelper extends SQLiteOpenHelper {
         }
         cursor.close();
         return events;
+    }
+
+    public boolean categoryNameExists(String name) {
+        SQLiteDatabase db = this.getReadableDatabase();
+        Cursor cursor = db.query("categories", new String[]{"id"}, "name = ?", new String[]{name}, null, null, null);
+        boolean exists = cursor.getCount() > 0;
+        cursor.close();
+        return exists;
     }
 }
