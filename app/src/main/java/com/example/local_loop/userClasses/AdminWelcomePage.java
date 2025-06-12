@@ -1,6 +1,8 @@
 package com.example.local_loop.userClasses;
 
+import android.content.Intent;
 import android.os.Bundle;
+import android.view.View;
 import android.widget.TextView;
 
 import androidx.activity.EdgeToEdge;
@@ -10,6 +12,7 @@ import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
 import com.example.local_loop.R;
+import com.example.local_loop.ui.login.LoginActivity;
 //The admin welcome page that displays a welcome message with the username and user type
 
 public class AdminWelcomePage extends AppCompatActivity {
@@ -25,7 +28,7 @@ public class AdminWelcomePage extends AppCompatActivity {
         String username = getIntent().getStringExtra("username");
         String userType = getIntent().getStringExtra("userType");
 
-        String welcomeMessage = "Welcome " + username + ". You are logged TEST in as " + userType + ". ADMIN WELCOME";
+        String welcomeMessage = "Welcome " + username + ". You are logged TEST in as " + userType + ". ADMIN WELCOME!";
         welcomeTextView.setText(welcomeMessage);
 
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.adminWelcomeTextView), (v, insets) -> {
@@ -33,4 +36,12 @@ public class AdminWelcomePage extends AppCompatActivity {
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
             return insets;
         });
-}}
+    }
+    public void OnListCategoriesButton(View view) {
+        //Intent intent = new Intent(getApplicationContext(), CategoryActivity.class);
+        //startActivityForResult(intent,0);
+        Intent intent = new Intent(AdminWelcomePage.this, CategoryActivity.class);
+        startActivity(intent);
+    }
+}
+

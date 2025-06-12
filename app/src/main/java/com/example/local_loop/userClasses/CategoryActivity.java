@@ -2,8 +2,6 @@ package com.example.local_loop.userClasses;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
-import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.Toast;
 
@@ -21,13 +19,12 @@ import java.util.List;
 public class CategoryActivity extends AppCompatActivity {
 
     private DBCategoryHelper dbHelper;
-    private RecyclerView categoryRecyclerView;
     private CategoryAdapter categoryAdapter;
 
     private ImageButton addCategoryButton, removeCategoryButton;
 
     private boolean isDeleteMode = false;
-    private List<Integer> selectedCategoryIds = new ArrayList<>();
+    private final List<Integer> selectedCategoryIds = new ArrayList<>();
 
     private ImageButton editCategoryButton;
     private boolean isEditMode = false;
@@ -42,7 +39,7 @@ public class CategoryActivity extends AppCompatActivity {
         addCategoryButton = findViewById(R.id.addCategoryButton);
         addCategoryButton.setOnClickListener(v -> showAddCategoryDialog());
 
-        categoryRecyclerView = findViewById(R.id.categoryRecyclerView);
+        RecyclerView categoryRecyclerView = findViewById(R.id.categoryRecyclerView);
 
         // Set layout manager with 3 columns for grid
         categoryRecyclerView.setLayoutManager(new GridLayoutManager(this, 2));
@@ -185,8 +182,7 @@ public class CategoryActivity extends AppCompatActivity {
                 .setNegativeButton("Cancel", null)
                 .show();
     }
-
-    @Override
+    @Deprecated
     public void onBackPressed() {
         if (isDeleteMode) {
             isDeleteMode = false;

@@ -1,8 +1,8 @@
 package com.example.local_loop.userClasses;
 
 public class Category {
-        private int id;
-        private String name;
+        private final int id;
+        private final String name;
 
         public Category(int id, String name) {
             this.id = id;
