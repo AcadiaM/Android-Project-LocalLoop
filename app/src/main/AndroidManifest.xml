@@ -13,6 +13,12 @@
         android:theme="@style/Theme.Local_Loop"
         tools:targetApi="31">
         <activity
+            android:name=".userClasses.EventCategoryActivity"
+            android:exported="false" />
+        <activity
+            android:name=".userClasses.CategoryActivity"
+            android:exported="false" />
+        <activity
             android:name=".userClasses.WelcomePage"
             android:exported="false" />
         <activity
