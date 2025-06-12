@@ -54,10 +54,23 @@ public class ProfileActivity extends AppCompatActivity {
             DatabaseHelper dbHelper = new DatabaseHelper(this);
             boolean inserted = dbHelper.insertUser(uInput, fInput, lInput, eInput, pInput, rInput);
             if (inserted) {
-                Intent intent = new Intent(getApplicationContext(), WelcomePage.class);
-                intent.putExtra("username", fInput);
-                intent.putExtra("userType", rInput);
-                startActivity(intent);
+                if (rInput.equalsIgnoreCase("admin")){
+                    Intent intent = new Intent(getApplicationContext(), AdminWelcomePage.class);
+                    intent.putExtra("username", fInput);
+                    intent.putExtra("userType", rInput);
+                    startActivity(intent);
+                }
+                else if (rInput.equalsIgnoreCase("organizer")) {
+                    Intent intent = new Intent(getApplicationContext(), OrganizerWelcomePage.class);
+                    intent.putExtra("username", fInput);
+                    intent.putExtra("userType", rInput);
+                    startActivity(intent);
+                } else {
+                    Intent intent = new Intent(getApplicationContext(), WelcomePage.class);
+                    intent.putExtra("username", fInput);
+                    intent.putExtra("userType", rInput);
+                    startActivity(intent);
+                }
                 Toast.makeText(ProfileActivity.this, "Welcome " + fInput + "! You are logged in as " + rInput + ".", Toast.LENGTH_SHORT).show();
                 //startActivityForResult(intent, 0);
                 //Toast.makeText(ProfileActivity.this, "Welcome " + fInput + "! You are logged in as " + rInput + ".", Toast.LENGTH_SHORT).show();
