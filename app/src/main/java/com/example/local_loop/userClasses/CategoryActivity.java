@@ -68,6 +68,7 @@ public class CategoryActivity extends AppCompatActivity {
                 Intent intent = new Intent(CategoryActivity.this, EventCategoryActivity.class);
                 intent.putExtra("categoryId", category.getId());
                 intent.putExtra("categoryName", category.getName());
+                intent.putExtra("categoryDescription", category.getDescription());
                 startActivity(intent);
             }
 

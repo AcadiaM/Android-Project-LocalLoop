@@ -15,9 +15,11 @@ import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.os.Bundle;
 import android.text.InputType;
+import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.LinearLayout;
+import android.widget.TextView;
 
 import java.util.List;
 
@@ -29,6 +31,7 @@ public class EventCategoryActivity extends AppCompatActivity {
 
     int categoryId;
     String categoryName;
+    TextView categoryDescriptionTextView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -47,6 +50,19 @@ public class EventCategoryActivity extends AppCompatActivity {
         // Get category info from Intent
         categoryId = getIntent().getIntExtra("categoryId", -1);
         categoryName = getIntent().getStringExtra("categoryName");
+
+        categoryDescriptionTextView = findViewById(R.id.categoryDescriptionTextView);
+
+        // Get description from Intent
+        String categoryDescription = getIntent().getStringExtra("categoryDescription");
+
+        if (categoryDescription != null && !categoryDescription.isEmpty()) {
+            String descriptionText = "Description: " + categoryDescription;
+            categoryDescriptionTextView.setText(descriptionText);
+            categoryDescriptionTextView.setVisibility(View.VISIBLE);
+        } else {
+            categoryDescriptionTextView.setVisibility(View.GONE);
+        }
 
         setTitle("Events in " + categoryName);
 
