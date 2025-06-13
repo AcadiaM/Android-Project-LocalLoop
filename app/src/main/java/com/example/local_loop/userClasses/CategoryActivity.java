@@ -19,7 +19,7 @@ import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.local_loop.R;
-import com.example.local_loop.database.DBCategoryHelper;
+import com.example.local_loop.database.DatabaseHelper;
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.android.material.textfield.TextInputLayout;
 
@@ -29,7 +29,7 @@ import java.util.Objects;
 
 public class CategoryActivity extends AppCompatActivity {
 
-    private DBCategoryHelper dbHelper;
+    private DatabaseHelper dbHelper;
     private CategoryAdapter categoryAdapter;
 
     private ImageButton addCategoryButton, removeCategoryButton;
@@ -45,7 +45,7 @@ public class CategoryActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_category);
 
-        dbHelper = new DBCategoryHelper(this);
+        dbHelper = new DatabaseHelper(this);
 
         addCategoryButton = findViewById(R.id.addCategoryButton);
         addCategoryButton.setOnClickListener(v -> showAddCategoryDialog());

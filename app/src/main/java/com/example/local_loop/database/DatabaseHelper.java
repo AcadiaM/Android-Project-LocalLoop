@@ -7,7 +7,12 @@ import android.content.ContentValues;
 import android.database.Cursor;
 import android.util.Log;
 
+import com.example.local_loop.userClasses.Category;
+import com.example.local_loop.userClasses.Event;
+
 import java.io.File;
+import java.util.ArrayList;
+import java.util.List;
 
 public class DatabaseHelper extends SQLiteOpenHelper {
 
@@ -21,26 +26,38 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
     @Override
     public void onCreate(SQLiteDatabase db) {
-        String createTable = "CREATE TABLE " + TABLE_USERS + " (" +
+        db.execSQL("PRAGMA foreign_keys=ON;");
+
+        db.execSQL( "CREATE TABLE users (" +
                 "id INTEGER PRIMARY KEY AUTOINCREMENT, " +
                 "username TEXT NOT NULL, " +
                 "firstName TEXT NOT NULL," +
                 "lastName TEXT NOT NULL," +
                 "email TEXT UNIQUE NOT NULL, " +
                 "password TEXT NOT NULL, " +
-                "role TEXT NOT NULL)";
-        db.execSQL(createTable);
+                "role TEXT NOT NULL);");
 
-//        insertUser("admin", "admin", "admin","admin@admin.admin", "XPI76SZUqyCjVxgnUjm0", "Admin");
-//        //Hardcoded admin account.
+        db.execSQL("CREATE TABLE categories (" +
+                "id INTEGER PRIMARY KEY AUTOINCREMENT, "+
+                "name TEXT NOT NULL, "+
+                "description Text NOT NULL);");
+
+        db.execSQL("CREATE TABLE events (" +
+                "id INTEGER PRIMARY KEY AUTOINCREMENT, " +
+                "category_id INTEGER, " +
+                "title TEXT NOT NULL, " +
+                "FOREIGN KEY(category_id) REFERENCES categories(id) ON DELETE CASCADE);");
     }
 
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
-        db.execSQL("DROP TABLE IF EXISTS " + TABLE_USERS);
+        db.execSQL("DROP TABLE IF EXISTS events;");
+        db.execSQL("DROP TABLE IF EXISTS categories;");
+        db.execSQL("DROP TABLE IF EXISTS users;");
         onCreate(db);
     }
 
+    //Inserts user into database, ensures no duplicates (fails on unique columns)
     public boolean insertUser(String username, String firstName, String lastName, String email, String password, String role) {
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues values = new ContentValues();
@@ -73,22 +90,6 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         return exists;
     }
 
-    // Get user’s role by email
-    public String getRoleByEmail(String email) {
-        SQLiteDatabase db = this.getReadableDatabase();
-        Cursor cursor = db.rawQuery(
-                "SELECT role FROM " + TABLE_USERS + " WHERE email = ?",
-                new String[]{email}
-        );
-        if (cursor.moveToFirst()) {
-            String role = cursor.getString(0);
-            cursor.close();
-            return role;
-        }
-        cursor.close();
-        return null;
-    }
-
     //Get role by username
     public String getRoleByUsername(String username) {
         SQLiteDatabase db = this.getReadableDatabase();
@@ -105,22 +106,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         return null;
     }
 
-    // Get user's username by email
-    public String getUserNameByEmail(String email) {
-        SQLiteDatabase db = this.getReadableDatabase();
-        Cursor cursor = db.rawQuery(
-                "SELECT username FROM " + TABLE_USERS + " WHERE email = ?",
-                new String[]{email}
-        );
-        if (cursor.moveToFirst()) {
-            String name = cursor.getString(0);
-            cursor.close();
-            return name;
-        }
-        cursor.close();
-        return null;
-    }
-
+    //Inserts admin user
     public void insertAdmin() {
         SQLiteDatabase db = this.getWritableDatabase();
         Cursor cursor = db.rawQuery("SELECT * FROM users WHERE username = 'admin'", null);
@@ -131,6 +117,89 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         cursor.close();
     }
 
+    // Add new category
+    public void addCategory(String name, String description) {
+        SQLiteDatabase db = getWritableDatabase();
+        ContentValues values = new ContentValues();
+        values.put("name", name);
+        values.put("description", description);
+        db.insert("categories", null, values);
+    }
 
+    // Rename category
+    public void renameCategory(int id, String newName, String newDescription) {
+        SQLiteDatabase db = getWritableDatabase();
+        ContentValues values = new ContentValues();
+        values.put("name", newName);
+        values.put("description", newDescription);
+        db.update("categories", values,"id=?", new String[]{String.valueOf(id)});
+    }
+
+    // Delete category (and all its events due to ON DELETE CASCADE)
+    public void deleteCategory(int id) {
+        SQLiteDatabase db = getWritableDatabase();
+        db.delete("categories", "id=?", new String[]{String.valueOf(id)});
+    }
+
+    // Get all categories
+    public List<Category> getAllCategories() {
+        List<Category> categories = new ArrayList<>();
+        SQLiteDatabase db = getReadableDatabase();
+        Cursor cursor = db.rawQuery("SELECT * FROM categories", null);
+
+        while (cursor.moveToNext()) {
+            int id = cursor.getInt(0);
+            String name = cursor.getString(1);
+            String description = cursor.getString(2);
+            categories.add(new Category(id, name, description));
+        }
+        cursor.close();
+        return categories;
+    }
+
+    // Add an event to a category
+    public void addEvent(int categoryId, String title) {
+        SQLiteDatabase db = getWritableDatabase();
+        ContentValues values = new ContentValues();
+        values.put("category_id", categoryId);
+        values.put("title", title);
+        db.insert("events", null, values);
+    }
+
+    // Rename an event
+    public void renameEvent(int id, String newTitle) {
+        SQLiteDatabase db = getWritableDatabase();
+        ContentValues values = new ContentValues();
+        values.put("title", newTitle);
+        db.update("events", values, "id=?", new String[]{String.valueOf(id)});
+    }
+
+    // Delete an event
+    public void deleteEvent(int id) {
+        SQLiteDatabase db = getWritableDatabase();
+        db.delete("events", "id=?", new String[]{String.valueOf(id)});
+    }
+
+    // Get all events in a category
+    public List<Event> getEventsByCategory(int categoryId) {
+        List<Event> events = new ArrayList<>();
+        SQLiteDatabase db = getReadableDatabase();
+        Cursor cursor = db.rawQuery("SELECT id, title FROM events WHERE category_id=?", new String[]{String.valueOf(categoryId)});
+        while (cursor.moveToNext()) {
+            int id = cursor.getInt(0);
+            String title = cursor.getString(1);
+            events.add(new Event(id, categoryId, title));
+        }
+        cursor.close();
+        return events;
+    }
+
+    //Ensures category exists
+    public boolean categoryNameExists(String name) {
+        SQLiteDatabase db = this.getReadableDatabase();
+        Cursor cursor = db.query("categories", new String[]{"id"}, "name = ?", new String[]{name}, null, null, null);
+        boolean exists = cursor.getCount() > 0;
+        cursor.close();
+        return exists;
+    }
 }
-

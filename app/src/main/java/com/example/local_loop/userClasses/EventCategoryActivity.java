@@ -9,7 +9,7 @@ import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
 import com.example.local_loop.R;
-import com.example.local_loop.database.DBCategoryHelper;
+import com.example.local_loop.database.DatabaseHelper;
 
 import android.app.AlertDialog;
 import android.text.InputType;
@@ -23,7 +23,7 @@ import java.util.List;
 
 public class EventCategoryActivity extends AppCompatActivity {
 
-    DBCategoryHelper dbHelper;
+    DatabaseHelper dbHelper;
     LinearLayout eventContainer;
     Button addEventButton;
 
@@ -41,7 +41,7 @@ public class EventCategoryActivity extends AppCompatActivity {
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
             return insets;
         });
-        dbHelper = new DBCategoryHelper(this);
+        dbHelper = new DatabaseHelper(this);
         eventContainer = findViewById(R.id.eventContainer);
         addEventButton = findViewById(R.id.addEventButton);
 
