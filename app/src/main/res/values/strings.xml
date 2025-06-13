@@ -29,4 +29,7 @@
     <string name="submit_button">Submit</string>
 
 
+    <string name="edit_category">Edit Category</string>
+    <string name="add_category">Add a Category</string>
+
 </resources>

@@ -1,23 +1,16 @@
 package com.example.local_loop.userClasses;
 
 import android.graphics.Typeface;
-import android.text.Editable;
-import android.text.TextWatcher;
-import android.util.TypedValue;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.text.InputType;
-import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Button;
 import android.widget.ImageButton;
-import android.widget.LinearLayout;
 import android.widget.Toast;
-import android.widget.Space;
 
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
@@ -32,6 +25,7 @@ import com.google.android.material.textfield.TextInputLayout;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 public class CategoryActivity extends AppCompatActivity {
 
@@ -172,7 +166,7 @@ public class CategoryActivity extends AppCompatActivity {
         descriptionInput.setText(category.getDescription());
 
         TextView title = new TextView(this);
-        title.setText("Edit Category");
+        title.setText(getString(R.string.edit_category));
         title.setPadding(40, 40, 40, 40);
         title.setGravity(Gravity.CENTER);
         title.setTextColor(ContextCompat.getColor(this, R.color.holo_dark_blue));
@@ -195,13 +189,13 @@ public class CategoryActivity extends AppCompatActivity {
             Button cancelButton = dialog.getButton(AlertDialog.BUTTON_NEGATIVE);
 
             // Set button colors
-            saveButton.setTextColor(getResources().getColor(android.R.color.holo_blue_dark));
-            cancelButton.setTextColor(getResources().getColor(android.R.color.darker_gray));
+            saveButton.setTextColor(ContextCompat.getColor(this, android.R.color.holo_blue_dark));
+            cancelButton.setTextColor(ContextCompat.getColor(this, android.R.color.darker_gray));
 
             // Override save button click to prevent dismiss if invalid input
             saveButton.setOnClickListener(v -> {
-                String newName = nameInput.getText().toString().trim();
-                String newDescription = descriptionInput.getText().toString().trim();
+                String newName = Objects.requireNonNull(nameInput.getText()).toString().trim();
+                String newDescription = Objects.requireNonNull(descriptionInput.getText()).toString().trim();
 
                 boolean valid = true;
 
@@ -241,7 +235,7 @@ public class CategoryActivity extends AppCompatActivity {
         TextInputEditText descriptionInput = dialogView.findViewById(R.id.categoryDescriptionInput);
 
         TextView title = new TextView(this);
-        title.setText("Edit Category");
+        title.setText(getString(R.string.add_category));
         title.setPadding(40, 40, 40, 40);
         title.setGravity(Gravity.CENTER);
         title.setTextColor(ContextCompat.getColor(this, R.color.holo_dark_blue));
@@ -260,12 +254,12 @@ public class CategoryActivity extends AppCompatActivity {
             Button cancelButton = dialog.getButton(AlertDialog.BUTTON_NEGATIVE);
 
             // Button colors
-            addButton.setTextColor(getResources().getColor(android.R.color.holo_blue_dark));
-            cancelButton.setTextColor(getResources().getColor(android.R.color.darker_gray));
+            addButton.setTextColor(ContextCompat.getColor(this, android.R.color.holo_blue_dark));
+            cancelButton.setTextColor(ContextCompat.getColor(this, android.R.color.darker_gray));
 
             addButton.setOnClickListener(v -> {
-                String name = nameInput.getText().toString().trim();
-                String description = descriptionInput.getText().toString().trim();
+                String name = Objects.requireNonNull(nameInput.getText()).toString().trim();
+                String description = Objects.requireNonNull(descriptionInput.getText()).toString().trim();
 
                 boolean valid = true;
 
@@ -298,7 +292,8 @@ public class CategoryActivity extends AppCompatActivity {
         dialog.show();
     }
 
-    @Deprecated
+    @SuppressWarnings("deprecation")
+    @Override
     public void onBackPressed() {
         if (isDeleteMode) {
             isDeleteMode = false;

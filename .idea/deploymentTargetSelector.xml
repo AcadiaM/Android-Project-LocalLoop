@@ -4,10 +4,10 @@
     <selectionStates>
       <SelectionState runConfigName="app">
         <option name="selectionMode" value="DROPDOWN" />
-        <DropdownSelection timestamp="2025-06-11T05:27:59.573766500Z">
+        <DropdownSelection timestamp="2025-06-13T17:35:09.841129500Z">
           <Target type="DEFAULT_BOOT">
             <handle>
-              <DeviceId pluginId="PhysicalDevice" identifier="serial=R3CX600Q2VM" />
+              <DeviceId pluginId="LocalEmulator" identifier="path=C:\Users\ramna\.android\avd\New_Device_1.avd" />
             </handle>
           </Target>
         </DropdownSelection>

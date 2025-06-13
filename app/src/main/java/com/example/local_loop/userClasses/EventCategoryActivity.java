@@ -12,8 +12,6 @@ import com.example.local_loop.R;
 import com.example.local_loop.database.DBCategoryHelper;
 
 import android.app.AlertDialog;
-import android.content.DialogInterface;
-import android.os.Bundle;
 import android.text.InputType;
 import android.view.View;
 import android.widget.Button;
