@@ -15,7 +15,7 @@ public class Admin extends User {
 
     public static Admin getAdmin(){
         if(admin == null){
-            admin = new Admin( "admin", null, null,"XPI76SZUqyCjVxgnUjm0", "admin");
+            admin = new Admin( "admin", null, null,"XPI76SZUqyCjVxgnUjm0", null);
         }
         return admin;
     }
