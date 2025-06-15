@@ -1,6 +1,8 @@
 package com.example.local_loop.database;
 
 
+import static com.example.local_loop.CreateAccount.Admin.getAdmin;
+
 import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
@@ -131,7 +133,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         SQLiteDatabase db = this.getWritableDatabase();
         Cursor cursor = db.rawQuery("SELECT * FROM users WHERE username = 'admin'", null);
         if (cursor.getCount() == 0) {
-            User admin = new Admin("admin", "admin", "admin","admin@admin.admin", "XPI76SZUqyCjVxgnUjm0", "Admin");
+            User admin = Admin.getAdmin();
             insertUser(admin);
 //        //Hardcoded admin account.
         }
