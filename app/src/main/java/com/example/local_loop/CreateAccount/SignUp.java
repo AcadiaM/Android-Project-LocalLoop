@@ -101,10 +101,10 @@ public class SignUp extends AppCompatActivity {
         else{
             User newUser;
             if(role.equalsIgnoreCase("organizer")){
-                newUser = new Organizer(user,first,last,password,email);
+                newUser = new Organizer(first,last, user, email, password);
             }
             else {
-                newUser = new Participant(user, first, last, password, email);
+                newUser = new Participant(first,last, user, email, password);
             }
 
             boolean successful = dbHelper.insertUser(newUser);
