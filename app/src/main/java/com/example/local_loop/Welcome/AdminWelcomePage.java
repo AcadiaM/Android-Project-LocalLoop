@@ -15,6 +15,7 @@ import androidx.core.view.WindowInsetsCompat;
 import com.example.local_loop.Category.CategoryActivity;
 import com.example.local_loop.R;
 import com.example.local_loop.Login.LoginActivity;
+import com.example.local_loop.UserList.userList;
 //The admin welcome page that displays a welcome message with the username and user type
 
 public class AdminWelcomePage extends AppCompatActivity {
@@ -53,6 +54,11 @@ public class AdminWelcomePage extends AppCompatActivity {
         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
         startActivity(intent);
         finish();
+    }
+
+    public void OnUsersButton(View view) {
+        Intent intent = new Intent(AdminWelcomePage.this, userList.class);
+        startActivity(intent);
     }
 
 }
