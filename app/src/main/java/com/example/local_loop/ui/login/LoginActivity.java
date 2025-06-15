@@ -27,6 +27,7 @@ import com.example.local_loop.database.DatabaseHelper;
 import com.example.local_loop.ui.login.LoginViewModel;
 import com.example.local_loop.ui.login.LoginViewModelFactory;
 import com.example.local_loop.databinding.ActivityLoginBinding;
+import com.example.local_loop.userClasses.MainActivity;
 import com.example.local_loop.userClasses.WelcomePage;
 import com.example.local_loop.userClasses.AdminWelcomePage;
 import com.example.local_loop.userClasses.OrganizerWelcomePage;
@@ -128,6 +129,16 @@ public class LoginActivity extends AppCompatActivity {
                         passwordEditText.getText().toString());
             }
         });
+
+
+    }
+
+    public void backButtonPressed(View view) {
+        // Handle back button press
+        Intent intent = new Intent(LoginActivity.this, MainActivity.class);
+        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
+        startActivity(intent);
+        finish();
     }
 
     private void updateUiWithUser(LoggedInUserView loggedInUser) {

@@ -30,8 +30,26 @@
         android:layout_marginEnd="160dp"
         android:onClick="OnListCategoriesButton"
         android:text="List of Categories"
+        android:backgroundTint="@android:color/holo_blue_dark"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/adminWelcomeTextView" />
+
+    <Button
+        android:id="@+id/button2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginBottom="24dp"
+        android:backgroundTint="@color/black"
+        android:onClick="OnLogoutButton"
+        android:text="Sign Out"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.047"
+        app:layout_constraintStart_toStartOf="parent"
+        />
+
+
 
 </androidx.constraintlayout.widget.ConstraintLayout>

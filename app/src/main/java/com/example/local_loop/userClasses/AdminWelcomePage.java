@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
@@ -28,7 +29,7 @@ public class AdminWelcomePage extends AppCompatActivity {
         String username = getIntent().getStringExtra("username");
         String userType = getIntent().getStringExtra("userType");
 
-        String welcomeMessage = "Welcome " + username + ". You are logged TEST in as " + userType + ". ADMIN WELCOME!";
+        String welcomeMessage = "Welcome " + username + ".\nYou are logged in as " + userType + ".";
         welcomeTextView.setText(welcomeMessage);
 
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.adminWelcomeTextView), (v, insets) -> {
@@ -43,5 +44,15 @@ public class AdminWelcomePage extends AppCompatActivity {
         Intent intent = new Intent(AdminWelcomePage.this, CategoryActivity.class);
         startActivity(intent);
     }
+
+    public void OnLogoutButton(View view) {
+        // Clear the user session and redirect to login
+        Toast.makeText(this, "Logging out...", Toast.LENGTH_SHORT).show();
+        Intent intent = new Intent(AdminWelcomePage.this, LoginActivity.class);
+        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
+        startActivity(intent);
+        finish();
+    }
+
 }
 

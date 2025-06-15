@@ -2,6 +2,7 @@ package com.example.local_loop.userClasses;
 
 import com.example.local_loop.R;
 import com.example.local_loop.database.DatabaseHelper;
+import com.example.local_loop.ui.login.LoginActivity;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -35,6 +36,13 @@ public class ProfileActivity extends AppCompatActivity {
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         spinner.setAdapter(adapter);
     }
+    public void backButtonPressed(View view) {
+        // Handle back button press
+        Intent intent = new Intent(ProfileActivity.this, MainActivity.class);
+        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
+        startActivity(intent);
+        finish();
+    }
     public void onSubmitButton(View view) {
         Spinner spinner = (Spinner) findViewById(R.id.spinner);
         EditText first, user, last, email, password;
@@ -53,7 +61,7 @@ public class ProfileActivity extends AppCompatActivity {
         if (!rInput.isEmpty() && !uInput.isEmpty() && !fInput.isEmpty() && !lInput.isEmpty() && !eInput.isEmpty() && !pInput.isEmpty()) {
             DatabaseHelper dbHelper = new DatabaseHelper(this);
             boolean inserted = dbHelper.insertUser(uInput, fInput, lInput, eInput, pInput, rInput);
-            if (inserted) {
+            if (inserted) { // Sends user to the appropriate welcome page based on their user type
                 if (rInput.equalsIgnoreCase("admin")){
                     Intent intent = new Intent(getApplicationContext(), AdminWelcomePage.class);
                     intent.putExtra("username", fInput);

@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<selector xmlns:android="http://schemas.android.com/apk/res/android">
+    <!-- Disabled state: gray background with rounded corners -->
+    <item android:state_enabled="false">
+        <shape>
+            <solid android:color="#C0C0C0" />
+            <corners android:radius="40dp" />
+        </shape>
+    </item>
+
+    <!-- Enabled state: holo_blue_dark background with rounded corners -->
+    <item>
+        <shape>
+            <solid android:color="@android:color/holo_blue_dark" />
+            <corners android:radius="40dp" />
+        </shape>
+    </item>
+</selector>
