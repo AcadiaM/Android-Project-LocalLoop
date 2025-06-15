@@ -70,7 +70,7 @@
         android:layout_marginBottom="24dp"
         android:backgroundTint="@color/black"
         android:onClick="OnLogoutButton"
-        android: android:layout_gravity="center_horizontal"
+        android:layout_gravity="center_horizontal"
         android:text="Sign Out"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
