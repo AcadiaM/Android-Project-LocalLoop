@@ -3,7 +3,7 @@
 /**
  * Abstract User class, extended by all types of users: Admin, Participant and Organizer.
  */
-package com.example.local_loop.Login;
+package com.example.local_loop.CreateAccount;
 public abstract class User {
 
     private String username;

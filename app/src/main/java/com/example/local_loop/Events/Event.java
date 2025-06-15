@@ -1,4 +1,4 @@
-package com.example.local_loop.userClasses;
+package com.example.local_loop.Events;
 
 public class Event {
         private int id;

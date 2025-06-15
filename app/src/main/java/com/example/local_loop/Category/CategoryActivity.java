@@ -20,7 +20,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.local_loop.R;
 import com.example.local_loop.database.DatabaseHelper;
-import com.example.local_loop.userClasses.EventCategoryActivity;
+import com.example.local_loop.Events.EventCategoryActivity;
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.android.material.textfield.TextInputLayout;
 

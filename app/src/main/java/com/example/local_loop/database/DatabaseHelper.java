@@ -9,9 +9,9 @@ import android.database.Cursor;
 import android.util.Log;
 
 import com.example.local_loop.Category.Category;
-import com.example.local_loop.Login.User;
-import com.example.local_loop.userClasses.*;
-import com.example.local_loop.userClasses.Event;
+import com.example.local_loop.CreateAccount.Admin;
+import com.example.local_loop.CreateAccount.User;
+import com.example.local_loop.Events.Event;
 
 import java.util.ArrayList;
 import java.util.List;

@@ -1,4 +1,4 @@
-package com.example.local_loop.AAAMain;
+package com.example.local_loop.Main;
 
 import com.example.local_loop.database.DatabaseHelper;
 import android.content.Intent;
@@ -13,7 +13,7 @@ import androidx.core.view.WindowInsetsCompat;
 
 import com.example.local_loop.R;
 import com.example.local_loop.Login.LoginActivity;
-import com.example.local_loop.BBBCreateAccount.SignUp;
+import com.example.local_loop.CreateAccount.SignUp;
 
 public class MainActivity extends AppCompatActivity {
 

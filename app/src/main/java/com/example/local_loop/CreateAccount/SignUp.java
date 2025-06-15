@@ -1,20 +1,15 @@
-package com.example.local_loop.BBBCreateAccount;
+package com.example.local_loop.CreateAccount;
 
-import com.example.local_loop.AAAMain.MainActivity;
+import com.example.local_loop.Main.MainActivity;
 import com.example.local_loop.R;
 import com.example.local_loop.database.DatabaseHelper;
-import com.example.local_loop.userClasses.AdminWelcomePage;
-import com.example.local_loop.userClasses.Organizer;
-import com.example.local_loop.userClasses.OrganizerWelcomePage;
-import com.example.local_loop.userClasses.Participant;
-import com.example.local_loop.userClasses.WelcomePage;
-import com.example.local_loop.Login.User;
+import com.example.local_loop.Welcome.OrganizerWelcomePage;
+import com.example.local_loop.Welcome.WelcomePage;
 
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Patterns;
 import android.view.View;
-import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.Toast;

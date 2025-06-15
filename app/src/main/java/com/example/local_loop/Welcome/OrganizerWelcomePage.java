@@ -1,7 +1,10 @@
-package com.example.local_loop.userClasses;
+package com.example.local_loop.Welcome;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.View;
+import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
@@ -11,21 +14,16 @@ import androidx.core.view.WindowInsetsCompat;
 
 import com.example.local_loop.R;
 import com.example.local_loop.Login.LoginActivity;
+//The organizer welcome page that displays a welcome message with the username and user type
 
-import android.view.View;
-import android.widget.TextView;
-import android.widget.Toast;
-
-//The normal user welcome page that displays a welcome message with the username and user type
-public class WelcomePage extends AppCompatActivity {
-
+public class OrganizerWelcomePage extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         EdgeToEdge.enable(this);
-        setContentView(R.layout.activity_welcome_page);
+        setContentView(R.layout.organizer_welcome_page);
 
-        TextView welcomeTextView = findViewById(R.id.welcomeTextView);
+        TextView welcomeTextView = findViewById(R.id.organizerWelcomeTextView);
 
         // Retrieve the username and userType from the Intent
         String username = getIntent().getStringExtra("username");
@@ -34,17 +32,16 @@ public class WelcomePage extends AppCompatActivity {
         String welcomeMessage = "Welcome " + username + ".\nYou are logged in as " + userType + ".";
         welcomeTextView.setText(welcomeMessage);
 
-        ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main), (v, insets) -> {
+        ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.organizerWelcomeTextView), (v, insets) -> {
             Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
             return insets;
         });
     }
-
     public void OnLogoutButton(View view) {
         // Clear the user session and redirect to login
         Toast.makeText(this, "Logging out...", Toast.LENGTH_SHORT).show();
-        Intent intent = new Intent(WelcomePage.this, LoginActivity.class);
+        Intent intent = new Intent(OrganizerWelcomePage.this, LoginActivity.class);
         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
         startActivity(intent);
         finish();

@@ -1,6 +1,4 @@
-package com.example.local_loop.userClasses;
-
-import com.example.local_loop.Login.User;
+package com.example.local_loop.CreateAccount;
 
 /**
  * User class of type administrator.

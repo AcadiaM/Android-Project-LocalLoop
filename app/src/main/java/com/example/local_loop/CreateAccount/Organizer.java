@@ -4,9 +4,7 @@
  * User class of type organizer.
  * Capable of creating events.
  */
-package com.example.local_loop.userClasses;
-
-import com.example.local_loop.Login.User;
+package com.example.local_loop.CreateAccount;
 
 public class Organizer extends User {
 

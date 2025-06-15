@@ -13,19 +13,19 @@
         android:theme="@style/Theme.Local_Loop"
         tools:targetApi="31">
         <activity
-            android:name=".userClasses.OrganizerWelcomePage"
+            android:name=".Welcome.OrganizerWelcomePage"
             android:exported="false" />
         <activity
-            android:name=".userClasses.AdminWelcomePage"
+            android:name=".Welcome.AdminWelcomePage"
             android:exported="false" />
         <activity
-            android:name=".userClasses.WelcomePage"
+            android:name=".Welcome.WelcomePage"
             android:exported="false" />
         <activity
-            android:name=".BBBCreateAccount.SignUp"
+            android:name=".CreateAccount.SignUp"
             android:exported="false" />
         <activity
-            android:name=".userClasses.EventCategoryActivity"
+            android:name=".Events.EventCategoryActivity"
             android:exported="false" />
         <activity
             android:name=".Category.CategoryActivity"
@@ -35,7 +35,7 @@
             android:exported="false"
             android:label="@string/title_activity_login" />
         <activity
-            android:name=".AAAMain.MainActivity"
+            android:name=".Main.MainActivity"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

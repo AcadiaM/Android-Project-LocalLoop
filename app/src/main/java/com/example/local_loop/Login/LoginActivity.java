@@ -24,10 +24,10 @@ import android.widget.Toast;
 
 import com.example.local_loop.database.DatabaseHelper;
 import com.example.local_loop.databinding.ActivityLoginBinding;
-import com.example.local_loop.AAAMain.MainActivity;
-import com.example.local_loop.userClasses.WelcomePage;
-import com.example.local_loop.userClasses.AdminWelcomePage;
-import com.example.local_loop.userClasses.OrganizerWelcomePage;
+import com.example.local_loop.Main.MainActivity;
+import com.example.local_loop.Welcome.WelcomePage;
+import com.example.local_loop.Welcome.AdminWelcomePage;
+import com.example.local_loop.Welcome.OrganizerWelcomePage;
 import android.content.Intent;
 
 

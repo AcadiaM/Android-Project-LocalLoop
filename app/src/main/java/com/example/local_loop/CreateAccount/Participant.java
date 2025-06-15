@@ -4,9 +4,7 @@
  * User class of type participant.
  * Basic user class capable of signing up for events.
  */
-package com.example.local_loop.userClasses;
-
-import com.example.local_loop.Login.User;
+package com.example.local_loop.CreateAccount;
 
 public class Participant extends User {
 
