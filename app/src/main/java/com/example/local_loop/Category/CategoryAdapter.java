@@ -1,4 +1,4 @@
-package com.example.local_loop.userClasses;
+package com.example.local_loop.Category;
 
 import com.example.local_loop.R;
 

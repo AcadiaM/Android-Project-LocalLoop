@@ -1,4 +1,4 @@
-package com.example.local_loop.userClasses;
+package com.example.local_loop.Category;
 
 import android.graphics.Typeface;
 import android.view.Gravity;
@@ -20,6 +20,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.local_loop.R;
 import com.example.local_loop.database.DatabaseHelper;
+import com.example.local_loop.userClasses.EventCategoryActivity;
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.android.material.textfield.TextInputLayout;
 

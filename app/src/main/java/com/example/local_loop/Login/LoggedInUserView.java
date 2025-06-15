@@ -1,4 +1,4 @@
-package com.example.local_loop.ui.login;
+package com.example.local_loop.Login;
 
 /**
  * Class exposing authenticated user details to the UI.

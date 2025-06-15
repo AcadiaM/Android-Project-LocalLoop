@@ -10,7 +10,7 @@ import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
 import com.example.local_loop.R;
-import com.example.local_loop.ui.login.LoginActivity;
+import com.example.local_loop.Login.LoginActivity;
 
 import android.view.View;
 import android.widget.TextView;

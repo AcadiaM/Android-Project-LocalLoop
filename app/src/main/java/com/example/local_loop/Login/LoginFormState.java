@@ -1,4 +1,4 @@
-package com.example.local_loop.ui.login;
+package com.example.local_loop.Login;
 
 import androidx.annotation.Nullable;
 

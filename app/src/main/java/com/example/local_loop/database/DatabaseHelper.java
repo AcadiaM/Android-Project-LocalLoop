@@ -1,5 +1,6 @@
 package com.example.local_loop.database;
 
+
 import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
@@ -7,12 +8,14 @@ import android.content.ContentValues;
 import android.database.Cursor;
 import android.util.Log;
 
-import com.example.local_loop.userClasses.Category;
+import com.example.local_loop.Category.Category;
+import com.example.local_loop.Login.User;
+import com.example.local_loop.userClasses.*;
 import com.example.local_loop.userClasses.Event;
 
-import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
+
 
 public class DatabaseHelper extends SQLiteOpenHelper {
 
@@ -58,15 +61,32 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     }
 
     //Inserts user into database, ensures no duplicates (fails on unique columns)
-    public boolean insertUser(String username, String firstName, String lastName, String email, String password, String role) {
+    public boolean checkUsername(String username){
+        boolean exists ;
+        SQLiteDatabase db = this.getReadableDatabase();
+        Cursor cursor =db.rawQuery("SELECT id FROM users WHERE username =?", new String[]{username});
+        exists = cursor.moveToFirst();
+        cursor.close();
+        return exists;
+    }
+    public boolean checkEmail(String email){
+        boolean exists;
+        SQLiteDatabase db = this.getReadableDatabase();
+        Cursor cursor = db.rawQuery("SELECT id FROM users WHERE email =?", new String[]{email});
+        exists = cursor.moveToFirst();
+        cursor.close();
+        return exists;
+    }
+
+    public boolean insertUser(User user) {
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues values = new ContentValues();
-        values.put("username", username);
-        values.put("firstName", firstName);
-        values.put("lastName", lastName);
-        values.put("email", email);
-        values.put("password", password);
-        values.put("role", role);
+        values.put("username", user.getUsername());
+        values.put("firstName", user.getFirstName());
+        values.put("lastName", user.getLastName());
+        values.put("email", user.getEmail());
+        values.put("password", user.getPassword());
+        values.put("role", user.getRole());
 
         try {
             long result = db.insert(TABLE_USERS, null, values);
@@ -111,7 +131,8 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         SQLiteDatabase db = this.getWritableDatabase();
         Cursor cursor = db.rawQuery("SELECT * FROM users WHERE username = 'admin'", null);
         if (cursor.getCount() == 0) {
-            insertUser("admin", "admin", "admin","admin@admin.admin", "XPI76SZUqyCjVxgnUjm0", "Admin");
+            User admin = new Admin("admin", "admin", "admin","admin@admin.admin", "XPI76SZUqyCjVxgnUjm0", "Admin");
+            insertUser(admin);
 //        //Hardcoded admin account.
         }
         cursor.close();

@@ -22,20 +22,20 @@
             android:name=".userClasses.WelcomePage"
             android:exported="false" />
         <activity
-            android:name=".userClasses.ProfileActivity"
+            android:name=".BBBCreateAccount.SignUp"
             android:exported="false" />
         <activity
             android:name=".userClasses.EventCategoryActivity"
             android:exported="false" />
         <activity
-            android:name=".userClasses.CategoryActivity"
+            android:name=".Category.CategoryActivity"
             android:exported="false" />
         <activity
-            android:name=".ui.login.LoginActivity"
+            android:name=".Login.LoginActivity"
             android:exported="false"
             android:label="@string/title_activity_login" />
         <activity
-            android:name=".userClasses.MainActivity"
+            android:name=".AAAMain.MainActivity"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

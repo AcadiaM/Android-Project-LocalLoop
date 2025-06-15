@@ -12,8 +12,9 @@ import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
+import com.example.local_loop.Category.CategoryActivity;
 import com.example.local_loop.R;
-import com.example.local_loop.ui.login.LoginActivity;
+import com.example.local_loop.Login.LoginActivity;
 //The admin welcome page that displays a welcome message with the username and user type
 
 public class AdminWelcomePage extends AppCompatActivity {

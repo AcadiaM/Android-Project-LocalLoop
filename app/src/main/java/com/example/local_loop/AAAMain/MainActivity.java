@@ -1,4 +1,4 @@
-package com.example.local_loop.userClasses;
+package com.example.local_loop.AAAMain;
 
 import com.example.local_loop.database.DatabaseHelper;
 import android.content.Intent;
@@ -12,7 +12,8 @@ import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
 import com.example.local_loop.R;
-import com.example.local_loop.ui.login.LoginActivity;
+import com.example.local_loop.Login.LoginActivity;
+import com.example.local_loop.BBBCreateAccount.SignUp;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -37,7 +38,7 @@ public class MainActivity extends AppCompatActivity {
     }
     public void OnCreateButton(View view) {
         // Application Context and Activity
-        Intent intent = new Intent(getApplicationContext(), ProfileActivity.class);
+        Intent intent = new Intent(getApplicationContext(), SignUp.class);
         startActivityForResult(intent,0);
 
     }

@@ -6,7 +6,7 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 
-import com.example.local_loop.userClasses.Category;
+import com.example.local_loop.Category.Category;
 import com.example.local_loop.userClasses.Event;
 
 import java.util.ArrayList;

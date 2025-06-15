@@ -31,5 +31,6 @@
 
     <string name="edit_category">Edit Category</string>
     <string name="add_category">Add a Category</string>
+    <string name="back_button">Back Button</string>
 
 </resources>

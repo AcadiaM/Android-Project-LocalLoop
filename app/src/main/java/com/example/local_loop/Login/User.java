@@ -3,29 +3,31 @@
 /**
  * Abstract User class, extended by all types of users: Admin, Participant and Organizer.
  */
-package com.example.local_loop.userClasses;
+package com.example.local_loop.Login;
 public abstract class User {
 
-    private String type;
     private String username;
+    private String password;
     private String firstName;
     private String lastName;
-    private String password;
     private String email;
+    private String role;
 
 
-    public User(String type, String username, String firstName, String lastName, String password, String email) {
-        this.type = type;
+
+    public User(String role, String username, String firstName, String lastName, String password, String email) {
         this.firstName = firstName;
         this.lastName = lastName;
         this.username = username;
         this.password = password;
         this.email = email;
+        this.role = role;
     }
 
-    public String getType() {
-        return this.type;
-    }
+    /*public String getDisplayName(){
+        return
+    } */
+
 
     public String getUsername() {
         return this.username;
@@ -42,5 +44,8 @@ public abstract class User {
     }
     public String getEmail() {
         return this.email;
+    }
+    public String getRole() {
+        return this.role;
     }
 }

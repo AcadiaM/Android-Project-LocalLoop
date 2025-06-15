@@ -9,12 +9,13 @@ import android.content.Context;
 /**
  * Class that handles authentication w/ login credentials and retrieves user information.
  */
-public class LoginDataSource {
+public class Login {
     private final DatabaseHelper dbHelper;
 
-    public LoginDataSource(Context context) {
+    public Login(Context context) {
         dbHelper = new DatabaseHelper(context);
     }
+
 
     public Result<LoggedInUser> login(String username, String password) {
         String role = dbHelper.getRoleByUsername(username);

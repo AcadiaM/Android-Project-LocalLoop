@@ -6,10 +6,12 @@
  */
 package com.example.local_loop.userClasses;
 
+import com.example.local_loop.Login.User;
+
 public class Participant extends User {
 
     public Participant(String username, String firstName, String lastName, String password, String email) {
-        super("Participant", username, firstName, lastName, password, email);
+        super("Participant",username, firstName, lastName, password, email);
     }
 
 }

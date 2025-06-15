@@ -13,7 +13,7 @@ import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
 import com.example.local_loop.R;
-import com.example.local_loop.ui.login.LoginActivity;
+import com.example.local_loop.Login.LoginActivity;
 //The organizer welcome page that displays a welcome message with the username and user type
 
 public class OrganizerWelcomePage extends AppCompatActivity {
