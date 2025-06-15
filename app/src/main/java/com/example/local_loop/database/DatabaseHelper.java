@@ -15,6 +15,8 @@ import com.example.local_loop.CreateAccount.Admin;
 import com.example.local_loop.CreateAccount.User;
 import com.example.local_loop.Events.Event;
 
+
+import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -233,5 +235,18 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         boolean exists = cursor.getCount() > 0;
         cursor.close();
         return exists;
+    }
+
+    //Gets all users other than admins
+    public List<User> getUsers() {
+        List<User> users = new ArrayList<>();
+        SQLiteDatabase db = this.getReadableDatabase();
+        Cursor cursor = db.rawQuery("SELECT * FROM " + TABLE_USERS + " WHERE role != admin", null);
+        if (cursor.moveToFirst()) {
+            while (cursor.moveToNext()) {
+                users.add(new User(cursor.getString(5), cursor.getString(0), cursor.getString(1), cursor.getString(2), cursor.getString(4), cursor.getString(3)){ });
+            }
+        }
+        return users;
     }
 }

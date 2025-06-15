@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    xmlns:tools="http://schemas.android.com/tools">
+
+
+    <TextView
+        android:id="@+id/Type"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_toEndOf="@id/LastName"
+        android:textColor="@color/black"
+        android:textSize="20sp"
+        tools:text="Type" />
+
+    <TextView
+        android:id="@+id/Email"
+        android:layout_width="84dp"
+        android:layout_height="wrap_content"
+        android:layout_toEndOf="@id/Username"
+        android:layout_below="@id/FirstName"
+        android:layout_marginTop="0dp"
+        android:textColor="@color/black"
+        tools:text="E-mail" />
+
+    <TextView
+        android:id="@+id/FirstName"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginRight="12dp"
+        android:textColor="@color/black"
+        android:textSize="20sp"
+        tools:text="First Name" />
+
+    <TextView
+        android:id="@+id/LastName"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_toEndOf="@id/FirstName"
+        android:layout_marginRight="12dp"
+        android:textColor="@color/black"
+        android:textSize="20sp"
+        tools:text="Last Name" />
+
+    <TextView
+        android:id="@+id/Username"
+        android:layout_width="84dp"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/FirstName"
+        android:layout_marginRight="30dp"
+        android:textColor="@color/black"
+        tools:text="Username" />
+
+    <ImageButton
+        android:id="@+id/delete"
+        android:layout_width="45dp"
+        android:layout_height="45dp"
+        android:layout_alignParentRight="true"
+        app:srcCompat="@drawable/baseline_delete_forever_24" />
+
+    <ImageButton
+        android:id="@+id/disable"
+        android:layout_width="45dp"
+        android:layout_height="45dp"
+        android:layout_marginRight="0dp"
+        android:layout_toLeftOf="@id/delete"
+        app:srcCompat="@android:drawable/ic_lock_idle_lock" />
+
+
+</RelativeLayout>
