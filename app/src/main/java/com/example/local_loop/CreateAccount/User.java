@@ -4,7 +4,7 @@
  * Abstract User class, extended by all types of users: Admin, Participant and Organizer.
  */
 package com.example.local_loop.CreateAccount;
-public abstract class User {
+public class User {
 
     private String username;
     private String password;
@@ -15,7 +15,7 @@ public abstract class User {
 
 
 
-    public User(String role, String username, String firstName, String lastName, String password, String email) {
+    public User(String firstName, String lastName,String username, String email, String password, String role) {
         this.firstName = firstName;
         this.lastName = lastName;
         this.username = username;

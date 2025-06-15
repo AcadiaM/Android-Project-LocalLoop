@@ -31,6 +31,9 @@
             android:name=".Category.CategoryActivity"
             android:exported="false" />
         <activity
+            android:name=".UserList.UserList"
+            android:exported="false" />
+        <activity
             android:name=".Login.LoginActivity"
             android:exported="false"
             android:label="@string/title_activity_login" />

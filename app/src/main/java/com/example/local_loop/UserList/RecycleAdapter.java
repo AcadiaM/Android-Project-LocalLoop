@@ -12,7 +12,7 @@ import com.example.local_loop.R;
 
 import java.util.List;
 
-public class RecycleAdapter extends RecyclerView.Adapter<userListViewer>{
+public class RecycleAdapter extends RecyclerView.Adapter<UserListViewer>{
 
     Context context;
     List<User> users;
@@ -24,12 +24,12 @@ public class RecycleAdapter extends RecyclerView.Adapter<userListViewer>{
 
     @NonNull
     @Override
-    public userListViewer onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        return new userListViewer(LayoutInflater.from(context).inflate(R.layout.user_list_layout, parent, false));
+    public UserListViewer onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+        return new UserListViewer(LayoutInflater.from(context).inflate(R.layout.user_list_layout, parent, false));
     }
 
     @Override
-    public void onBindViewHolder(@NonNull userListViewer holder, int position) {
+    public void onBindViewHolder(@NonNull UserListViewer holder, int position) {
         holder.firstView.setText(users.get(position).getFirstName());
         holder.lastView.setText(users.get(position).getLastName());
         holder.userView.setText(users.get(position).getUsername());

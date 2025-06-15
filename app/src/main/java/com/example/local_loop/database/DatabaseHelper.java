@@ -36,9 +36,9 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
         db.execSQL( "CREATE TABLE users (" +
                 "id INTEGER PRIMARY KEY AUTOINCREMENT, " +
-                "username TEXT NOT NULL, " +
                 "firstName TEXT NOT NULL," +
                 "lastName TEXT NOT NULL," +
+                "username TEXT NOT NULL, " +
                 "email TEXT UNIQUE NOT NULL, " +
                 "password TEXT NOT NULL, " +
                 "role TEXT NOT NULL, " +
@@ -85,9 +85,9 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     public boolean insertUser(User user) {
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues values = new ContentValues();
-        values.put("username", user.getUsername());
         values.put("firstName", user.getFirstName());
         values.put("lastName", user.getLastName());
+        values.put("username", user.getUsername());
         values.put("email", user.getEmail());
         values.put("password", user.getPassword());
         values.put("role", user.getRole());
@@ -241,12 +241,24 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     public List<User> getUsers() {
         List<User> users = new ArrayList<>();
         SQLiteDatabase db = this.getReadableDatabase();
-        Cursor cursor = db.rawQuery("SELECT * FROM " + TABLE_USERS + " WHERE role != admin", null);
+        Cursor cursor = db.rawQuery("SELECT * FROM " + TABLE_USERS + " WHERE role != 'admin'", null);
+
         if (cursor.moveToFirst()) {
-            while (cursor.moveToNext()) {
-                users.add(new User(cursor.getString(5), cursor.getString(0), cursor.getString(1), cursor.getString(2), cursor.getString(4), cursor.getString(3)){ });
-            }
+            do {
+                // Replace constructor arguments based on your User class definition
+                User user = new User(
+                        cursor.getString(1), // firstName
+                        cursor.getString(2), // lastName
+                        cursor.getString(3), // userName
+                        cursor.getString(4), // email
+                        cursor.getString(5), // password
+                        cursor.getString(6)  // role
+                );
+                users.add(user);
+            } while (cursor.moveToNext());
         }
+
+        cursor.close();
         return users;
     }
 }

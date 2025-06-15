@@ -8,8 +8,8 @@ package com.example.local_loop.CreateAccount;
 
 public class Participant extends User {
 
-    public Participant(String username, String firstName, String lastName, String password, String email) {
-        super("Participant",username, firstName, lastName, password, email);
+    public Participant(String firstName, String lastName, String username, String email, String password) {
+        super(firstName, lastName, username, email, password, "participant");
     }
 
 }

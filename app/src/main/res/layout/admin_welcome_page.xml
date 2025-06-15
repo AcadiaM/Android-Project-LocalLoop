@@ -8,7 +8,7 @@
     android:background="@color/white"
     android:orientation="vertical"
     android:padding="32dp"
-    tools:context=".Welcome.WelcomePage">
+    tools:context=".Welcome.AdminWelcomePage">
 
     <TextView
         android:id="@+id/adminWelcomeTextView"

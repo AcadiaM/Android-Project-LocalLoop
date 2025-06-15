@@ -9,12 +9,12 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.local_loop.R;
 
-public class userListViewer extends RecyclerView.ViewHolder {
+public class UserListViewer extends RecyclerView.ViewHolder {
 
     TextView firstView, lastView, userView, emailView, typeView;
     ImageButton disable, delete;
 
-    public userListViewer(@NonNull View itemView) {
+    public UserListViewer(@NonNull View itemView) {
         super(itemView);
         firstView = itemView.findViewById(R.id.FirstName);
         lastView = itemView.findViewById(R.id.LastName);
