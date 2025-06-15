@@ -40,7 +40,8 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                 "lastName TEXT NOT NULL," +
                 "email TEXT UNIQUE NOT NULL, " +
                 "password TEXT NOT NULL, " +
-                "role TEXT NOT NULL);");
+                "role TEXT NOT NULL, " +
+                "active INTEGER NOT NULL DEFAULT 1);");
 
         db.execSQL("CREATE TABLE categories (" +
                 "id INTEGER PRIMARY KEY AUTOINCREMENT, "+
@@ -104,7 +105,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     public boolean checkLogin(String username, String password) {
         SQLiteDatabase db = this.getReadableDatabase();
         Cursor cursor = db.rawQuery(
-                "SELECT * FROM " + TABLE_USERS + " WHERE username = ? AND password = ?",
+                "SELECT * FROM " + TABLE_USERS + " WHERE username = ? AND password = ? AND active = 1",
                 new String[]{username, password}
         );
         boolean exists = cursor.getCount() > 0;
@@ -138,6 +139,15 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 //        //Hardcoded admin account.
         }
         cursor.close();
+    }
+
+    public void deactivateUser(User user) {
+        SQLiteDatabase db = getWritableDatabase();
+
+        ContentValues values = new ContentValues();
+        values.put("active", 0);
+
+        db.update(TABLE_USERS, values, "username = ?", new String[]{user.getUsername()});
     }
 
     // Add new category
