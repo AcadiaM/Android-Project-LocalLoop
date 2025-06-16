@@ -80,7 +80,7 @@ public class CategoryAdapter extends RecyclerView.Adapter<CategoryAdapter.Catego
         if (deleteMode) {
             // Select to delete
             holder.categoryButton.setOnClickListener(v -> {
-                int id = category.getId();
+                int id = category.getID();
                 if (selectedCategoryIds.contains(id)) {
                     selectedCategoryIds.remove(Integer.valueOf(id));
                     v.setBackgroundColor(Color.LTGRAY);
@@ -91,7 +91,7 @@ public class CategoryAdapter extends RecyclerView.Adapter<CategoryAdapter.Catego
             });
 
             // Set visual selection state on bind
-            if (selectedCategoryIds.contains(category.getId())) {
+            if (selectedCategoryIds.contains(category.getID())) {
                 holder.categoryButton.setBackgroundColor(Color.TRANSPARENT);
             } else {
                 holder.categoryButton.setBackgroundColor(Color.LTGRAY);

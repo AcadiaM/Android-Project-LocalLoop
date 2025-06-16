@@ -61,7 +61,7 @@ public class CategoryActivity extends AppCompatActivity {
             @Override
             public void onClick(Category category) {
                 Intent intent = new Intent(CategoryActivity.this, EventCategoryActivity.class);
-                intent.putExtra("categoryId", category.getId());
+                intent.putExtra("categoryId", category.getID());
                 intent.putExtra("categoryName", category.getName());
                 intent.putExtra("categoryDescription", category.getDescription());
                 startActivity(intent);
@@ -146,7 +146,7 @@ public class CategoryActivity extends AppCompatActivity {
                     if (which == 0) {
                         showRenameCategoryDialog(category);
                     } else if (which == 1) {
-                        dbHelper.deleteCategory(category.getId());
+                        dbHelper.deleteCategory(category.getID());
                         loadCategories();
                     }
                 })
@@ -215,7 +215,7 @@ public class CategoryActivity extends AppCompatActivity {
                 }
 
                 if (valid) {
-                    dbHelper.renameCategory(category.getId(), newName, newDescription);
+                    dbHelper.renameCategory(category.getID(), newName, newDescription);
                     loadCategories();
                     exitEditMode();
                     dialog.dismiss();

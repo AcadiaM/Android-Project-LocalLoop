@@ -12,6 +12,7 @@ public class User {
     private String lastName;
     private String email;
     private String role;
+    private boolean isActive = true;
 
 
 
@@ -27,6 +28,10 @@ public class User {
     /*public String getDisplayName(){
         return
     } */
+
+    public void deActivate(){
+        isActive = false;
+    }
 
 
     public String getUsername() {

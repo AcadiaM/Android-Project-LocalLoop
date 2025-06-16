@@ -1,0 +1,51 @@
+@startuml
+class User  {
+    - role : String
+    - email : String
+    - lastName : String
+    - firstName : String
+    - password : String
+    - username : String
+    - isActive : boolean
++ User(String firstName, String lastName, String username, String email, String password, String role)
+}
+class Admin {
+    - {static} admin : Admin
+    + Admin(String firstName, String lastName, String username, String email, String password)
+    + {static} Admin getAdmin()
+}
+
+class Participant  {
+    + Participant(String firstName, String lastName, String username, String email, String password)
+}
+
+class Organizer  {
+    + Organizer(String firstName, String lastName, String username, String email, String password)
+}
+
+class Category {
+    - ID : int {final}
+    - NAME : String {final}
+    - DESCRIPTION : String {final}
+    + Category(int id, String name, String description)
+    + int getId()
+    + String getName()
+    + String getDescription()
+}
+
+class Event {
+    - id : int
+    - categoryId : int
+    - title : String
+    + Event(int id, int categoryId, String title)
+    + int getId()
+    + int getCategoryId()
+    + String getTitle()
+}
+
+User <|-- Admin
+User <|-- Participant
+User <|-- Organizer
+Admin "1" ..>"*" Category : <<creates>>
+Category "1"..>"*" Event
+@enduml
