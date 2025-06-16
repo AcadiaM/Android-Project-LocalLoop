@@ -8,6 +8,7 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.local_loop.R;
+import com.example.local_loop.database.DatabaseHelper;
 
 public class UserListViewer extends RecyclerView.ViewHolder {
 

@@ -142,18 +142,19 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         cursor.close();
     }
 
-    public void deleteUser(User user) {
+    public void deleteUser(String email) {
         SQLiteDatabase db = getWritableDatabase();
-        db.delete("users", "email=?", new String[]{user.getEmail()});
+        //db.delete("users", "email=?", new );
+        db.rawQuery("DELETE FROM users WHERE email=?", new String[]{email});
     }
 
-    public void deactivateUser(User user) {
+    public void deactivateUser(String email) {
         SQLiteDatabase db = getWritableDatabase();
 
         ContentValues values = new ContentValues();
         values.put("active", 0);
 
-        db.update(TABLE_USERS, values, "username = ?", new String[]{user.getUsername()});
+        db.update(TABLE_USERS, values, "email = ?", new String[]{email});
     }
 
     // Add new category

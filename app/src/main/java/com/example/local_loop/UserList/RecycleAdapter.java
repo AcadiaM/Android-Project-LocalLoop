@@ -2,13 +2,16 @@ package com.example.local_loop.UserList;
 
 import android.content.Context;
 import android.view.LayoutInflater;
+import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.local_loop.CreateAccount.User;
 import com.example.local_loop.R;
+import com.example.local_loop.database.DatabaseHelper;
 
 import java.util.List;
 
@@ -20,6 +23,15 @@ public class RecycleAdapter extends RecyclerView.Adapter<UserListViewer>{
     public RecycleAdapter(Context context, List<User> users) {
         this.context = context;
         this.users = users;
+    }
+
+    public void deleteEntry(String email) {
+        for (int i = 0; i < users.size(); i++) {
+            if (users.get(i).getEmail().equals(email)) {
+                users.remove(1);
+                break;
+            }
+        }
     }
 
     @NonNull
@@ -42,4 +54,5 @@ public class RecycleAdapter extends RecyclerView.Adapter<UserListViewer>{
     public int getItemCount() {
         return users.size();
     }
+
 }
