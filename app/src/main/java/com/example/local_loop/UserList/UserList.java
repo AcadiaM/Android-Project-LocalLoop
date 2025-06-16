@@ -1,5 +1,6 @@
 package com.example.local_loop.UserList;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.TextView;
@@ -12,8 +13,11 @@ import androidx.core.view.WindowInsetsCompat;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.local_loop.CreateAccount.Organizer;
 import com.example.local_loop.CreateAccount.User;
 import com.example.local_loop.R;
+import com.example.local_loop.Welcome.AdminWelcomePage;
+import com.example.local_loop.Welcome.OrganizerWelcomePage;
 import com.example.local_loop.database.DatabaseHelper;
 
 import java.util.List;
@@ -40,24 +44,6 @@ public class UserList extends AppCompatActivity {
     private List<User> getData() {
         DatabaseHelper db = new DatabaseHelper(this);
         return db.getUsers();
-    }
-
-    public void OnDisable(View view) {
-        TextView emailText = findViewById(R.id.Email);
-        DatabaseHelper db = new DatabaseHelper(this);
-        db.deactivateUser(emailText.getText().toString());
-    }
-
-    //java.lang.IllegalStateException: Could not find method OnDelete(View) in a parent or ancestor
-    // Context for android:onClick attribute defined on view class android.widget.ImageButton with id 'delete'
-    public void OnDelete(View view) {
-        TextView emailText = findViewById(R.id.Email);
-        DatabaseHelper db = new DatabaseHelper(this);
-        db.deleteUser(emailText.getText().toString());
-        RecyclerView recyclerView = findViewById(R.id.recycler);
-        RecycleAdapter adapter = (RecycleAdapter) recyclerView.getAdapter();
-        adapter.deleteEntry(emailText.getText().toString());
-        //getData();
     }
 
 }

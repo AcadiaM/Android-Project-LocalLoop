@@ -28,7 +28,7 @@ public class RecycleAdapter extends RecyclerView.Adapter<UserListViewer>{
     public void deleteEntry(String email) {
         for (int i = 0; i < users.size(); i++) {
             if (users.get(i).getEmail().equals(email)) {
-                users.remove(1);
+                users.remove(i);
                 break;
             }
         }
@@ -47,7 +47,21 @@ public class RecycleAdapter extends RecyclerView.Adapter<UserListViewer>{
         holder.userView.setText(users.get(position).getUsername());
         holder.emailView.setText(users.get(position).getEmail());
         holder.typeView.setText(users.get(position).getRole());
-
+        //The imageButton images do not show on the emulator. Right-most is delete, left-most is disable.
+        holder.delete.setOnClickListener(v->{
+            TextView emailText = holder.emailView;
+            DatabaseHelper db = new DatabaseHelper(context);
+            db.deleteUser(emailText.getText().toString());
+            this.deleteEntry(emailText.getText().toString());
+            notifyDataSetChanged();
+        });
+        holder.disable.setOnClickListener(v -> {
+            TextView emailText = holder.emailView;
+            DatabaseHelper db = new DatabaseHelper(context);
+            db.deactivateUser(emailText.getText().toString());
+            notifyDataSetChanged();
+        });
+        //Not currently implemented to UI, but shows in database.
     }
 
     @Override

@@ -59,18 +59,18 @@
         android:id="@+id/delete"
         android:layout_width="45dp"
         android:layout_height="45dp"
-        android:onClick="OnDelete"
         android:layout_alignParentRight="true"
-        app:srcCompat="@drawable/baseline_delete_forever_24" />
+        app:srcCompat="@drawable/delete_icon"
+        tools:srcCompat="@drawable/delete_icon" />
 
     <ImageButton
         android:id="@+id/disable"
         android:layout_width="45dp"
         android:layout_height="45dp"
-        android:onClick="OnDisable"
         android:layout_marginRight="0dp"
         android:layout_toLeftOf="@id/delete"
-        app:srcCompat="@android:drawable/ic_lock_idle_lock" />
+        app:srcCompat="@drawable/disable_icon"
+        tools:srcCompat="@drawable/disable_icon" />
 
 
 </RelativeLayout>

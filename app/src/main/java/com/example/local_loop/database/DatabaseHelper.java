@@ -144,8 +144,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
     public void deleteUser(String email) {
         SQLiteDatabase db = getWritableDatabase();
-        //db.delete("users", "email=?", new );
-        db.rawQuery("DELETE FROM users WHERE email=?", new String[]{email});
+        db.delete("users", "email=?", new String[]{email});
     }
 
     public void deactivateUser(String email) {
