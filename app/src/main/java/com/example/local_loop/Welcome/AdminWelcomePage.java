@@ -1,5 +1,8 @@
 package com.example.local_loop.Welcome;
 
+import static com.example.local_loop.Event.EventDetailsActivity.EXTRA_SOURCE;
+import static com.example.local_loop.Event.EventDetailsActivity.SOURCE_ADMIN;
+
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
@@ -13,12 +16,14 @@ import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
 import com.example.local_loop.Category.CategoryActivity;
+import com.example.local_loop.Event.EventActivity;
 import com.example.local_loop.R;
 import com.example.local_loop.Login.LoginActivity;
 import com.example.local_loop.UserList.UserList;
 //The admin welcome page that displays a welcome message with the username and user type
 
 public class AdminWelcomePage extends AppCompatActivity {
+    private String username, userType;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -28,8 +33,8 @@ public class AdminWelcomePage extends AppCompatActivity {
         TextView welcomeTextView = findViewById(R.id.adminWelcomeTextView);
 
         // Retrieve the username and userType from the Intent
-        String username = getIntent().getStringExtra("username");
-        String userType = getIntent().getStringExtra("userType");
+        username = getIntent().getStringExtra("username");
+        userType = getIntent().getStringExtra("userType");
 
         String welcomeMessage = "Welcome " + username + ".\nYou are logged in as " + userType + ".";
         welcomeTextView.setText(welcomeMessage);
@@ -41,9 +46,8 @@ public class AdminWelcomePage extends AppCompatActivity {
         });
     }
     public void OnListCategoriesButton(View view) {
-        //Intent intent = new Intent(getApplicationContext(), CategoryActivity.class);
-        //startActivityForResult(intent,0);
         Intent intent = new Intent(AdminWelcomePage.this, CategoryActivity.class);
+        intent.putExtra(EXTRA_SOURCE, SOURCE_ADMIN);
         startActivity(intent);
     }
 
@@ -61,5 +65,11 @@ public class AdminWelcomePage extends AppCompatActivity {
         startActivity(intent);
     }
 
+    public void OnEventsButton(View view) {
+        Intent intent = new Intent(AdminWelcomePage.this, EventActivity.class);
+        intent.putExtra("username", username);// Pass the username to the WelcomePage
+        intent.putExtra("userType", userType); // Pass the userType to the WelcomePage
+        startActivity(intent);
+    }
 }
 

@@ -7,7 +7,6 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 
 import com.example.local_loop.Category.Category;
-import com.example.local_loop.Events.Event;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -104,7 +103,7 @@ public class DBCategoryHelper extends SQLiteOpenHelper {
     }
 
     // Get all events in a category
-    public List<Event> getEventsByCategory(int categoryId) {
+    /*public List<Event> getEventsByCategory(int categoryId) {
         List<Event> events = new ArrayList<>();
         SQLiteDatabase db = getReadableDatabase();
         Cursor cursor = db.rawQuery("SELECT id, title FROM events WHERE category_id=?", new String[]{String.valueOf(categoryId)});
@@ -115,7 +114,7 @@ public class DBCategoryHelper extends SQLiteOpenHelper {
         }
         cursor.close();
         return events;
-    }
+    }*/
 
     public boolean categoryNameExists(String name) {
         SQLiteDatabase db = this.getReadableDatabase();

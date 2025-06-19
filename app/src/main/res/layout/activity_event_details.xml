@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:padding="24dp"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <TextView
+        android:id="@+id/eventDetailTitle"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textSize="22sp"
+        android:textStyle="bold"
+        android:text="Event Title"
+        android:layout_marginBottom="16dp" />
+
+    <TextView
+        android:id="@+id/eventDetailDescription"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textSize="16sp"
+        android:text="Event description here"
+        android:layout_marginBottom="12dp" />
+
+    <TextView
+        android:id="@+id/eventDetailFee"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Fee"
+        android:textSize="16sp"
+        android:layout_marginBottom="8dp" />
+
+    <TextView
+        android:id="@+id/eventDetailDateTime"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Date/Time"
+        android:textSize="16sp" />
+
+    <TextView
+        android:id="@+id/eventDetailContextInfo"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Extra Info"
+        android:textSize="16sp"
+        android:layout_marginTop="8dp"/>
+</LinearLayout>

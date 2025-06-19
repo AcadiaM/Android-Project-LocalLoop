@@ -1,10 +1,9 @@
-
+package com.example.local_loop.CreateAccount;
 
 /**
  * User class of type organizer.
  * Capable of creating events.
  */
-package com.example.local_loop.CreateAccount;
 
 public class Organizer extends User {
 

@@ -13,6 +13,12 @@
         android:theme="@style/Theme.Local_Loop"
         tools:targetApi="31">
         <activity
+            android:name=".Event.EventDetailsActivity"
+            android:exported="false" />
+        <activity
+            android:name=".Category.CategoryDetailsActivity"
+            android:exported="false" />
+        <activity
             android:name=".Welcome.OrganizerWelcomePage"
             android:exported="false" />
         <activity
@@ -25,7 +31,7 @@
             android:name=".CreateAccount.SignUp"
             android:exported="false" />
         <activity
-            android:name=".Events.EventCategoryActivity"
+            android:name=".Event.EventActivity"
             android:exported="false" />
         <activity
             android:name=".Category.CategoryActivity"

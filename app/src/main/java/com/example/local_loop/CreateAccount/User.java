@@ -1,17 +1,12 @@
-
+package com.example.local_loop.CreateAccount;
 
 /**
- * Abstract User class, extended by all types of users: Admin, Participant and Organizer.
+ * A User class, extended by all types of users: Admin, Participant and Organizer.
  */
-package com.example.local_loop.CreateAccount;
+
 public class User {
 
-    private String username;
-    private String password;
-    private String firstName;
-    private String lastName;
-    private String email;
-    private String role;
+    private final String firstName, lastName, username, email, password, role;
     private boolean isActive = true;
 
 

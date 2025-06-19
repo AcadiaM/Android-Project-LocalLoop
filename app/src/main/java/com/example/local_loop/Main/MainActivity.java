@@ -16,11 +16,12 @@ import com.example.local_loop.Login.LoginActivity;
 import com.example.local_loop.CreateAccount.SignUp;
 
 public class MainActivity extends AppCompatActivity {
+    DatabaseHelper dbHelper;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        DatabaseHelper dbHelper = new DatabaseHelper(this);
+        dbHelper = new DatabaseHelper(this);
         dbHelper.insertAdmin();
 
         EdgeToEdge.enable(this);

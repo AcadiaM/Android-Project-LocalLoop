@@ -1,5 +1,7 @@
 package com.example.local_loop.Category;
 
+import static com.example.local_loop.Event.EventDetailsActivity.EXTRA_SOURCE;
+
 import android.graphics.Typeface;
 import android.view.Gravity;
 import android.view.LayoutInflater;
@@ -20,7 +22,6 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.local_loop.R;
 import com.example.local_loop.database.DatabaseHelper;
-import com.example.local_loop.Events.EventCategoryActivity;
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.android.material.textfield.TextInputLayout;
 
@@ -60,7 +61,8 @@ public class CategoryActivity extends AppCompatActivity {
         categoryAdapter = new CategoryAdapter(new java.util.ArrayList<>(), new CategoryAdapter.OnCategoryClickListener() {
             @Override
             public void onClick(Category category) {
-                Intent intent = new Intent(CategoryActivity.this, EventCategoryActivity.class);
+                Intent intent = new Intent(CategoryActivity.this, CategoryDetailsActivity.class);
+                intent.putExtra(EXTRA_SOURCE, getIntent().getStringExtra(EXTRA_SOURCE));
                 intent.putExtra("categoryId", category.getID());
                 intent.putExtra("categoryName", category.getName());
                 intent.putExtra("categoryDescription", category.getDescription());
@@ -83,6 +85,10 @@ public class CategoryActivity extends AppCompatActivity {
 
         removeCategoryButton = findViewById(R.id.removeCategoryButton);
         removeCategoryButton.setOnClickListener(v -> {
+            if (categoryAdapter.getItemCount() == 0){
+                Toast.makeText(this,"No categories to delete", Toast.LENGTH_SHORT).show();
+                return;
+            }
             if (!isDeleteMode) {
                 isDeleteMode = true;
                 selectedCategoryIds.clear();
@@ -122,6 +128,10 @@ public class CategoryActivity extends AppCompatActivity {
         editCategoryButton = findViewById(R.id.editCategoryButton);
 
         editCategoryButton.setOnClickListener(v -> {
+            if (categoryAdapter.getItemCount() == 0){
+                Toast.makeText(this,"No categories to edit", Toast.LENGTH_SHORT).show();
+                return;
+            }
             if (!isEditMode) {
                 isEditMode = true;
                 Toast.makeText(this, "Tap a category to rename", Toast.LENGTH_SHORT).show();

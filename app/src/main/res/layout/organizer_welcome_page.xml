@@ -5,7 +5,7 @@
     android:id="@+id/main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".Welcome.WelcomePage">
+    tools:context=".Welcome.OrganizerWelcomePage">
 
     <TextView
         android:id="@+id/organizerWelcomeTextView"
@@ -19,6 +19,17 @@
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
+
+    <Button
+        android:id="@+id/eventOrganizerManagement"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:backgroundTint="@android:color/holo_blue_dark"
+        android:onClick="OnEventsOrganizerButton"
+        android:text="@string/eventManagement"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/organizerWelcomeTextView" />
 
     <Button
         android:id="@+id/signOut"

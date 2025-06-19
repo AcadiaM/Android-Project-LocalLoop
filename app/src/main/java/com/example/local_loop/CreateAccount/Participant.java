@@ -1,10 +1,9 @@
-
+package com.example.local_loop.CreateAccount;
 
 /**
  * User class of type participant.
  * Basic user class capable of signing up for events.
  */
-package com.example.local_loop.CreateAccount;
 
 public class Participant extends User {
 

@@ -36,4 +36,11 @@
     <string name="userManagement">User Management</string>
     <string name="eventManagement">Event Management</string>
 
+    <!-- Custom Date/Time Picker style -->
+    <style name="MyDatePickerDialogTheme" parent="Theme.MaterialComponents.DayNight.Dialog">
+        <item name="colorPrimary">@android:color/holo_blue_dark</item>
+        <item name="colorPrimaryVariant">@android:color/holo_blue_dark</item>
+        <item name="colorAccent">@android:color/holo_blue_dark</item>
+    </style>
+
 </resources>

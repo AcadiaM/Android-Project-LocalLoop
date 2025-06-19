@@ -2,6 +2,7 @@ package com.example.local_loop.Category;
 
 import com.example.local_loop.R;
 
+import android.annotation.SuppressLint;
 import android.graphics.Color;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -23,23 +24,23 @@ public class CategoryAdapter extends RecyclerView.Adapter<CategoryAdapter.Catego
     }
 
     private List<Category> categories;
-    private OnCategoryClickListener listener;
+    private final OnCategoryClickListener listener;
     public CategoryAdapter(List<Category> categories, OnCategoryClickListener listener) {
         this.categories = categories;
         this.listener = listener;
     }
 
     private boolean deleteMode = false;
-    private List<Integer> selectedIds = new ArrayList<>();
 
+    @SuppressLint("NotifyDataSetChanged")
     public void setDeleteMode(boolean enabled) {
         this.deleteMode = enabled;
         notifyDataSetChanged();
     }
 
     private boolean editMode = false;
-    private int selectedCategoryIdForRename = -1;
 
+    @SuppressLint("NotifyDataSetChanged")
     public void setEditMode(boolean enabled) {
         this.editMode = enabled;
         notifyDataSetChanged();
@@ -47,6 +48,7 @@ public class CategoryAdapter extends RecyclerView.Adapter<CategoryAdapter.Catego
 
     private List<Integer> selectedCategoryIds = new ArrayList<>();
 
+    @SuppressLint("NotifyDataSetChanged")
     public void setSelectedCategoryIds(List<Integer> selectedIds){
         this.selectedCategoryIds= selectedIds;
         notifyDataSetChanged();
@@ -120,16 +122,13 @@ public class CategoryAdapter extends RecyclerView.Adapter<CategoryAdapter.Catego
         return categories.size();
     }
 
+    @SuppressLint("NotifyDataSetChanged")
     public void updateCategories(List<Category> newCategories) {
         this.categories = newCategories;
         notifyDataSetChanged();
     }
 
-    public int getSelectedCategoryIdForRename() {
-        return selectedCategoryIdForRename;
-    }
-
-    static class CategoryViewHolder extends RecyclerView.ViewHolder {
+    public static class CategoryViewHolder extends RecyclerView.ViewHolder {
         Button categoryButton;
 
         public CategoryViewHolder(@NonNull View itemView) {
