@@ -204,7 +204,7 @@ public class EventActivity extends AppCompatActivity {
         datetimeInput.setOnClickListener(v -> showDateTimePicker(datetimeInput));
 
         TextView title = new TextView(this);
-        title.setText(getString(R.string.add_category));
+        title.setText(getString(R.string.add_event));
         title.setPadding(40, 40, 40, 40);
         title.setGravity(Gravity.CENTER);
         title.setTextColor(ContextCompat.getColor(this, R.color.holo_dark_blue));
