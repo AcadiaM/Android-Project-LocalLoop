@@ -54,7 +54,7 @@
 
     <Space
         android:layout_width="match_parent"
-        android:layout_height="11dp" />
+        android:layout_height="16dp" />
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -211,7 +211,8 @@
 
     <Space
         android:layout_width="match_parent"
-        android:layout_height="11dp" />
+        android:layout_height="16dp" />
+
 
     <Button
         android:id="@+id/submitButton"
@@ -223,11 +224,14 @@
         android:backgroundTint="@android:color/holo_blue_dark"
         android:fontFamily="@font/bree_serif"
         android:foregroundGravity="center_horizontal"
-        android:gravity="center_horizontal"
+        android:gravity="center"
         android:onClick="onSubmitButton"
         android:text="@string/submit_button"
         android:textAlignment="center" />
 
+    <Space
+        android:layout_width="match_parent"
+        android:layout_height="16dp" />
 
     <com.google.android.material.button.MaterialButton
         android:id="@+id/signOut"
@@ -241,12 +245,11 @@
         android:text=""
         app:icon="@drawable/undo_icon"
         app:iconGravity="textStart"
-        app:iconPadding="0dp"
         app:iconSize="25dp"
         app:iconTint="@color/white"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.061"
+        app:layout_constraintHorizontal_bias="0.063"
         app:layout_constraintStart_toStartOf="parent"
         tools:ignore="RedundantDescriptionCheck" />
 

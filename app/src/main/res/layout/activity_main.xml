@@ -10,7 +10,7 @@
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="wrap_content"
         android:layout_marginStart="50dp"
         android:layout_marginTop="230dp"
         android:layout_marginEnd="50dp"
@@ -38,9 +38,12 @@
             android:id="@+id/Signbutton"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:minHeight="48dp"
+            android:layout_gravity="center"
             android:backgroundTint="@color/black"
             android:onClick="OnSignButton"
             android:text="@string/sign_button"
+            android:textColor="@android:color/white"
             tools:ignore="VisualLintButtonSize" />
 
         <Space
@@ -51,10 +54,12 @@
             android:id="@+id/Createbutton"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:minHeight="48dp"
+            android:layout_gravity="center"
             android:backgroundTint="@android:color/holo_blue_dark"
             android:onClick="OnCreateButton"
             android:text="@string/create_button"
-            android:textColor="#212121"
+            android:textColor="@android:color/white"
             tools:ignore="VisualLintButtonSize" />
     </LinearLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>
