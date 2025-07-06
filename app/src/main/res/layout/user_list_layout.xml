@@ -1,30 +1,32 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@id/main"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:layout_marginTop="40dp"
-    android:id="@id/main"
     tools:context=".UserList.UserList">
 
     <TextView
         android:id="@+id/Type"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_toEndOf="@id/LastName"
+        android:layout_marginLeft="12dp"
         android:textColor="@color/black"
         android:textSize="20sp"
+        app:layout_constraintStart_toEndOf="@id/LastName"
+        app:layout_constraintTop_toTopOf="parent"
         tools:text="Type" />
 
     <TextView
         android:id="@+id/Email"
         android:layout_width="120dp"
         android:layout_height="wrap_content"
-        android:layout_below="@id/FirstName"
-        android:layout_marginTop="0dp"
-        android:layout_toEndOf="@id/Username"
+        android:layout_marginStart="56dp"
         android:textColor="@color/black"
+        app:layout_constraintStart_toEndOf="@id/Username"
+        app:layout_constraintTop_toBottomOf="@id/FirstName"
         tools:text="E-mail" />
 
     <TextView
@@ -34,43 +36,60 @@
         android:layout_marginRight="12dp"
         android:textColor="@color/black"
         android:textSize="20sp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
         tools:text="First Name" />
 
     <TextView
         android:id="@+id/LastName"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginLeft="12dp"
         android:layout_marginRight="12dp"
-        android:layout_toEndOf="@id/FirstName"
         android:textColor="@color/black"
         android:textSize="20sp"
+        app:layout_constraintStart_toEndOf="@id/FirstName"
+        app:layout_constraintTop_toTopOf="parent"
         tools:text="Last Name" />
 
     <TextView
         android:id="@+id/Username"
         android:layout_width="84dp"
         android:layout_height="wrap_content"
-        android:layout_below="@id/FirstName"
-        android:layout_marginRight="30dp"
+        android:layout_marginStart="32dp"
         android:textColor="@color/black"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/FirstName"
         tools:text="Username" />
 
-    <ImageButton
+    <com.google.android.material.button.MaterialButton
         android:id="@+id/delete"
         android:layout_width="45dp"
         android:layout_height="45dp"
-        android:layout_alignParentRight="true"
-        app:srcCompat="@drawable/delete_icon"
-        tools:srcCompat="@drawable/delete_icon" />
+        android:layout_marginEnd="4dp"
+        android:backgroundTint="@android:color/transparent"
+        android:text=""
+        app:icon="@drawable/deleteicon"
+        app:iconGravity="textStart"
+        app:iconPadding="0dp"
+        app:iconSize="25dp"
+        app:iconTint="@color/black"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
-    <ImageButton
+    <com.google.android.material.button.MaterialButton
         android:id="@+id/disable"
         android:layout_width="45dp"
         android:layout_height="45dp"
-        android:layout_marginRight="0dp"
-        android:layout_toLeftOf="@id/delete"
-        app:srcCompat="@drawable/disable_icon"
-        tools:srcCompat="@drawable/disable_icon" />
+        android:layout_marginEnd="50dp"
+        android:backgroundTint="@android:color/transparent"
+        android:text=""
+        app:icon="@drawable/disableicon"
+        app:iconGravity="textStart"
+        app:iconPadding="0dp"
+        app:iconSize="25dp"
+        app:iconTint="@color/black"
+        app:layout_constraintEnd_toEndOf="@id/delete"
+        app:layout_constraintTop_toTopOf="parent" />
 
-
-</RelativeLayout>
+</androidx.constraintlayout.widget.ConstraintLayout>

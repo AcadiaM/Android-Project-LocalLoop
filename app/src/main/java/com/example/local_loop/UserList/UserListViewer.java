@@ -13,7 +13,7 @@ import com.example.local_loop.database.DatabaseHelper;
 public class UserListViewer extends RecyclerView.ViewHolder {
 
     TextView firstView, lastView, userView, emailView, typeView;
-    ImageButton disable, delete;
+    com.google.android.material.button.MaterialButton disable, delete;
 
     public UserListViewer(@NonNull View itemView) {
         super(itemView);

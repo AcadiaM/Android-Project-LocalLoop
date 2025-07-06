@@ -5,6 +5,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
@@ -37,7 +38,7 @@ public class RecycleAdapter extends RecyclerView.Adapter<UserListViewer>{
     @NonNull
     @Override
     public UserListViewer onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        return new UserListViewer(LayoutInflater.from(context).inflate(R.layout.user_list_layout, parent, false));
+        return new UserListViewer(LayoutInflater.from(parent.getContext()).inflate(R.layout.user_list_layout, parent, false));
     }
 
     @Override
@@ -49,19 +50,35 @@ public class RecycleAdapter extends RecyclerView.Adapter<UserListViewer>{
         holder.typeView.setText(users.get(position).getRole());
         //The imageButton images do not show on the emulator. Right-most is delete, left-most is disable.
         holder.delete.setOnClickListener(v->{
-            TextView emailText = holder.emailView;
-            DatabaseHelper db = new DatabaseHelper(context);
-            db.deleteUser(emailText.getText().toString());
-            this.deleteEntry(emailText.getText().toString());
-            notifyDataSetChanged();
+            String email = holder.emailView.getText().toString();
+            onDelete(email);
         });
         holder.disable.setOnClickListener(v -> {
-            TextView emailText = holder.emailView;
-            DatabaseHelper db = new DatabaseHelper(context);
-            db.deactivateUser(emailText.getText().toString());
-            notifyDataSetChanged();
+            String email = holder.emailView.getText().toString();
+            onDisable(email);
         });
         //Not currently implemented to UI, but shows in database.
+    }
+
+    public void onDisable(String email){
+        DatabaseHelper db = new DatabaseHelper(context);
+        db.deactivateUser(email);
+        notifyDataSetChanged();
+        String username = "";
+        for (User user: users){
+            if (user.getEmail().equals(email)){
+                username = user.getUsername();
+                break;
+            }
+        }
+        Toast.makeText(context, "User " + username + " is now disabled", Toast.LENGTH_SHORT).show();
+    }
+
+    public void onDelete(String email){
+        DatabaseHelper db = new DatabaseHelper(context);
+        db.deleteUser(email);
+        this.deleteEntry(email);
+        notifyDataSetChanged();
     }
 
     @Override
