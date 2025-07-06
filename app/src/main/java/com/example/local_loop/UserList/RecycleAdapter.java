@@ -62,16 +62,34 @@ public class RecycleAdapter extends RecyclerView.Adapter<UserListViewer>{
 
     public void onDisable(String email){
         DatabaseHelper db = new DatabaseHelper(context);
-        db.deactivateUser(email);
-        notifyDataSetChanged();
-        String username = "";
-        for (User user: users){
-            if (user.getEmail().equals(email)){
-                username = user.getUsername();
+        switch (db.isActive(email)) {
+            case 1:
+                //The user is active and must be deactivated.
+                db.deactivateUser(email);
+                notifyDataSetChanged();
+                String username1 = "";
+                for (User user: users){
+                    if (user.getEmail().equals(email)){
+                        username1 = user.getUsername();
+                        break;
+                    }
+                }
+                Toast.makeText(context, "User " + username1 + " is now disabled", Toast.LENGTH_SHORT).show();
                 break;
-            }
+            case 0:
+                //The user is inactive and must be reactivated.
+                db.reactivateUser(email);
+                notifyDataSetChanged();
+                String username2 = "";
+                for (User user: users){
+                    if (user.getEmail().equals(email)){
+                        username2 = user.getUsername();
+                        break;
+                    }
+                }
+                Toast.makeText(context, "User " + username2 + " is now enabled", Toast.LENGTH_SHORT).show();
+                break;
         }
-        Toast.makeText(context, "User " + username + " is now disabled", Toast.LENGTH_SHORT).show();
     }
 
     public void onDelete(String email){

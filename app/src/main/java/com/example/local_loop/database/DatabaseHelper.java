@@ -162,10 +162,31 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
 
     public void deactivateUser(String email) {
+        //The user is active (active=1) and is set to inactive=0
         SQLiteDatabase db = getWritableDatabase();
         ContentValues values = new ContentValues();
         values.put("active", 0);
         db.update(TABLE_USERS, values, "email = ?", new String[]{email});
+    }
+
+    public void reactivateUser(String email) {
+        //The user is inactive (active=0) and is set to active=1.
+        SQLiteDatabase db = getWritableDatabase();
+        ContentValues values = new ContentValues();
+        values.put("active", 1);
+        db.update(TABLE_USERS, values, "email = ?", new String[]{email});
+    }
+
+    public int isActive(String email) {
+        int active = 1;
+        //Set default to active.
+        SQLiteDatabase db = getReadableDatabase();
+        Cursor cursor = db.rawQuery("SELECT * FROM " + TABLE_USERS + " WHERE email = ?", new String[]{email});
+        if (cursor.moveToFirst()) {
+            active = cursor.getInt(7);
+        }
+        cursor.close();
+        return active;
     }
 
     public List<User> getUsers() {
