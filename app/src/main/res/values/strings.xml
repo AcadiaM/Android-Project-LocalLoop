@@ -33,6 +33,7 @@
     <string name="back_button">Back Button</string>
 
     <string name="add_event">Add an Event</string>
+    <string name="edit_event">Edit Event</string>
     <string name="categoriesManagement">Categories Management</string>
     <string name="userManagement">User Management</string>
     <string name="eventManagement">Event Management</string>

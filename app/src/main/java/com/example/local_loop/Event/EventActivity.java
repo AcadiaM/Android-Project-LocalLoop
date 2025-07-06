@@ -349,7 +349,7 @@ public class EventActivity extends AppCompatActivity {
         datetimeInput.setText(event.getDateTime());
 
         TextView title = new TextView(this);
-        title.setText(getString(R.string.edit_category));
+        title.setText(getString(R.string.edit_event));
         title.setPadding(40, 40, 40, 40);
         title.setGravity(Gravity.CENTER);
         title.setTextColor(ContextCompat.getColor(this, R.color.holo_dark_blue));
