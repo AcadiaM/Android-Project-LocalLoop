@@ -7,12 +7,19 @@ class User  {
     - password : String
     - username : String
     - isActive : boolean
-+ User(String firstName, String lastName, String username, String email, String password, String role)
+    + User(String firstName, String lastName, String username, String email, String password, String role)
+    + getUsername() : String
+    + getFirstName() : String
+    + getLastName() : String
+    + getPassword() : String
+    + getEmail() : String
+    + getRole() : String
+    + deActivate() : boolean
 }
 class Admin {
     - {static} admin : Admin
     + Admin(String firstName, String lastName, String username, String email, String password)
-    + {static} Admin getAdmin()
+    + getAdmin() : {static} Admin
 }
 
 class Participant  {
@@ -28,24 +35,38 @@ class Category {
     - NAME : String {final}
     - DESCRIPTION : String {final}
     + Category(int id, String name, String description)
-    + int getId()
-    + String getName()
-    + String getDescription()
+    + getId() : int
+    + getName() : String
+    + getDescription() : String
 }
 
 class Event {
     - id : int
-    - categoryId : int
-    - title : String
-    + Event(int id, int categoryId, String title)
-    + int getId()
-    + int getCategoryId()
-    + String getTitle()
+    - title : String {final}
+    - description : String {final}
+    - categoryId : int {final}
+    - organizer : String {final}
+    - fee : double {final}
+    - dateTime : String {final}
+    + Event(int id, String title, String description, int categoryId, String organizer, double fee, String dateTime)
+    + getId() : int
+    + setId(int id) : void
+    + getTitle() : String
+    + getDescription() : String
+    + setDescription(String d) : void
+    + getCategoryId() : int
+    + getOrganizer() : String
+    + setOrganizer(String o) : void
+    + getFee(): double
+    + getDateTime() : String
 }
 
 User <|-- Admin
 User <|-- Participant
 User <|-- Organizer
 Admin "1" ..>"*" Category : <<creates>>
-Category "1"..>"*" Event
+Category "1"*.."*" Event : <<Needs to Exist>>
+Organizer "1" -->"0...*" Event <<creates>>
+Admin --> Organizer : <<Manages>>
+Admin --> Participant : <<Manages>>
 @enduml
