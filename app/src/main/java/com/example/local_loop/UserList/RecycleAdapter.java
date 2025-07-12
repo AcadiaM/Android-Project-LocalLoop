@@ -55,10 +55,10 @@ public class RecycleAdapter extends RecyclerView.Adapter<UserListViewer>{
         holder.disable.setOnClickListener(v -> {
             String email = holder.emailView.getText().toString();
             String username = holder.userView.getText().toString();
-            onDisable(holder, email, username, holder.getAdapterPosition());
+            onDisable(holder, username, holder.getAdapterPosition());
         });
         DatabaseHelper db = new DatabaseHelper(context);
-        if (db.isActive(users.get(position).getEmail()) == 0) {
+        if (db.isActive(users.get(position).getUsername()) == 0) {
             holder.disable.setIconTint(ColorStateList.valueOf(Color.RED));
             holder.disable.setHint("User is disabled.");
         } else {
@@ -69,25 +69,24 @@ public class RecycleAdapter extends RecyclerView.Adapter<UserListViewer>{
 
     /**
      * @param holder Reference to the current view holder.
-     * @param email The email of the user being modified.
      * @param username The username of the user being modified.
      * @param pos The position of the user being modified in the recycle adapter.
      *
      * Disabled or re-enables the selected user when clicking the disable button. Displays the button's icon in red when user is disabled and displays Toast indicating a change was made.
      */
-    public void onDisable(UserListViewer holder, String email, String username, int pos){
+    public void onDisable(UserListViewer holder, String username, int pos){
         DatabaseHelper db = new DatabaseHelper(context);
-        switch (db.isActive(email)) {
+        switch (db.isActive(username)) {
             case 1:
                 //The user is active and must be deactivated.
-                db.deactivateUser(email);
+                db.deactivateUser(username);
                 holder.disable.setIconTint(ColorStateList.valueOf(Color.RED));
                 Toast.makeText(context.getApplicationContext(), "User " + username + " is now disabled.", Toast.LENGTH_SHORT).show();
                 notifyItemChanged(pos);
                 break;
             case 0:
                 //The user is inactive and must be reactivated.
-                db.reactivateUser(email);
+                db.reactivateUser(username);
                 holder.disable.setIconTint(ColorStateList.valueOf(Color.BLACK));
                 Toast.makeText(context.getApplicationContext(), "User " + username + " is now enabled.", Toast.LENGTH_SHORT).show();
                 notifyItemChanged(pos);

@@ -174,30 +174,29 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         // Then delete user
         db.delete("users", "email = ?", new String[]{email});
     }
-
-
-    public void deactivateUser(String email) {
+    
+    public void deactivateUser(String username) {
         //The user is active (active=1) and is set to inactive=0
         SQLiteDatabase db = getWritableDatabase();
         ContentValues values = new ContentValues();
         values.put("active", 0);
-        db.update(TABLE_USERS, values, "email = ?", new String[]{email});
+        db.update(TABLE_USERS, values, "username = ?", new String[]{username});
     }
 
-    public void reactivateUser(String email) {
+    public void reactivateUser(String username) {
         //The user is inactive (active=0) and is set to active=1.
         SQLiteDatabase db = getWritableDatabase();
         ContentValues values = new ContentValues();
         values.put("active", 1);
-        db.update(TABLE_USERS, values, "email = ?", new String[]{email});
+        db.update(TABLE_USERS, values, "username = ?", new String[]{username});
     }
 
-    public int isActive(String email) {
+    public int isActive(String username) {
         int active = 1; // Default to active.
         SQLiteDatabase db = getReadableDatabase();
-        Cursor cursor = db.query(TABLE_USERS, null, "email = ?", new String[]{email}, null, null, null);
+        Cursor cursor = db.query(TABLE_USERS, new String[]{"active"}, "username = ?", new String[]{username}, null, null, null);
         if (cursor.moveToFirst()) {
-            active = cursor.getInt(7);
+            active = cursor.getInt(0);
         }
         cursor.close();
         return active;
