@@ -1,16 +1,12 @@
 package com.example.local_loop.UserList;
 
-import android.content.res.ColorStateList;
-import android.graphics.Color;
 import android.view.View;
-import android.widget.ImageButton;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.local_loop.R;
-import com.example.local_loop.database.DatabaseHelper;
 
 public class UserListViewer extends RecyclerView.ViewHolder {
 

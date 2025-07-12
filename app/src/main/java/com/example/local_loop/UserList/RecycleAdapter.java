@@ -4,9 +4,7 @@ import android.content.Context;
 import android.content.res.ColorStateList;
 import android.graphics.Color;
 import android.view.LayoutInflater;
-import android.view.View;
 import android.view.ViewGroup;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -22,7 +20,6 @@ public class RecycleAdapter extends RecyclerView.Adapter<UserListViewer>{
 
     Context context;
     List<User> users;
-    UserListViewer viewer;
 
     public RecycleAdapter(Context context, List<User> users) {
         this.context = context;
@@ -61,15 +58,12 @@ public class RecycleAdapter extends RecyclerView.Adapter<UserListViewer>{
             onDisable(holder, email, username, holder.getAdapterPosition());
         });
         DatabaseHelper db = new DatabaseHelper(context);
-        switch (db.isActive(users.get(position).getEmail())) {
-            case 0:
-                holder.disable.setIconTint(ColorStateList.valueOf(Color.RED));
-                holder.disable.setHint("User is disabled.");
-                break;
-            default:
-                holder.disable.setIconTint(ColorStateList.valueOf(Color.BLACK));
-                holder.disable.setHint("User is not disabled.");
-                break;
+        if (db.isActive(users.get(position).getEmail()) == 0) {
+            holder.disable.setIconTint(ColorStateList.valueOf(Color.RED));
+            holder.disable.setHint("User is disabled.");
+        } else {
+            holder.disable.setIconTint(ColorStateList.valueOf(Color.BLACK));
+            holder.disable.setHint("User is not disabled.");
         }
     }
 
