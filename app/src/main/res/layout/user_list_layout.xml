@@ -21,9 +21,9 @@
 
     <TextView
         android:id="@+id/Email"
-        android:layout_width="120dp"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="56dp"
+        android:layout_width="107dp"
+        android:layout_height="20dp"
+        android:layout_marginStart="40dp"
         android:textColor="@color/black"
         app:layout_constraintStart_toEndOf="@id/Username"
         app:layout_constraintTop_toBottomOf="@id/FirstName"
@@ -68,6 +68,7 @@
         android:layout_height="45dp"
         android:layout_marginEnd="4dp"
         android:backgroundTint="@android:color/transparent"
+        android:hint="Delete user (cannot be undone)."
         android:text=""
         app:icon="@drawable/deleteicon"
         app:iconGravity="textStart"
@@ -83,6 +84,7 @@
         android:layout_height="45dp"
         android:layout_marginEnd="50dp"
         android:backgroundTint="@android:color/transparent"
+        android:hint="User is not disabled."
         android:text=""
         app:icon="@drawable/disableicon"
         app:iconGravity="textStart"

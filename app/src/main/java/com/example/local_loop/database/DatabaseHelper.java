@@ -137,6 +137,18 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         return null;
     }
 
+    public String getUsernameByEmail(String email) {
+        SQLiteDatabase db = this.getReadableDatabase();
+        Cursor cursor = db.query(TABLE_USERS, new String[]{"username"}, "email = ?", new String[]{email}, null, null, null);
+        if (cursor.moveToFirst()) {
+            String username = cursor.getString(0);
+            cursor.close();
+            return username;
+        }
+        cursor.close();
+        return null;
+    }
+
     public void insertAdmin() {
         SQLiteDatabase db = this.getWritableDatabase();
         Cursor cursor = db.query("users", null, "username = ?", new String[]{"admin"}, null, null, null);

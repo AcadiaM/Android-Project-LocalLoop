@@ -1,6 +1,8 @@
 package com.example.local_loop.UserList;
 
 import android.content.Context;
+import android.content.res.ColorStateList;
+import android.graphics.Color;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -20,6 +22,7 @@ public class RecycleAdapter extends RecyclerView.Adapter<UserListViewer>{
 
     Context context;
     List<User> users;
+    UserListViewer viewer;
 
     public RecycleAdapter(Context context, List<User> users) {
         this.context = context;
@@ -48,55 +51,63 @@ public class RecycleAdapter extends RecyclerView.Adapter<UserListViewer>{
         holder.userView.setText(users.get(position).getUsername());
         holder.emailView.setText(users.get(position).getEmail());
         holder.typeView.setText(users.get(position).getRole());
-        //The imageButton images do not show on the emulator. Right-most is delete, left-most is disable.
         holder.delete.setOnClickListener(v->{
             String email = holder.emailView.getText().toString();
-            onDelete(email);
+            onDelete(email, holder.getAdapterPosition());
         });
         holder.disable.setOnClickListener(v -> {
             String email = holder.emailView.getText().toString();
-            onDisable(email);
+            String username = holder.userView.getText().toString();
+            onDisable(holder, email, username, holder.getAdapterPosition());
         });
-        //Not currently implemented to UI, but shows in database.
+        DatabaseHelper db = new DatabaseHelper(context);
+        switch (db.isActive(users.get(position).getEmail())) {
+            case 0:
+                holder.disable.setIconTint(ColorStateList.valueOf(Color.RED));
+                holder.disable.setHint("User is disabled.");
+                break;
+            default:
+                holder.disable.setIconTint(ColorStateList.valueOf(Color.BLACK));
+                holder.disable.setHint("User is not disabled.");
+                break;
+        }
     }
 
-    public void onDisable(String email){
+    /**
+     * @param holder Reference to the current view holder.
+     * @param email The email of the user being modified.
+     * @param username The username of the user being modified.
+     * @param pos The position of the user being modified in the recycle adapter.
+     *
+     * Disabled or re-enables the selected user when clicking the disable button. Displays the button's icon in red when user is disabled and displays Toast indicating a change was made.
+     */
+    public void onDisable(UserListViewer holder, String email, String username, int pos){
         DatabaseHelper db = new DatabaseHelper(context);
         switch (db.isActive(email)) {
             case 1:
                 //The user is active and must be deactivated.
                 db.deactivateUser(email);
-                notifyDataSetChanged();
-                String username1 = "";
-                for (User user: users){
-                    if (user.getEmail().equals(email)){
-                        username1 = user.getUsername();
-                        break;
-                    }
-                }
-                Toast.makeText(context, "User " + username1 + " is now disabled", Toast.LENGTH_SHORT).show();
+                holder.disable.setIconTint(ColorStateList.valueOf(Color.RED));
+                Toast.makeText(context.getApplicationContext(), "User " + username + " is now disabled.", Toast.LENGTH_SHORT).show();
+                notifyItemChanged(pos);
                 break;
             case 0:
                 //The user is inactive and must be reactivated.
                 db.reactivateUser(email);
-                notifyDataSetChanged();
-                String username2 = "";
-                for (User user: users){
-                    if (user.getEmail().equals(email)){
-                        username2 = user.getUsername();
-                        break;
-                    }
-                }
-                Toast.makeText(context, "User " + username2 + " is now enabled", Toast.LENGTH_SHORT).show();
+                holder.disable.setIconTint(ColorStateList.valueOf(Color.BLACK));
+                Toast.makeText(context.getApplicationContext(), "User " + username + " is now enabled.", Toast.LENGTH_SHORT).show();
+                notifyItemChanged(pos);
                 break;
         }
     }
 
-    public void onDelete(String email){
+    public void onDelete(String email, int pos){
         DatabaseHelper db = new DatabaseHelper(context);
+        String username = db.getUsernameByEmail(email);
         db.deleteUser(email);
         this.deleteEntry(email);
-        notifyDataSetChanged();
+        Toast.makeText(context.getApplicationContext(), "User " + username + " was deleted.", Toast.LENGTH_SHORT).show();
+        notifyItemRemoved(pos);
     }
 
     @Override

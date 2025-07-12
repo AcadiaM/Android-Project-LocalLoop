@@ -1,5 +1,7 @@
 package com.example.local_loop.UserList;
 
+import android.content.res.ColorStateList;
+import android.graphics.Color;
 import android.view.View;
 import android.widget.ImageButton;
 import android.widget.TextView;
@@ -22,7 +24,7 @@ public class UserListViewer extends RecyclerView.ViewHolder {
         userView = itemView.findViewById(R.id.Username);
         emailView = itemView.findViewById(R.id.Email);
         typeView = itemView.findViewById(R.id.Type);
-        disable = itemView.findViewById(R.id.disable);
         delete = itemView.findViewById(R.id.delete);
+        disable = itemView.findViewById(R.id.disable);
     }
 }
