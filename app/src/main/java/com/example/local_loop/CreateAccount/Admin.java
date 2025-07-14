@@ -13,6 +13,11 @@ public class Admin extends User {
         super(firstName, lastName, username, email, password, "admin");
     }
 
+    /**
+     * This function creates the predefined admin, as given in the project description.
+     *
+     * @return the predefined admin.
+     */
     public static Admin getAdmin(){
         if(admin == null){
             admin = new Admin( "admin", "admin", "admin","admin", "XPI76SZUqyCjVxgnUjm0");
