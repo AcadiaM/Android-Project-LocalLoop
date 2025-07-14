@@ -155,7 +155,7 @@ public class LoginActivity extends AppCompatActivity {
                 intent.putExtra("userType", userType); // Pass the userType to the WelcomePage
                 startActivity(intent);
             }
-        else if (userType.equalsIgnoreCase("user")){
+        else if (userType.equalsIgnoreCase("participant")) {
             Intent intent = new Intent(getApplicationContext(), WelcomePage.class);
             intent.putExtra("username", loggedInUser.getDisplayName());// Pass the username to the WelcomePage
             intent.putExtra("userType", userType); // Pass the userType to the WelcomePage

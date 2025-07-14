@@ -397,6 +397,33 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         return events;
     }
 
+//Returns a lsit of all the events stored in the database.
+    public List<Event> getAllEvents(){
+        List<Event> eventList = new ArrayList<>();
+        SQLiteDatabase db = this.getReadableDatabase();
+        String query = "SELECT e.id, e.title, e.description, e.category_id, " +
+                "e.organizer, e.fee, e.datetime " +
+                "FROM events e";
+        Cursor cursor = db.rawQuery(query, null);
+
+        if (cursor.moveToFirst()){
+            do {
+                int id = cursor.getInt(cursor.getColumnIndexOrThrow("id"));
+                String title = cursor.getString(cursor.getColumnIndexOrThrow("title"));
+                String description = cursor.getString(cursor.getColumnIndexOrThrow("description"));
+                int categoryId = cursor.getInt(cursor.getColumnIndexOrThrow("category_id"));
+                String organizer = cursor.getString(cursor.getColumnIndexOrThrow("organizer"));
+                double fee = cursor.getDouble(cursor.getColumnIndexOrThrow("fee"));
+                String dateTime = cursor.getString(cursor.getColumnIndexOrThrow("datetime"));
+
+                eventList.add(new Event(id, title, description, categoryId, organizer, fee, dateTime));
+            } while (cursor.moveToNext());
+        }
+        cursor.close();
+        return eventList;
+
+    }
+
     public Category getCategoryById(int categoryId) {
         SQLiteDatabase db = this.getReadableDatabase();
         Cursor cursor = db.query("categories", null, "id=?", new String[]{String.valueOf(categoryId)}, null, null, null);

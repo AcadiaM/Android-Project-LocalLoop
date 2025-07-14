@@ -33,6 +33,7 @@ public class MainActivity extends AppCompatActivity {
             return insets;
         });
 
+        //this is to hide the system bars and make the app immersive
         decorView = getWindow().getDecorView();
         decorView.setOnSystemUiVisibilityChangeListener(new View.OnSystemUiVisibilityChangeListener() {
             @Override
@@ -44,6 +45,7 @@ public class MainActivity extends AppCompatActivity {
         })
     ;}
 
+    //this method is called when the activity gains or loses focus
     @Override
     public void onWindowFocusChanged(boolean hasFocus) {
         super.onWindowFocusChanged(hasFocus);

@@ -9,6 +9,7 @@ import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
+import com.example.local_loop.Event.UserEventActivity;
 import com.example.local_loop.R;
 import com.example.local_loop.Login.LoginActivity;
 
@@ -39,6 +40,11 @@ public class WelcomePage extends AppCompatActivity {
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
             return insets;
         });
+    }
+
+    public void OnBrowseEventsButton(View view){
+        Intent intent = new Intent(WelcomePage.this, UserEventActivity.class);
+        startActivity(intent);
     }
 
     public void OnLogoutButton(View view) {
