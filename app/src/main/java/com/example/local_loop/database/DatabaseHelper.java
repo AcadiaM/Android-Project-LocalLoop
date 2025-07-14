@@ -11,6 +11,7 @@ import com.example.local_loop.Category.Category;
 import com.example.local_loop.CreateAccount.Admin;
 import com.example.local_loop.CreateAccount.User;
 import com.example.local_loop.Event.Event;
+import com.example.local_loop.Event.Request;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -59,8 +60,8 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                 "event_id INTEGER, " +
                 "attendee_id TEXT NOT NULL, " +
                 "status TEXT DEFAULT 'pending', " +
-                "FOREIGN KEY(event_id) REFERENCES Events(event_id) ON DELETE CASCADE, " +
-                "FOREIGN KEY(attendee_id) REFERENCES Users(username) ON DELETE CASCADE);");
+                "FOREIGN KEY(event_id) REFERENCES events(event_id) ON DELETE CASCADE, " +
+                "FOREIGN KEY(attendee_id) REFERENCES users(username) ON DELETE CASCADE);");
     }
 
     @Override
@@ -488,15 +489,65 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         return events;
     }
 
-    public boolean submitJoinRequest(int eventId, int attendeeId) {
+    public boolean submitJoinRequest(int eventId, String attendeeId) {
         SQLiteDatabase db = this.getWritableDatabase();
+
+        Cursor cursor = db.query("requests",
+                new String[]{"request_id"},
+                "event_id = ? AND attendee_id = ?",
+                new String[]{String.valueOf(eventId), attendeeId},
+                null, null, null);
+
+        boolean exists = cursor.moveToFirst();
+        cursor.close();
+
+        if (exists) {
+            db.close();
+            return false;  // Request already exists
+        }
+
         ContentValues values = new ContentValues();
 
         values.put("event_id", eventId);
         values.put("attendee_id", attendeeId);
 
         long result = db.insert("Requests", null, values);
+        db.close();
         return result != -1;
     }
+
+    public List<Request> getPendingRequests(String organizerUsername) {
+        SQLiteDatabase db = this.getReadableDatabase();
+        List<Request> requests = new ArrayList<>();
+
+        String query = "SELECT r.request_id, r.event_id, r.attendee_id, r.status " +
+                "FROM requests r INNER JOIN events e ON r.event_id = e.id " +
+                "WHERE e.organizer = ? AND r.status = 'pending'";
+
+        Cursor cursor = db.rawQuery(query, new String[]{organizerUsername});
+
+        while (cursor.moveToNext()) {
+            Request req = new Request(
+                    cursor.getInt(0),  // request_id
+                    cursor.getInt(1),  // event_id
+                    cursor.getString(2),  // attendee_id
+                    cursor.getString(3)); // status
+            requests.add(req);
+        }
+        cursor.close();
+        db.close();
+        return requests;
+    }
+
+    public boolean updateRequestStatus(int requestId, String newStatus) {
+        SQLiteDatabase db = this.getWritableDatabase();
+        ContentValues values = new ContentValues();
+        values.put("status", newStatus);
+
+        int rows = db.update("requests", values, "request_id=?", new String[]{String.valueOf(requestId)});
+        db.close();
+        return rows > 0;
+    }
+
 
 }
