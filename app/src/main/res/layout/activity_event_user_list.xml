@@ -10,15 +10,14 @@
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recyclerViewEvents"
-        android:layout_width="0dp"
-        android:layout_height="0dp"
+        android:layout_width="387dp"
+        android:layout_height="642dp"
         android:layout_marginStart="10dp"
-        android:layout_marginTop="70dp"
         android:layout_marginEnd="10dp"
-        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toBottomOf="@id/searchBar"
+        tools:layout_editor_absoluteY="67dp" />
 
     <com.google.android.material.button.MaterialButton
         android:id="@+id/signOut"
@@ -41,6 +40,28 @@
         app:layout_constraintStart_toStartOf="parent"
         tools:ignore="RedundantDescriptionCheck" />
 
+    <EditText
+        android:id="@+id/searchBar"
+        android:layout_width="253dp"
+        android:layout_height="62dp"
+        android:layout_marginTop="20dp"
+        android:drawableStart="@android:drawable/ic_menu_search"
+        android:hint="@string/search_events"
+        android:padding="10dp"
+        app:layout_constraintEnd_toStartOf="@+id/categorySpinner"
+        app:layout_constraintStart_toStartOf="@id/recyclerViewEvents"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintWidth_percent="0.65" />
+
+    <Spinner
+        android:id="@+id/categorySpinner"
+        android:layout_width="120dp"
+        android:layout_height="48dp"
+        android:layout_margin="10dp"
+        app:layout_constraintBottom_toBottomOf="@id/searchBar"
+        app:layout_constraintEnd_toEndOf="@id/recyclerViewEvents"
+        app:layout_constraintStart_toEndOf="@id/searchBar"
+        app:layout_constraintWidth_percent="0.35" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>
