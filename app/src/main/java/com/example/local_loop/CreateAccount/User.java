@@ -7,9 +7,8 @@ package com.example.local_loop.CreateAccount;
 public class User {
 
     private final String firstName, lastName, username, email, password, role;
-    private boolean isActive = true;
 
-
+//    private boolean isActive = true;
 
     public User(String firstName, String lastName,String username, String email, String password, String role) {
         this.firstName = firstName;
@@ -24,10 +23,9 @@ public class User {
         return
     } */
 
-    public void deActivate(){
-        isActive = false;
-    }
-
+//    public void deActivate(){
+//        isActive = false;
+//    }
 
     public String getUsername() {
         return this.username;

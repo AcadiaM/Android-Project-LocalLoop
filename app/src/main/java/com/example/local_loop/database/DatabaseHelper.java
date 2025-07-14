@@ -724,7 +724,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     }
 
     /**
-     * This function allows a participant to submit a request to attend an event.
+     * This function allows a participant to submit a request to attend an event, while ensuring that the participant has not already submitted a request to the event.
      *
      * @param eventId the row id of the event.
      * @param attendeeId the id of the attendee.
