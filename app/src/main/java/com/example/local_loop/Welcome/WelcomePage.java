@@ -1,5 +1,8 @@
 package com.example.local_loop.Welcome;
 
+import static com.example.local_loop.Event.EventDetailsActivity.EXTRA_SOURCE;
+import static com.example.local_loop.Event.EventDetailsActivity.SOURCE_PARTICIPANT;
+
 import android.content.Intent;
 import android.os.Bundle;
 
@@ -44,6 +47,9 @@ public class WelcomePage extends AppCompatActivity {
 
     public void OnBrowseEventsButton(View view){
         Intent intent = new Intent(WelcomePage.this, UserEventActivity.class);
+        intent.putExtra(EXTRA_SOURCE, SOURCE_PARTICIPANT);
+        intent.putExtra("username", getIntent().getStringExtra("username"));// Pass the username to the WelcomePage
+        intent.putExtra("userType", getIntent().getStringExtra("userType")); // Pass the userType to the WelcomePage
         startActivity(intent);
     }
 

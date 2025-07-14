@@ -65,7 +65,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                 "event_id INTEGER, " +
                 "attendee_id TEXT NOT NULL, " +
                 "status TEXT DEFAULT 'pending', " +
-                "FOREIGN KEY(event_id) REFERENCES events(event_id) ON DELETE CASCADE, " +
+                "FOREIGN KEY(event_id) REFERENCES events(id) ON DELETE CASCADE, " +
                 "FOREIGN KEY(attendee_id) REFERENCES users(username) ON DELETE CASCADE);");
     }
 
@@ -184,6 +184,18 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         }
         cursor.close();
         return null;
+    }
+
+    public int getIDByUsername(String username) {
+        SQLiteDatabase db = this.getReadableDatabase();
+        Cursor cursor = db.query(TABLE_USERS, new String[]{"id"}, "username = ?", new String[]{username}, null, null, null);
+        if (cursor.moveToFirst()) {
+            int attendeeID = cursor.getInt(0);
+            cursor.close();
+            return attendeeID;
+        }
+        cursor.close();
+        return -1;
     }
 
     /**
@@ -785,5 +797,20 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         return rows > 0;
     }
 
+    public boolean hasJoinRequest(int eventId, String attendeeId) {
+        SQLiteDatabase db = this.getReadableDatabase();
+
+        Cursor cursor = db.query("requests",
+                new String[]{"request_id"},
+                "event_id = ? AND attendee_id = ?",
+                new String[]{String.valueOf(eventId), attendeeId},
+                null, null, null);
+
+        boolean exists = cursor.moveToFirst();
+        cursor.close();
+        db.close();
+
+        return exists;
+    }
 
 }

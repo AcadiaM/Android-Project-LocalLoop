@@ -42,7 +42,7 @@ public class UserEventActivity extends AppCompatActivity {
         RecyclerView eventRecyclerView = findViewById(R.id.recyclerViewEvents);
         eventRecyclerView.setLayoutManager(new GridLayoutManager(this, 2));
 
-        eventAdapter = new EventAdapter(getIntent().getStringExtra(EXTRA_SOURCE), new ArrayList<>(), this);
+        eventAdapter = new EventAdapter(getIntent().getStringExtra(EXTRA_SOURCE), userName, new ArrayList<>(), this);
         eventRecyclerView.setAdapter(eventAdapter);
         loadEventsForUser();
     }

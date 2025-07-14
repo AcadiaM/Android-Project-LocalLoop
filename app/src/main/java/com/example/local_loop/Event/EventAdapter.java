@@ -31,9 +31,17 @@ public class EventAdapter extends RecyclerView.Adapter<EventAdapter.EventViewHol
     private OnEventClickListener listener;
     private final Context context;
     private final String source;
+    private String attendeeID = null;
 
     public EventAdapter(String source, List<Event> eventList, Context context) {
         this.source = source;
+        this.events = eventList;
+        this.context = context;
+    }
+
+    public EventAdapter(String source, String attendeeID, List<Event> eventList, Context context) {
+        this.source = source;
+        this.attendeeID = attendeeID;
         this.events = eventList;
         this.context = context;
     }
@@ -112,12 +120,16 @@ public class EventAdapter extends RecyclerView.Adapter<EventAdapter.EventViewHol
             // If listener is defined, you can use it OR launch detail screen here
             Intent intent = new Intent(context, EventDetailsActivity.class);
             intent.putExtra(EXTRA_SOURCE, source);
+            intent.putExtra("eventId", event.getID());
             intent.putExtra("title", event.getTitle());
             intent.putExtra("description", event.getDescription());
             intent.putExtra("fee", String.valueOf(event.getFee()));
             intent.putExtra("datetime", event.getDateTime());
             intent.putExtra("categoryId", event.getCategoryId());
             intent.putExtra("organizer", event.getOrganizer());
+            if (attendeeID != null){
+                intent.putExtra("attendeeId", attendeeID);
+            }
             context.startActivity(intent);
         });
 
