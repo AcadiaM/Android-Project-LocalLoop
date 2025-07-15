@@ -6,18 +6,18 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/white"
+    android:paddingRight="24dp"
     tools:context=".Event.UserEventActivity">
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recyclerViewEvents"
-        android:layout_width="387dp"
-        android:layout_height="642dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
         android:layout_marginStart="10dp"
         android:layout_marginEnd="10dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/searchBar"
-        tools:layout_editor_absoluteY="67dp" />
+        app:layout_constraintTop_toBottomOf="@id/searchBar" />
 
     <com.google.android.material.button.MaterialButton
         android:id="@+id/signOut"
@@ -42,8 +42,8 @@
 
     <EditText
         android:id="@+id/searchBar"
-        android:layout_width="253dp"
-        android:layout_height="62dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         android:layout_marginTop="20dp"
         android:drawableStart="@android:drawable/ic_menu_search"
         android:hint="@string/search_events"

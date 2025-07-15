@@ -5,6 +5,7 @@ import static com.example.local_loop.Event.EventDetailsActivity.EXTRA_SOURCE;
 import android.app.DatePickerDialog;
 import android.app.TimePickerDialog;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.Typeface;
 import android.view.Gravity;
@@ -27,6 +28,8 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.local_loop.Category.Category;
 import com.example.local_loop.R;
+import com.example.local_loop.Welcome.OrganizerWelcomePage;
+import com.example.local_loop.Welcome.WelcomePage;
 import com.example.local_loop.database.DatabaseHelper;
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.android.material.textfield.TextInputLayout;
@@ -456,7 +459,7 @@ public class EventActivity extends AppCompatActivity {
             dialog.show();
     }
 
-    private void enterDeleteMode() {
+    private void enterDeleteMode(){
         isDeleteMode = true;
         selectedEventIds.clear();
         Toast.makeText(this, "Select events to delete", Toast.LENGTH_SHORT).show();
@@ -492,7 +495,6 @@ public class EventActivity extends AppCompatActivity {
         eventAdapter.setSelectedEventIds(selectedEventIds);
     }
 
-    @SuppressWarnings("deprecation")
     @Override
     public void onBackPressed() {
         if (isDeleteMode) {
@@ -573,5 +575,19 @@ public class EventActivity extends AppCompatActivity {
         datePickerDialog.show();
     }
 
+    public void backButtonPressed(View view) {
+        // Handle back button press
+        if (isDeleteMode) {
+            exitDeleteMode();
+            Toast.makeText(this, "Delete mode cancelled", Toast.LENGTH_SHORT).show();
+        } else if (isEditMode) {
+            exitEditMode();
+        } else {
+            Intent intent = new Intent(EventActivity.this, OrganizerWelcomePage.class);
+            intent.putExtra("username", userName);
+            intent.putExtra("userType", getIntent().getStringExtra("userType"));
+            startActivity(intent);
+        }
+    }
 }
 

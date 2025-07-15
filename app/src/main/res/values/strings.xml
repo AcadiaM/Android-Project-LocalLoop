@@ -10,6 +10,7 @@
     <string name="invalid_password">Password must be >5 characters</string>
     <string name="login_failed">"Login failed"</string>
     <string name="sign_up">"Sign Up"</string>>
+    <string name = "browse_events">Browse Events</string>
 
     <string name="create_button">Create an account</string>
     <string name="sign_button">Sign in</string>

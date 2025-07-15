@@ -20,7 +20,11 @@ import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.local_loop.CreateAccount.User;
+import com.example.local_loop.Event.EventActivity;
 import com.example.local_loop.R;
+import com.example.local_loop.Welcome.AdminWelcomePage;
+import com.example.local_loop.Welcome.OrganizerWelcomePage;
 import com.example.local_loop.database.DatabaseHelper;
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.android.material.textfield.TextInputLayout;
@@ -304,8 +308,8 @@ public class CategoryActivity extends AppCompatActivity {
     }
 
     @SuppressWarnings("deprecation")
-    @Override
-    public void onBackPressed() {
+    //@Override
+    public void onBackPressed(View view) {
         if (isDeleteMode) {
             isDeleteMode = false;
             selectedCategoryIds.clear();
@@ -316,7 +320,11 @@ public class CategoryActivity extends AppCompatActivity {
         } else if (isEditMode) {
             exitEditMode();
         } else{
-            super.onBackPressed();
+            Intent intent = new Intent(CategoryActivity.this, AdminWelcomePage.class);
+            User userName;
+            intent.putExtra("username", getIntent().getStringExtra("userName"));
+            intent.putExtra("userType", getIntent().getStringExtra("userType"));
+            startActivity(intent);
         }
     }
 

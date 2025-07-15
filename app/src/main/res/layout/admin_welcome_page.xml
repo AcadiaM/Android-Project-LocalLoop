@@ -1,39 +1,37 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/white"
-    android:orientation="vertical"
-    android:padding="32dp"
+    android:padding="24dp"
     tools:context=".Welcome.AdminWelcomePage">
 
     <TextView
         android:id="@+id/adminWelcomeTextView"
-        android:layout_width="match_parent"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
         android:text="@string/welcome"
         android:textAlignment="center"
-        android:textSize="34sp"
+        android:textSize="40sp"
+        android:gravity="center"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
 
-    <Space
-        android:layout_width="match_parent"
-        android:layout_height="32dp" />
-
     <Button
         android:id="@+id/userManagement"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
         android:backgroundTint="@android:color/holo_blue_dark"
+        android:gravity="center"
         android:onClick="OnUsersButton"
         android:text="@string/userManagement"
+        android:textSize="20sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/adminWelcomeTextView" />
@@ -42,37 +40,38 @@
         android:id="@+id/categoriesManagement"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
         android:backgroundTint="@android:color/holo_blue_dark"
+        android:gravity="center"
         android:onClick="OnListCategoriesButton"
         android:text="@string/categoriesManagement"
+        android:textSize="20sp"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/adminWelcomeTextView" />
+        app:layout_constraintTop_toBottomOf="@id/userManagement" />
 
     <Button
         android:id="@+id/eventManagement"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
         android:backgroundTint="@android:color/holo_blue_dark"
         android:onClick="OnEventsButton"
         android:text="@string/eventManagement"
+        android:textSize="20sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/adminWelcomeTextView" />
-
-    <Space
-        android:layout_width="match_parent"
-        android:layout_height="64dp" />
+        app:layout_constraintTop_toBottomOf="@id/categoriesManagement" />
 
     <Button
         android:id="@+id/signOut"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="16dp"
-        android:layout_marginBottom="24dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginBottom="8dp"
         android:backgroundTint="@color/black"
         android:onClick="OnLogoutButton"
-        android:layout_gravity="center_horizontal"
         android:text="Sign Out"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
@@ -80,4 +79,4 @@
         app:layout_constraintStart_toStartOf="parent" />
 
 
-</LinearLayout>
+</androidx.constraintlayout.widget.ConstraintLayout>

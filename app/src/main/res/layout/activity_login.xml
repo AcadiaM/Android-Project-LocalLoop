@@ -6,10 +6,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/white"
-    android:paddingLeft="@dimen/activity_horizontal_margin"
-    android:paddingTop="@dimen/activity_vertical_margin"
-    android:paddingRight="@dimen/activity_horizontal_margin"
-    android:paddingBottom="@dimen/activity_vertical_margin"
+    android:padding="24dp"
     tools:context=".Login.LoginActivity">
 
     <EditText
@@ -48,22 +45,24 @@
 
     <androidx.appcompat.widget.AppCompatButton
         android:id="@+id/login"
-        android:textAllCaps="false"
-        style ="?android:attr/buttonStyle"
+        style="?android:attr/buttonStyle"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="start"
         android:layout_marginTop="16dp"
         android:layout_marginBottom="64dp"
+        android:background="@drawable/button_background"
         android:enabled="false"
         android:text="@string/sign_button"
+        android:textAllCaps="false"
         android:textColor="@android:color/white"
-        android:background="@drawable/button_background"
+        android:textSize="20sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.498"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/password"
-        app:layout_constraintVertical_bias="0.123" />
+        app:layout_constraintVertical_bias="0.14" />
 
     <ProgressBar
         android:id="@+id/loading"
@@ -83,21 +82,38 @@
         android:id="@+id/signOut"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="16dp"
-        android:layout_marginBottom="24dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginBottom="8dp"
         android:backgroundTint="@color/black"
+        android:contentDescription="@string/back_button"
+        android:gravity="center"
         android:onClick="backButtonPressed"
         android:text=""
-        android:contentDescription="Back Button"
+        android:textSize="20sp"
         app:icon="@drawable/undo_icon"
-        app:iconPadding="0dp"
-        app:iconTint="@color/white"
         app:iconGravity="textStart"
         app:iconSize="25dp"
+        app:iconTint="@color/white"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.047"
+        app:layout_constraintHorizontal_bias="0.063"
         app:layout_constraintStart_toStartOf="parent"
         />
+
+    <Button
+        android:id="@+id/noAccount"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:layout_marginBottom="8dp"
+        android:backgroundTint="@android:color/transparent"
+        android:onClick="onNoAccountClick"
+        android:text="Don't have an account? Click here to sign up!"
+        android:textAlignment="center"
+        android:textColor="@color/holo_dark_blue"
+        android:textSize="15sp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/password" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

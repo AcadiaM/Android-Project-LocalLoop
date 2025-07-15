@@ -36,7 +36,7 @@ public class AdminWelcomePage extends AppCompatActivity {
         username = getIntent().getStringExtra("username");
         userType = getIntent().getStringExtra("userType");
 
-        String welcomeMessage = "Welcome " + username + ".\nYou are logged in as " + userType + ".";
+        String welcomeMessage = "Welcome Admin!";
         welcomeTextView.setText(welcomeMessage);
 
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.adminWelcomeTextView), (v, insets) -> {

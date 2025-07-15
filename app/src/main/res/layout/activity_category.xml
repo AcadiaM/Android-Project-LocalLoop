@@ -6,6 +6,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/white"
+    android:padding="24dp"
     tools:context=".Category.CategoryActivity">
 
     <androidx.recyclerview.widget.RecyclerView
@@ -63,6 +64,27 @@
         app:layout_constraintEnd_toStartOf="@+id/removeCategoryButton"
         app:layout_constraintTop_toTopOf="parent"
         app:srcCompat="@drawable/outline_box_edit_24" />
+
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/signOut"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:layout_marginBottom="8dp"
+        android:backgroundTint="@color/black"
+        android:contentDescription="@string/back_button"
+        android:gravity="center"
+        android:onClick="onBackPressed"
+        android:text=""
+        app:icon="@drawable/undo_icon"
+        app:iconGravity="textStart"
+        app:iconSize="25dp"
+        app:iconTint="@color/white"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.063"
+        app:layout_constraintStart_toStartOf="parent"
+        />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

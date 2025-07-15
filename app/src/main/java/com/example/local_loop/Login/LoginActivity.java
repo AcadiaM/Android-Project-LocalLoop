@@ -22,6 +22,7 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.local_loop.CreateAccount.SignUp;
 import com.example.local_loop.database.DatabaseHelper;
 import com.example.local_loop.databinding.ActivityLoginBinding;
 import com.example.local_loop.Main.MainActivity;
@@ -141,6 +142,12 @@ public class LoginActivity extends AppCompatActivity {
         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
         startActivity(intent);
         finish();
+    }
+
+    public void onNoAccountClick(View view){
+        Intent intent = new Intent(LoginActivity.this, SignUp.class);
+        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
+        startActivity(intent);
     }
 
     private void updateUiWithUser(LoggedInUserView loggedInUser) {
