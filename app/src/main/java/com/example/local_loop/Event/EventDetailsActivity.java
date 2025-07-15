@@ -73,18 +73,17 @@ public class EventDetailsActivity extends AppCompatActivity {
             joinButton.setVisibility(View.VISIBLE);
             if (dBHelper.hasJoinRequest(eventID, attendeeID)){
                 joinButton.setEnabled(false);
+                joinButton.setBackgroundColor(Color.LTGRAY);
                 joinButton.setText("Joined");
             }
             else{
                 joinButton.setOnClickListener(v -> {
                             joinButton.setEnabled(false);
+                            joinButton.setBackgroundColor(Color.LTGRAY);
                             joinButton.setText("Joined");
                             dBHelper.submitJoinRequest(eventID, attendeeID);
                 });
             }
         }
-    }
-    public boolean isJoined(int ID, String participant){
-      return true;
     }
 }
