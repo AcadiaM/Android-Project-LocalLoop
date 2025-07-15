@@ -80,6 +80,7 @@
         android:layout_marginStart="150dp"
         android:layout_marginTop="75dp"
         android:layout_marginEnd="150dp"
+        android:backgroundTint="@color/holo_dark_blue"
         android:text="Join"
         android:visibility="invisible"
         app:layout_constraintEnd_toEndOf="parent"
