@@ -10,8 +10,13 @@ import com.example.local_loop.R;
 
 public class UserListViewer extends RecyclerView.ViewHolder {
 
-    TextView firstView, lastView, userView, emailView, typeView;
-    com.google.android.material.button.MaterialButton disable, delete;
+    public TextView firstView;
+    public TextView lastView;
+    public TextView userView;
+    public TextView emailView;
+    public TextView typeView;
+    public com.google.android.material.button.MaterialButton disable;
+    public com.google.android.material.button.MaterialButton delete;
 
     public UserListViewer(@NonNull View itemView) {
         super(itemView);

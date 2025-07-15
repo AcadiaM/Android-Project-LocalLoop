@@ -6,12 +6,20 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.local_loop.Category.Category;
+import com.example.local_loop.CreateAccount.User;
 import com.example.local_loop.R;
+import com.example.local_loop.UserList.RecycleAdapter;
 import com.example.local_loop.database.DatabaseHelper;
+
+import java.util.List;
+import java.util.Objects;
 
 public class EventDetailsActivity extends AppCompatActivity {
 
@@ -37,6 +45,7 @@ public class EventDetailsActivity extends AppCompatActivity {
         TextView contextInfoText = findViewById(R.id.eventDetailContextInfo);
 
         Button joinButton = findViewById(R.id.joinButton);
+        RecyclerView attendeeRecycler = findViewById(R.id.attendee_recycler);
 
         // Get data passed from intent
         int eventID = getIntent().getIntExtra("eventId",-1);
@@ -67,21 +76,37 @@ public class EventDetailsActivity extends AppCompatActivity {
             joinButton.setEnabled(false);
         } else if (SOURCE_ORGANIZER.equals(source)) {
             contextInfoText.setText("Category: " + categoryName);
+            attendeeRecycler.setVisibility(View.VISIBLE);
             joinButton.setEnabled(false);
+            attendeeRecycler.setLayoutManager(new LinearLayoutManager(this));
+            try {
+                attendeeRecycler.setAdapter(new RecycleAdapterByEvent(getApplicationContext(), dBHelper.getPendingRequestsByEvent(eventID), eventID));
+            }catch (Exception e){
+                Toast.makeText(this, "adapter crash:" + e.getMessage(), Toast.LENGTH_LONG).show();
+                e.printStackTrace();
+            }
         } else {
             contextInfoText.setText("Category: " + categoryName + "\n" + "\n" + "Organizer: " + organizer);  // Or "Unknown Source"
             joinButton.setVisibility(View.VISIBLE);
             if (dBHelper.hasJoinRequest(eventID, attendeeID)){
                 joinButton.setEnabled(false);
-                joinButton.setBackgroundColor(Color.LTGRAY);
-                joinButton.setText("Joined");
+                joinButton.setText(dBHelper.getStatus(eventID,attendeeID));
+                if (Objects.equals(dBHelper.getStatus(eventID, attendeeID), "Approved")){
+                    joinButton.setBackgroundColor(Color.GREEN);
+                    joinButton.setTextColor(Color.WHITE);
+                } else if (Objects.equals(dBHelper.getStatus(eventID, attendeeID), "Refused")){
+                    joinButton.setBackgroundColor(Color.RED);
+                    joinButton.setTextColor(Color.WHITE);
+                } else {
+                    joinButton.setBackgroundColor(Color.LTGRAY);
+                }
             }
             else{
                 joinButton.setOnClickListener(v -> {
+                            dBHelper.submitJoinRequest(eventID, attendeeID);
                             joinButton.setEnabled(false);
                             joinButton.setBackgroundColor(Color.LTGRAY);
-                            joinButton.setText("Joined");
-                            dBHelper.submitJoinRequest(eventID, attendeeID);
+                            joinButton.setText(dBHelper.getStatus(eventID,attendeeID));
                 });
             }
         }

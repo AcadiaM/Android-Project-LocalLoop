@@ -5,9 +5,10 @@
     android:id="@+id/linearLayout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/white"
     android:paddingStart="24dp"
-    android:paddingTop="24dp"
     android:paddingLeft="24dp"
+    android:paddingTop="24dp"
     android:paddingRight="24dp">
 
     <TextView
@@ -20,9 +21,9 @@
         android:textColor="@color/black"
         android:textSize="22sp"
         android:textStyle="bold"
-        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"/>
+        app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
         android:id="@+id/eventDetailDescription"
@@ -45,9 +46,9 @@
         android:text="Fee"
         android:textColor="@color/black"
         android:textSize="16sp"
-        app:layout_constraintTop_toBottomOf="@id/eventDetailDescription"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent" />
+        app:layout_constraintTop_toBottomOf="@id/eventDetailDescription" />
 
     <TextView
         android:id="@+id/eventDetailDateTime"
@@ -57,9 +58,9 @@
         android:text="Date/Time"
         android:textColor="@color/black"
         android:textSize="16sp"
-        app:layout_constraintTop_toBottomOf="@id/eventDetailFee"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent" />
+        app:layout_constraintTop_toBottomOf="@id/eventDetailFee" />
 
     <TextView
         android:id="@+id/eventDetailContextInfo"
@@ -69,9 +70,9 @@
         android:text="Extra Info"
         android:textColor="@color/black"
         android:textSize="16sp"
-        app:layout_constraintTop_toBottomOf="@id/eventDetailDateTime"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent" />
+        app:layout_constraintTop_toBottomOf="@id/eventDetailDateTime" />
 
     <Button
         android:id="@+id/joinButton"
@@ -82,6 +83,16 @@
         android:layout_marginEnd="150dp"
         android:backgroundTint="@color/holo_dark_blue"
         android:text="Join"
+        android:visibility="invisible"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/eventDetailContextInfo" />
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/attendee_recycler"
+        android:layout_width="373dp"
+        android:layout_height="472dp"
+        android:layout_marginTop="16dp"
         android:visibility="invisible"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"

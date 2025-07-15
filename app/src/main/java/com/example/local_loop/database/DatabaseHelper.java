@@ -803,4 +803,114 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         return exists;
     }
 
+    public String getStatus(int eventId, String attendeeId) {
+        SQLiteDatabase db = this.getReadableDatabase();
+        Cursor cursor = db.query("requests", new String[]{"status"}, "event_id = ? AND attendee_id = ?", new String[]{String.valueOf(eventId),attendeeId}, null, null, null);
+        if (cursor.moveToFirst()) {
+            String status = cursor.getString(0);
+            cursor.close();
+            return status;
+        }
+        cursor.close();
+        return null;
+    }
+
+    /**
+     * Returns a list of Users who have a pending join request for the given event.
+     *
+     * @param eventId The ID of the event.
+     * @return List of User objects who have requested to join the event and are still pending.
+     */
+    public List<User> getPendingRequestsByEvent(int eventId) {
+        SQLiteDatabase db = this.getReadableDatabase();
+        List<User> pendingUsers = new ArrayList<>();
+
+        Cursor cursor = db.query(
+                "requests",
+                new String[]{"attendee_id"},
+                "event_id = ? AND status = ?",
+                new String[]{String.valueOf(eventId), "pending"},
+                null, null, null
+        );
+
+        if (cursor.moveToFirst()) {
+            do {
+                String attendeeUsername = cursor.getString(0);  // attendee_id = username
+
+                // Retrieve full User details
+                User user = getUserByUsername(attendeeUsername);
+
+                if (user != null) {
+                    pendingUsers.add(user);
+                }
+
+            } while (cursor.moveToNext());
+        }
+
+        cursor.close();
+        db.close();
+
+        return pendingUsers;
+    }
+
+    /**
+     * Retrieves a User object by username.
+     *
+     * @param username The username of the user.
+     * @return The User object if found, otherwise null.
+     */
+    public User getUserByUsername(String username) {
+        SQLiteDatabase db = this.getReadableDatabase();
+
+        Cursor cursor = db.query(TABLE_USERS,
+                new String[]{"firstName", "lastName", "username", "email", "password", "role"},
+                "username = ?",
+                new String[]{username},
+                null, null, null
+        );
+
+        User user = null;
+
+        if (cursor.moveToFirst()) {
+            user = new User(
+                    cursor.getString(0),  // firstName
+                    cursor.getString(1),  // lastName
+                    cursor.getString(2),  // username
+                    cursor.getString(3),  // email
+                    cursor.getString(4),  // password
+                    cursor.getString(5)   // role
+            );
+        }
+
+        cursor.close();
+        db.close();
+
+        return user;
+    }
+
+    /**
+     * Updates the status of a join request for a specific attendee and event.
+     *
+     * @param eventId The ID of the event.
+     * @param attendeeId The ID of the attendee (username).
+     * @param newStatus The new status to set (e.g. "Approved", "Rejected").
+     * @return true if the update was successful (at least one row affected), false otherwise.
+     */
+    public boolean updateStatus(int eventId, String attendeeId, String newStatus) {
+        SQLiteDatabase db = this.getWritableDatabase();
+        ContentValues values = new ContentValues();
+        values.put("status", newStatus);
+
+        int rows = db.update(
+                "requests",
+                values,
+                "event_id = ? AND attendee_id = ?",
+                new String[]{String.valueOf(eventId), attendeeId}
+        );
+
+        db.close();
+        return rows > 0;  // Returns true if at least one row was updated
+    }
+
+
 }
