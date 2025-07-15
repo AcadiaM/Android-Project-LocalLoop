@@ -733,20 +733,6 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     public boolean submitJoinRequest(int eventId, String attendeeId) {
         SQLiteDatabase db = this.getWritableDatabase();
 
-        Cursor cursor = db.query("requests",
-                new String[]{"request_id"},
-                "event_id = ? AND attendee_id = ?",
-                new String[]{String.valueOf(eventId), attendeeId},
-                null, null, null);
-
-        boolean exists = cursor.moveToFirst();
-        cursor.close();
-
-        if (exists) {
-            db.close();
-            return false;  // Request already exists
-        }
-
         ContentValues values = new ContentValues();
 
         values.put("event_id", eventId);
