@@ -28,6 +28,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.local_loop.Category.Category;
 import com.example.local_loop.R;
+import com.example.local_loop.Welcome.AdminWelcomePage;
 import com.example.local_loop.Welcome.OrganizerWelcomePage;
 import com.example.local_loop.Welcome.WelcomePage;
 import com.example.local_loop.database.DatabaseHelper;
@@ -576,6 +577,8 @@ public class EventActivity extends AppCompatActivity {
     }
 
     public void backButtonPressed(View view) {
+        String userName = getIntent().getStringExtra("username");
+        String userType = getIntent().getStringExtra("userType");
         // Handle back button press
         if (isDeleteMode) {
             exitDeleteMode();
@@ -583,10 +586,17 @@ public class EventActivity extends AppCompatActivity {
         } else if (isEditMode) {
             exitEditMode();
         } else {
-            Intent intent = new Intent(EventActivity.this, OrganizerWelcomePage.class);
-            intent.putExtra("username", userName);
-            intent.putExtra("userType", getIntent().getStringExtra("userType"));
-            startActivity(intent);
+            if (userType.equalsIgnoreCase("organizer")) {
+                Intent intent = new Intent(EventActivity.this, OrganizerWelcomePage.class);
+                intent.putExtra("username", userName);
+                intent.putExtra("userType", userType);
+                startActivity(intent);
+            } else {
+                Intent intent = new Intent(EventActivity.this, AdminWelcomePage.class);
+                intent.putExtra("username", userName);
+                intent.putExtra("userType", userType);
+                startActivity(intent);
+            }
         }
     }
 }
