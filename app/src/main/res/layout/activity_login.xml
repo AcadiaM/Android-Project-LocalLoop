@@ -9,6 +9,16 @@
     android:padding="24dp"
     tools:context=".Login.LoginActivity">
 
+    <TextView
+        android:id="@+id/textView"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:fontFamily="@font/bree_serif"
+        android:gravity="center_horizontal"
+        android:textColor="@color/black"
+        android:text="@string/sign_in"
+        android:textSize="30sp" />
+
     <EditText
         android:id="@+id/username"
         android:layout_width="0dp"
@@ -60,7 +70,7 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.498"
-        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintStart_toStartOf="@id/noAccount"
         app:layout_constraintTop_toBottomOf="@+id/password"
         app:layout_constraintVertical_bias="0.14" />
 
@@ -110,7 +120,7 @@
         android:onClick="onNoAccountClick"
         android:text="Don't have an account? Click here to sign up!"
         android:textAlignment="center"
-        android:textColor="@color/holo_dark_blue"
+        android:textColor="@android:color/holo_blue_dark"
         android:textSize="15sp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"

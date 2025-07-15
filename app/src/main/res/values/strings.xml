@@ -27,6 +27,7 @@
     <string name="name">Name</string>
     <string name="account_creation">Create an Account</string>
     <string name="submit_button">Submit</string>
+    <string name="sign_in">Sign In</string>
 
     <string name="edit_category">Edit Category</string>
     <string name="add_category">Add a Category</string>

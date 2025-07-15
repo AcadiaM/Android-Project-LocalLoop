@@ -1,5 +1,6 @@
 package com.example.local_loop.CreateAccount;
 
+import com.example.local_loop.Login.LoginActivity;
 import com.example.local_loop.Main.MainActivity;
 import com.example.local_loop.R;
 import com.example.local_loop.database.DatabaseHelper;
@@ -91,6 +92,13 @@ public class SignUp extends AppCompatActivity {
         password = passwordInput.getText().toString().trim();
         first = firstNameInput.getText().toString().trim();
         last = lastNameInput.getText().toString().trim();
+    }
+
+    public void haveAccountClick(View view){
+        Intent intent = new Intent(SignUp.this, LoginActivity.class);
+        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
+        startActivity(intent);
+        finish();
     }
     public void onSubmitButton(View view) {
         initialize();
