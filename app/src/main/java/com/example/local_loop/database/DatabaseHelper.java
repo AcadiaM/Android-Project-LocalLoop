@@ -728,9 +728,8 @@ public class DatabaseHelper extends SQLiteOpenHelper {
      *
      * @param eventId the row id of the event.
      * @param attendeeId the id of the attendee.
-     * @return true if the join request was successful, false otherwise.
      */
-    public boolean submitJoinRequest(int eventId, String attendeeId) {
+    public void submitJoinRequest(int eventId, String attendeeId) {
         SQLiteDatabase db = this.getWritableDatabase();
 
         ContentValues values = new ContentValues();
@@ -740,7 +739,6 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
         long result = db.insert("Requests", null, values);
         db.close();
-        return result != -1;
     }
 
     /**
