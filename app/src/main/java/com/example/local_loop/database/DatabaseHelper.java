@@ -737,7 +737,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         values.put("event_id", eventId);
         values.put("attendee_id", attendeeId);
 
-        long result = db.insert("Requests", null, values);
+        db.insert("Requests", null, values);
         db.close();
     }
 
