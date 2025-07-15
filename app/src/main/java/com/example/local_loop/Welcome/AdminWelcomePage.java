@@ -36,7 +36,7 @@ public class AdminWelcomePage extends AppCompatActivity {
         username = getIntent().getStringExtra("username");
         userType = getIntent().getStringExtra("userType");
 
-        String welcomeMessage = "Welcome Admin!";
+        String welcomeMessage = "Welcome " + username + ".\nYou are logged in as " + userType + ".";
         welcomeTextView.setText(welcomeMessage);
 
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.adminWelcomeTextView), (v, insets) -> {
@@ -46,8 +46,11 @@ public class AdminWelcomePage extends AppCompatActivity {
         });
     }
     public void OnListCategoriesButton(View view) {
+        username = getIntent().getStringExtra("username");
+        userType = getIntent().getStringExtra("userType");
         Intent intent = new Intent(AdminWelcomePage.this, CategoryActivity.class);
-        intent.putExtra(EXTRA_SOURCE, SOURCE_ADMIN);
+        intent.putExtra("username", username);// Pass the username to the WelcomePage
+        intent.putExtra("userType", userType); // Pass the userType to the WelcomePage
         startActivity(intent);
     }
 
@@ -61,11 +64,17 @@ public class AdminWelcomePage extends AppCompatActivity {
     }
 
     public void OnUsersButton(View view) {
+        username = getIntent().getStringExtra("username");
+        userType = getIntent().getStringExtra("userType");
         Intent intent = new Intent(AdminWelcomePage.this, UserList.class);
+        intent.putExtra("username", username);// Pass the username to the WelcomePage
+        intent.putExtra("userType", userType); // Pass the userType to the WelcomePage
         startActivity(intent);
     }
 
     public void OnEventsButton(View view) {
+        username = getIntent().getStringExtra("username");
+        userType = getIntent().getStringExtra("userType");
         Intent intent = new Intent(AdminWelcomePage.this, EventActivity.class);
         intent.putExtra("username", username);// Pass the username to the WelcomePage
         intent.putExtra("userType", userType); // Pass the userType to the WelcomePage

@@ -54,7 +54,7 @@ public class UserList extends AppCompatActivity {
 
     public void OnBackButtonPressed(View view) {
         Intent intent = new Intent(UserList.this, AdminWelcomePage.class);
-        intent.putExtra("username", getIntent().getStringExtra("userName"));
+        intent.putExtra("username", getIntent().getStringExtra("username"));
         intent.putExtra("userType", getIntent().getStringExtra("userType"));
         startActivity(intent);
     }

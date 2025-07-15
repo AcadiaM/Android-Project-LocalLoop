@@ -322,7 +322,7 @@ public class CategoryActivity extends AppCompatActivity {
         } else{
             Intent intent = new Intent(CategoryActivity.this, AdminWelcomePage.class);
             User userName;
-            intent.putExtra("username", getIntent().getStringExtra("userName"));
+            intent.putExtra("username", getIntent().getStringExtra("username"));
             intent.putExtra("userType", getIntent().getStringExtra("userType"));
             startActivity(intent);
         }
