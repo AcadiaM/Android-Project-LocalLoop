@@ -52,4 +52,11 @@ public class UserList extends AppCompatActivity {
         return db.getUsers();
     }
 
+    public void OnBackButtonPressed(View view) {
+        Intent intent = new Intent(UserList.this, AdminWelcomePage.class);
+        intent.putExtra("username", getIntent().getStringExtra("userName"));
+        intent.putExtra("userType", getIntent().getStringExtra("userType"));
+        startActivity(intent);
+    }
+
 }
