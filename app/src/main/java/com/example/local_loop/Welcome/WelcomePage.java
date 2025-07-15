@@ -13,6 +13,7 @@ import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
 import com.example.local_loop.Event.UserEventActivity;
+import com.example.local_loop.Event.UserMyEvent;
 import com.example.local_loop.R;
 import com.example.local_loop.Login.LoginActivity;
 
@@ -60,5 +61,13 @@ public class WelcomePage extends AppCompatActivity {
         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
         startActivity(intent);
         finish();
+    }
+
+    public void OnMyEventsButton(View view){
+        Intent intent = new Intent(WelcomePage.this, UserMyEvent.class);
+        intent.putExtra(EXTRA_SOURCE, SOURCE_PARTICIPANT);
+        intent.putExtra("username", getIntent().getStringExtra("username"));// Pass the username to the WelcomePage
+        intent.putExtra("userType", getIntent().getStringExtra("userType")); // Pass the userType to the WelcomePage
+        startActivity(intent);
     }
 }

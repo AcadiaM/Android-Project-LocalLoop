@@ -38,6 +38,7 @@
     <string name="categoriesManagement">Categories Management</string>
     <string name="userManagement">User Management</string>
     <string name="eventManagement">Event Management</string>
+    <string name="my_events">My Events</string>
 
     <!-- Custom Date/Time Picker style -->
     <style name="MyDatePickerDialogTheme" parent="Theme.MaterialComponents.DayNight.Dialog">

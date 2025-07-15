@@ -35,6 +35,8 @@
             android:exported="false" />
         <activity android:name=".Event.UserEventActivity"
             android:exported="false" />
+        <activity android:name=".Event.UserMyEvent"
+            android:exported="false" />
         <activity
             android:name=".Category.CategoryActivity"
             android:exported="false" />

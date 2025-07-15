@@ -814,6 +814,32 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         cursor.close();
         return null;
     }
+    public List<Event> getEventsUserRequested(String username) {
+        List<Event> events = new ArrayList<>();
+        SQLiteDatabase db = this.getReadableDatabase();
+
+        String query = "SELECT e.id, e.title, e.description, e.fee, e.datetime, e.category_id, e.organizer " +
+                "FROM events e " +
+                "JOIN requests r ON e.id = r.event_id " +
+                "WHERE r.attendee_id = ?";
+
+        Cursor cursor = db.rawQuery(query, new String[]{username});
+
+        while (cursor.moveToNext()) {
+            Event event = new Event(
+                    cursor.getInt(cursor.getColumnIndexOrThrow("id")),
+                    cursor.getString(cursor.getColumnIndexOrThrow("title")),
+                    cursor.getString(cursor.getColumnIndexOrThrow("description")),
+                    cursor.getInt(cursor.getColumnIndexOrThrow("category_id")),
+                    cursor.getString(cursor.getColumnIndexOrThrow("organizer")),
+                    cursor.getDouble(cursor.getColumnIndexOrThrow("fee")),
+                    cursor.getString(cursor.getColumnIndexOrThrow("datetime"))
+            );
+            events.add(event);
+        }
+        cursor.close();
+        return events;
+    }
 
     /**
      * Returns a list of Users who have a pending join request for the given event.
