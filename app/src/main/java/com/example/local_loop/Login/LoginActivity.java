@@ -118,16 +118,21 @@ public class LoginActivity extends AppCompatActivity {
             }
         });
 
+
         loginButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 loadingProgressBar.setVisibility(View.VISIBLE);
-                loginViewModel.login(usernameEditText.getText().toString(),
-                        passwordEditText.getText().toString());
+                DatabaseHelper db = new DatabaseHelper(LoginActivity.this);
+                if (db.isActive(usernameEditText.getText().toString()) == 1) {
+                    loginViewModel.login(usernameEditText.getText().toString(),
+                            passwordEditText.getText().toString());
+                } else {
+                    Toast.makeText(LoginActivity.this, "Error: account is disabled.", Toast.LENGTH_LONG).show();
+                    loadingProgressBar.setVisibility(View.GONE);
+                }
             }
         });
-
-
     }
 
     public void backButtonPressed(View view) {
