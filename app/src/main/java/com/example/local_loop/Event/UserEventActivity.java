@@ -84,6 +84,9 @@ public class UserEventActivity extends AppCompatActivity {
     //Method to handle back button press which redirects to previous page, in this case, the WelcomePage
     public void backButtonPressed(View view) {
         Intent intent = new Intent(UserEventActivity.this, WelcomePage.class);
+        intent.putExtra("username", userName);
+        intent.putExtra("userType", getIntent().getStringExtra("userType"));
+
         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
         startActivity(intent);
     }
