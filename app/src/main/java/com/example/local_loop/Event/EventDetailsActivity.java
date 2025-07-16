@@ -96,16 +96,17 @@ public class EventDetailsActivity extends AppCompatActivity {
                 joinButton.setEnabled(false);
                 joinButton.setText(dBHelper.getStatus(eventID,attendeeID));
                 if (Objects.equals(dBHelper.getStatus(eventID, attendeeID), "Approved")){
-                    joinButton.setBackgroundColor(Color.GREEN);
+                    joinButton.setBackgroundColor(getResources().getColor(R.color.dark_green));
                     joinButton.setTextColor(Color.WHITE);
                 } else if (Objects.equals(dBHelper.getStatus(eventID, attendeeID), "Refused")){
-                    joinButton.setBackgroundColor(Color.RED);
+                    joinButton.setBackgroundColor(getResources().getColor(R.color.red));
                     joinButton.setTextColor(Color.WHITE);
                 } else {
                     joinButton.setBackgroundColor(Color.LTGRAY);
                 }
             }
             else{
+                joinButton.setText("Join");
                 joinButton.setOnClickListener(v -> {
                             dBHelper.submitJoinRequest(eventID, attendeeID);
                             joinButton.setEnabled(false);
