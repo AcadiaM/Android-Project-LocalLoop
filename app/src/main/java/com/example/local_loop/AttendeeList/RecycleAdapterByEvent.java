@@ -48,14 +48,14 @@ public class RecycleAdapterByEvent extends RecyclerView.Adapter<AttendeeListView
             holder.emailView.setText(users.get(position).getEmail());
             holder.typeView.setText(users.get(position).getRole());
             holder.delete.setOnClickListener(v -> {
-                onApprove(eventId, users.get(position).getUsername());
-                deleteEntry(users.get(position).getEmail());
+                onApprove(eventId, users.get(holder.getAdapterPosition()).getUsername());
+                deleteEntry(users.get(holder.getAdapterPosition()).getEmail());
                 notifyItemRemoved(holder.getAdapterPosition());
             });
 
             holder.disable.setOnClickListener(v -> {
-                onRefuse(eventId, users.get(position).getUsername());
-                deleteEntry(users.get(position).getEmail());
+                onRefuse(eventId, users.get(holder.getAdapterPosition()).getUsername());
+                deleteEntry(users.get(holder.getAdapterPosition()).getEmail());
                 notifyItemRemoved(holder.getAdapterPosition());
             });
             DatabaseHelper db = new DatabaseHelper(context);
@@ -71,7 +71,6 @@ public class RecycleAdapterByEvent extends RecyclerView.Adapter<AttendeeListView
         DatabaseHelper db = new DatabaseHelper(context);
         db.updateStatus(eventId, attendeeId, "Refused");
         Toast.makeText(context.getApplicationContext(), "User " + attendeeId + " was refused.", Toast.LENGTH_SHORT).show();
-        notifyItemRemoved(eventId);
     }
         @Override
         public int getItemCount () {
