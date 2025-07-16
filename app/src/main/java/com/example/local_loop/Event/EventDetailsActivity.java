@@ -76,7 +76,6 @@ public class EventDetailsActivity extends AppCompatActivity {
             joinButton.setVisibility(View.INVISIBLE);
         } else if (SOURCE_ORGANIZER.equals(source)) {
             contextInfoText.setText("Category: " + categoryName);
-            joinButton.setBackgroundColor(getResources().getColor(R.color.holo_dark_blue));
             joinButton.setText("Attendee List");
             joinButton.setOnClickListener(v -> {
                 Intent intent = new Intent(getApplicationContext(), AttendeeList.class);
