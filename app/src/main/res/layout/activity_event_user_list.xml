@@ -9,6 +9,20 @@
     android:padding="24dp"
     tools:context=".Event.UserEventActivity">
 
+    <TextView
+        android:id="@+id/events"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:gravity="center"
+        android:text="@string/event"
+        android:textColor="@android:color/holo_blue_dark"
+        android:textSize="30sp"
+        android:textStyle="bold"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="@+id/searchBar"
+        app:layout_constraintTop_toTopOf="parent" />
+
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recyclerViewEvents"
         android:layout_width="0dp"
@@ -47,7 +61,7 @@
         android:padding="10dp"
         app:layout_constraintEnd_toStartOf="@+id/categorySpinner"
         app:layout_constraintStart_toStartOf="@id/recyclerViewEvents"
-        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/events"
         app:layout_constraintWidth_percent="0.65" />
 
     <Spinner

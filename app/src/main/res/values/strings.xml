@@ -47,6 +47,8 @@
     <string name="emailAddress">Email: </string>
     <string name="type">Type: </string>
 
+    <string name="event">Events</string>
+
     <!-- Custom Date/Time Picker style -->
     <style name="MyDatePickerDialogTheme" parent="Theme.MaterialComponents.DayNight.Dialog">
         <item name="colorPrimary">@android:color/holo_blue_dark</item>
