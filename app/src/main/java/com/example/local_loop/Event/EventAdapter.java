@@ -120,6 +120,7 @@ public class EventAdapter extends RecyclerView.Adapter<EventAdapter.EventViewHol
             // If listener is defined, you can use it OR launch detail screen here
             Intent intent = new Intent(context, EventDetailsActivity.class);
             intent.putExtra(EXTRA_SOURCE, source);
+            intent.putExtra("sourceContext", context.getClass().getName());
             intent.putExtra("eventId", event.getID());
             intent.putExtra("title", event.getTitle());
             intent.putExtra("description", event.getDescription());

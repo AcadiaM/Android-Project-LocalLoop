@@ -57,6 +57,7 @@ public class AttendeeList extends AppCompatActivity {
         intent.putExtra("username", getIntent().getStringExtra("organizer"));
         intent.putExtra("userType", "organizer");
         intent.putExtra(EXTRA_SOURCE, getIntent().getStringExtra(EXTRA_SOURCE));
+        intent.putExtra("sourceContext", getIntent().getStringExtra("sourceContext"));
         intent.putExtra("eventId", getIntent().getIntExtra("eventId",-1));
         intent.putExtra("title", getIntent().getStringExtra("title"));
         intent.putExtra("description", getIntent().getStringExtra("description"));

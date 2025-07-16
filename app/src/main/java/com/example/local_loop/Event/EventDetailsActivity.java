@@ -17,7 +17,10 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.example.local_loop.AttendeeList.AttendeeList;
 import com.example.local_loop.AttendeeList.RecycleAdapterByEvent;
 import com.example.local_loop.Category.Category;
+import com.example.local_loop.Category.CategoryDetailsActivity;
 import com.example.local_loop.R;
+import com.example.local_loop.UserList.UserList;
+import com.example.local_loop.Welcome.AdminWelcomePage;
 import com.example.local_loop.database.DatabaseHelper;
 
 import java.util.Objects;
@@ -80,6 +83,7 @@ public class EventDetailsActivity extends AppCompatActivity {
             joinButton.setOnClickListener(v -> {
                 Intent intent = new Intent(getApplicationContext(), AttendeeList.class);
                 intent.putExtra(EXTRA_SOURCE, source);
+                intent.putExtra("sourceContext", getIntent().getStringExtra("sourceContext"));
                 intent.putExtra("eventId", eventID);
                 intent.putExtra("title", title);
                 intent.putExtra("description", description);
@@ -116,4 +120,23 @@ public class EventDetailsActivity extends AppCompatActivity {
             }
         }
     }
+
+    public void OnEventBackButtonPressed(View view) {
+        String className = getIntent().getStringExtra("sourceContext");
+        try {
+            Class<?> targetActivity = Class.forName(className);
+            Intent intent = new Intent(EventDetailsActivity.this, targetActivity);
+            intent.putExtra(EXTRA_SOURCE, getIntent().getStringExtra(EXTRA_SOURCE));
+            intent.putExtra("username", getIntent().getStringExtra("username"));
+            intent.putExtra("userType", getIntent().getStringExtra("userType"));
+            if (className.endsWith("CategoryDetailsActivity")){
+                intent.putExtra("categoryId", getIntent().getIntExtra("categoryId",-1));
+            }
+            startActivity(intent);
+        } catch (ClassNotFoundException e) {
+            e.printStackTrace();
+            Toast.makeText(this, "Activity not found.", Toast.LENGTH_SHORT).show();
+        }
+    }
+
 }

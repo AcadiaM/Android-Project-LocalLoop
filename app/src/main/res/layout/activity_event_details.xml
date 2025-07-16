@@ -87,4 +87,25 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/eventDetailContextInfo" />
 
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/signOut"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="1dp"
+        android:layout_marginBottom="16dp"
+        android:backgroundTint="@color/black"
+        android:contentDescription="@string/back_button"
+        android:elevation="8dp"
+        android:gravity="center"
+        android:onClick="OnEventBackButtonPressed"
+        android:text=""
+        app:icon="@drawable/undo_icon"
+        app:iconGravity="textStart"
+        app:iconSize="25dp"
+        app:iconTint="@color/white"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent" />
+
 </androidx.constraintlayout.widget.ConstraintLayout>

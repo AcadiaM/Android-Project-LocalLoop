@@ -2,7 +2,9 @@ package com.example.local_loop.Category;
 
 import static com.example.local_loop.Event.EventDetailsActivity.EXTRA_SOURCE;
 
+import android.content.Intent;
 import android.os.Bundle;
+import android.view.View;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -12,6 +14,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.local_loop.Event.Event;
 import com.example.local_loop.Event.EventAdapter;
+import com.example.local_loop.Event.EventDetailsActivity;
 import com.example.local_loop.R;
 import com.example.local_loop.database.DatabaseHelper;
 
@@ -51,5 +54,13 @@ public class CategoryDetailsActivity extends AppCompatActivity {
         eventRecyclerView.setLayoutManager(new GridLayoutManager(this,2));
         EventAdapter eventAdapter = new EventAdapter(getIntent().getStringExtra(EXTRA_SOURCE), events, this);
         eventRecyclerView.setAdapter(eventAdapter);
+    }
+
+    public void OnCategoryBackButtonPressed(View view) {
+        Intent intent = new Intent(CategoryDetailsActivity.this, CategoryActivity.class);
+        intent.putExtra(EXTRA_SOURCE, getIntent().getStringExtra(EXTRA_SOURCE));
+        intent.putExtra("username", getIntent().getStringExtra("username"));
+        intent.putExtra("userType", getIntent().getStringExtra("userType"));
+        startActivity(intent);
     }
 }
