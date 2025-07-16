@@ -34,6 +34,7 @@
         android:gravity="center"
         android:onClick="OnBackButtonPressed"
         android:text=""
+        android:elevation="8dp"
         app:icon="@drawable/undo_icon"
         app:iconGravity="textStart"
         app:iconSize="25dp"
@@ -46,11 +47,11 @@
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recycler"
         android:layout_width="0dp"
-        android:layout_height="wrap_content"
+        android:layout_height="0dp"
         android:paddingBottom="24dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintBottom_toTopOf="@id/signOut"
         app:layout_constraintTop_toBottomOf="@id/userManagementTitle" />
 
 
