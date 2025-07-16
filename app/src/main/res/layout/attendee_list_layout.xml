@@ -2,17 +2,16 @@
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@id/main"
+    android:id="@+id/main"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:layout_marginTop="40dp"
+    android:padding="24dp"
     tools:context=".AttendeeList.AttendeeList">
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:orientation="horizontal"
-        android:paddingRight="24dp">
+        android:orientation="horizontal">
 
         <LinearLayout
             android:layout_width="0dp"
@@ -74,39 +73,40 @@
         <LinearLayout
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_weight="1"
             android:layout_gravity="center"
-            android:orientation="horizontal">
+            android:layout_weight="1"
+            android:gravity="center"
+            android:padding="12dp"
+            android:orientation="vertical">
 
             <com.google.android.material.button.MaterialButton
-                android:id="@+id/delete"
-                android:layout_width="45dp"
+                android:id="@+id/disable"
+                android:layout_width="wrap_content"
                 android:layout_height="45dp"
-                android:layout_marginEnd="4dp"
                 android:backgroundTint="@android:color/transparent"
-                android:hint="Delete user (cannot be undone)."
+                android:hint="User is not approved."
                 android:text=""
                 android:textSize="20sp"
                 app:icon="@drawable/baseline_group_add_24"
                 app:iconGravity="textStart"
                 app:iconPadding="0dp"
-                app:iconSize="50dp"
+                app:iconSize="40dp"
                 app:iconTint="@color/dark_green" />
 
             <com.google.android.material.button.MaterialButton
-                android:id="@+id/disable"
-                android:layout_width="45dp"
+                android:id="@+id/delete"
+                android:layout_width="wrap_content"
                 android:layout_height="45dp"
-                android:layout_marginEnd="50dp"
                 android:backgroundTint="@android:color/transparent"
-                android:hint="User is not disabled."
+                android:hint="Refuse user (cannot be undone)."
                 android:text=""
                 android:textSize="20sp"
                 app:icon="@drawable/baseline_group_remove_24"
                 app:iconGravity="textStart"
                 app:iconPadding="0dp"
-                app:iconSize="50dp"
+                app:iconSize="40dp"
                 app:iconTint="@color/red" />
+
         </LinearLayout>
 
     </LinearLayout>
@@ -114,3 +114,4 @@
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>
+

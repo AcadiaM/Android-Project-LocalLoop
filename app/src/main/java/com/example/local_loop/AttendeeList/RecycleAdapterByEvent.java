@@ -47,13 +47,13 @@ public class RecycleAdapterByEvent extends RecyclerView.Adapter<AttendeeListView
             holder.userView.setText(users.get(position).getUsername());
             holder.emailView.setText(users.get(position).getEmail());
             holder.typeView.setText(users.get(position).getRole());
-            holder.delete.setOnClickListener(v -> {
+            holder.disable.setOnClickListener(v -> {
                 onApprove(eventId, users.get(holder.getAdapterPosition()).getUsername());
                 deleteEntry(users.get(holder.getAdapterPosition()).getEmail());
                 notifyItemRemoved(holder.getAdapterPosition());
             });
 
-            holder.disable.setOnClickListener(v -> {
+            holder.delete.setOnClickListener(v -> {
                 onRefuse(eventId, users.get(holder.getAdapterPosition()).getUsername());
                 deleteEntry(users.get(holder.getAdapterPosition()).getEmail());
                 notifyItemRemoved(holder.getAdapterPosition());
