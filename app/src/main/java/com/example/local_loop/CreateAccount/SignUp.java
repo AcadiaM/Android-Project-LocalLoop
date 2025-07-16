@@ -27,6 +27,8 @@ public class SignUp extends AppCompatActivity {
     Spinner roleInput;
     DatabaseHelper dbHelper;
 
+    private View decorView;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -44,6 +46,17 @@ public class SignUp extends AppCompatActivity {
         passwordInput = findViewById(R.id.passwordInputEditText);
         roleInput = findViewById(R.id.roles);
         dbHelper = new DatabaseHelper(this);
+
+        //this is to hide the system bars and make the app immersive
+        decorView = getWindow().getDecorView();
+        decorView.setOnSystemUiVisibilityChangeListener(new View.OnSystemUiVisibilityChangeListener() {
+            @Override
+            public void onSystemUiVisibilityChange(int visibility) {
+                if (visibility == 0) {
+                    decorView.setSystemUiVisibility(hideSystemBars());
+                }
+            }
+        });
     }
 
 
@@ -134,5 +147,23 @@ public class SignUp extends AppCompatActivity {
                 Toast.makeText(this, "Error", Toast.LENGTH_SHORT).show();
             }
         }
+    }
+
+
+    //this method is called when the activity gains or loses focus
+    @Override
+    public void onWindowFocusChanged(boolean hasFocus) {
+        super.onWindowFocusChanged(hasFocus);
+        if(hasFocus) {
+            decorView.setSystemUiVisibility(hideSystemBars());
+        }
+    }
+    private int hideSystemBars(){
+        return (View.SYSTEM_UI_FLAG_LAYOUT_STABLE
+                | View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY
+                | View.SYSTEM_UI_FLAG_FULLSCREEN
+                | View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
+                | View.SYSTEM_UI_FLAG_FULLSCREEN
+                | View.SYSTEM_UI_FLAG_HIDE_NAVIGATION);
     }
 }

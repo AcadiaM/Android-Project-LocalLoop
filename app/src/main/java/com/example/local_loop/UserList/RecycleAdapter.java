@@ -43,11 +43,11 @@ public class RecycleAdapter extends RecyclerView.Adapter<UserListViewer>{
 
     @Override
     public void onBindViewHolder(@NonNull UserListViewer holder, int position) {
-        holder.firstView.setText("First: " + users.get(position).getFirstName());
-        holder.lastView.setText("Last: " + users.get(position).getLastName());
-        holder.userView.setText("User: " +users.get(position).getUsername());
-        holder.emailView.setText("Email: " + users.get(position).getEmail());
-        holder.typeView.setText("Type: " + users.get(position).getRole());
+        holder.firstView.setText(users.get(position).getFirstName());
+        holder.lastView.setText(users.get(position).getLastName());
+        holder.userView.setText(users.get(position).getUsername());
+        holder.emailView.setText(users.get(position).getEmail());
+        holder.typeView.setText(users.get(position).getRole());
         holder.delete.setOnClickListener(v->{
             String email = holder.emailView.getText().toString();
             onDelete(email, holder.getAdapterPosition());

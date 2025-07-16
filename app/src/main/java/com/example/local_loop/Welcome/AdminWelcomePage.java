@@ -23,6 +23,7 @@ import com.example.local_loop.UserList.UserList;
 //The admin welcome page that displays a welcome message with the username and user type
 
 public class AdminWelcomePage extends AppCompatActivity {
+    private View decorView;
     private String username, userType;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -44,6 +45,18 @@ public class AdminWelcomePage extends AppCompatActivity {
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
             return insets;
         });
+
+        //this is to hide the system bars and make the app immersive
+        decorView = getWindow().getDecorView();
+        decorView.setOnSystemUiVisibilityChangeListener(new View.OnSystemUiVisibilityChangeListener() {
+            @Override
+            public void onSystemUiVisibilityChange(int visibility) {
+                if (visibility == 0) {
+                    decorView.setSystemUiVisibility(hideSystemBars());
+                }
+            }
+        });
+
     }
     public void OnListCategoriesButton(View view) {
         username = getIntent().getStringExtra("username");
@@ -79,6 +92,23 @@ public class AdminWelcomePage extends AppCompatActivity {
         intent.putExtra("username", username);// Pass the username to the WelcomePage
         intent.putExtra("userType", userType); // Pass the userType to the WelcomePage
         startActivity(intent);
+    }
+
+    //this method is called when the activity gains or loses focus
+    @Override
+    public void onWindowFocusChanged(boolean hasFocus) {
+        super.onWindowFocusChanged(hasFocus);
+        if(hasFocus) {
+            decorView.setSystemUiVisibility(hideSystemBars());
+        }
+    }
+    private int hideSystemBars(){
+        return (View.SYSTEM_UI_FLAG_LAYOUT_STABLE
+                | View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY
+                | View.SYSTEM_UI_FLAG_FULLSCREEN
+                | View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
+                | View.SYSTEM_UI_FLAG_FULLSCREEN
+                | View.SYSTEM_UI_FLAG_HIDE_NAVIGATION);
     }
 }
 
