@@ -23,6 +23,7 @@ public class UserMyEvent extends AppCompatActivity {
     private EventAdapter eventAdapter;
     private DatabaseHelper dbHelper;
     private String userName;
+    private View decorView;
 
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -42,6 +43,36 @@ public class UserMyEvent extends AppCompatActivity {
         eventRecyclerView.setAdapter(eventAdapter);
 
         loadEventsForUser();
+
+        //this is to hide the system bars and make the app immersive
+        decorView = getWindow().getDecorView();
+        decorView.setOnSystemUiVisibilityChangeListener(new View.OnSystemUiVisibilityChangeListener() {
+            @Override
+            public void onSystemUiVisibilityChange(int visibility) {
+                if (visibility == 0) {
+                    decorView.setSystemUiVisibility(hideSystemBars());
+                }
+            }
+        });
+
+    }
+
+
+    //this method is called when the activity gains or loses focus
+    @Override
+    public void onWindowFocusChanged(boolean hasFocus) {
+        super.onWindowFocusChanged(hasFocus);
+        if(hasFocus) {
+            decorView.setSystemUiVisibility(hideSystemBars());
+        }
+    }
+    private int hideSystemBars(){
+        return (View.SYSTEM_UI_FLAG_LAYOUT_STABLE
+                | View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY
+                | View.SYSTEM_UI_FLAG_FULLSCREEN
+                | View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
+                | View.SYSTEM_UI_FLAG_FULLSCREEN
+                | View.SYSTEM_UI_FLAG_HIDE_NAVIGATION);
     }
 
     //Method to load the events for the user from the database

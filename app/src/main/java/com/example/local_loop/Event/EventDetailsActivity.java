@@ -30,7 +30,6 @@ public class EventDetailsActivity extends AppCompatActivity {
     public static final String SOURCE_ADMIN = "admin_page";
     public static final String SOURCE_ORGANIZER = "organizer_page";
     public static final String SOURCE_PARTICIPANT = "participant_page";
-
     @SuppressLint("SetTextI18n")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
