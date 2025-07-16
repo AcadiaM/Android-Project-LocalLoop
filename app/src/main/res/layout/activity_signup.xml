@@ -57,6 +57,7 @@
                 android:layout_height="match_parent"
                 android:layout_marginEnd="64dp"
                 android:entries="@array/person_position"
+                android:popupBackground="@color/white"
                 android:textAlignment="textEnd" />
 
         </LinearLayout>

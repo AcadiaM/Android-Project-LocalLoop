@@ -1,8 +1,6 @@
-package com.example.local_loop.Event;
+package com.example.local_loop.AttendeeList;
 
 import android.content.Context;
-import android.content.res.ColorStateList;
-import android.graphics.Color;
 import android.view.LayoutInflater;
 import android.view.ViewGroup;
 import android.widget.Toast;
@@ -12,12 +10,11 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.local_loop.CreateAccount.User;
 import com.example.local_loop.R;
-import com.example.local_loop.UserList.UserListViewer;
 import com.example.local_loop.database.DatabaseHelper;
 
 import java.util.List;
 
-public class RecycleAdapterByEvent extends RecyclerView.Adapter<UserListViewer> {
+public class RecycleAdapterByEvent extends RecyclerView.Adapter<AttendeeListViewer> {
 
         Context context;
         List<User> users;
@@ -39,30 +36,30 @@ public class RecycleAdapterByEvent extends RecyclerView.Adapter<UserListViewer> 
 
         @NonNull
         @Override
-        public UserListViewer onCreateViewHolder (@NonNull ViewGroup parent,int viewType){
-        return new UserListViewer(LayoutInflater.from(parent.getContext()).inflate(R.layout.user_list_layout, parent, false));
+        public AttendeeListViewer onCreateViewHolder (@NonNull ViewGroup parent,int viewType){
+        return new AttendeeListViewer(LayoutInflater.from(parent.getContext()).inflate(R.layout.attendee_list_layout, parent, false));
     }
 
         @Override
-        public void onBindViewHolder (@NonNull UserListViewer holder,int position){
-        holder.firstView.setText(users.get(position).getFirstName());
-        holder.lastView.setText(users.get(position).getLastName());
-        holder.userView.setText(users.get(position).getUsername());
-        holder.emailView.setText(users.get(position).getEmail());
-        holder.typeView.setText(users.get(position).getRole());
-        holder.delete.setOnClickListener(v -> {
-            onApprove(eventId, users.get(position).getUsername());
-            deleteEntry(users.get(position).getEmail());
-            notifyItemRemoved(holder.getAdapterPosition());
-        });
+        public void onBindViewHolder (@NonNull AttendeeListViewer holder,int position){
+            holder.firstView.setText(users.get(position).getFirstName());
+            holder.lastView.setText(users.get(position).getLastName());
+            holder.userView.setText(users.get(position).getUsername());
+            holder.emailView.setText(users.get(position).getEmail());
+            holder.typeView.setText(users.get(position).getRole());
+            holder.delete.setOnClickListener(v -> {
+                onApprove(eventId, users.get(position).getUsername());
+                deleteEntry(users.get(position).getEmail());
+                notifyItemRemoved(holder.getAdapterPosition());
+            });
 
-        holder.disable.setOnClickListener(v -> {
-            onRefuse(eventId, users.get(position).getUsername());
-            deleteEntry(users.get(position).getEmail());
-            notifyItemRemoved(holder.getAdapterPosition());
-        });
-        DatabaseHelper db = new DatabaseHelper(context);
-    }
+            holder.disable.setOnClickListener(v -> {
+                onRefuse(eventId, users.get(position).getUsername());
+                deleteEntry(users.get(position).getEmail());
+                notifyItemRemoved(holder.getAdapterPosition());
+            });
+            DatabaseHelper db = new DatabaseHelper(context);
+        }
 
         public void onApprove (int eventId, String attendeeId){
         DatabaseHelper db = new DatabaseHelper(context);

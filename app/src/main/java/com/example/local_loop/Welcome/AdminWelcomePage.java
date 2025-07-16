@@ -2,6 +2,7 @@ package com.example.local_loop.Welcome;
 
 import static com.example.local_loop.Event.EventDetailsActivity.EXTRA_SOURCE;
 import static com.example.local_loop.Event.EventDetailsActivity.SOURCE_ADMIN;
+import static com.example.local_loop.Event.EventDetailsActivity.SOURCE_ORGANIZER;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -49,6 +50,7 @@ public class AdminWelcomePage extends AppCompatActivity {
         username = getIntent().getStringExtra("username");
         userType = getIntent().getStringExtra("userType");
         Intent intent = new Intent(AdminWelcomePage.this, CategoryActivity.class);
+        intent.putExtra(EXTRA_SOURCE, SOURCE_ADMIN);
         intent.putExtra("username", username);// Pass the username to the WelcomePage
         intent.putExtra("userType", userType); // Pass the userType to the WelcomePage
         startActivity(intent);
@@ -76,6 +78,7 @@ public class AdminWelcomePage extends AppCompatActivity {
         username = getIntent().getStringExtra("username");
         userType = getIntent().getStringExtra("userType");
         Intent intent = new Intent(AdminWelcomePage.this, EventActivity.class);
+        intent.putExtra(EXTRA_SOURCE, SOURCE_ADMIN);
         intent.putExtra("username", username);// Pass the username to the WelcomePage
         intent.putExtra("userType", userType); // Pass the userType to the WelcomePage
         startActivity(intent);

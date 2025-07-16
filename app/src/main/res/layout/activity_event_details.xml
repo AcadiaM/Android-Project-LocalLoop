@@ -82,19 +82,9 @@
         android:layout_marginTop="75dp"
         android:layout_marginEnd="150dp"
         android:backgroundTint="@color/holo_dark_blue"
-        android:text="Join"
-        android:visibility="invisible"
+        android:text="Unknown"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/eventDetailContextInfo" />
 
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/attendee_recycler"
-        android:layout_width="373dp"
-        android:layout_height="472dp"
-        android:layout_marginTop="16dp"
-        android:visibility="invisible"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/eventDetailContextInfo" />
 </androidx.constraintlayout.widget.ConstraintLayout>
