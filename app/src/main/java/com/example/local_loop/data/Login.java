@@ -1,5 +1,6 @@
 package com.example.local_loop.data;
 
+import com.example.local_loop.CreateAccount.User;
 import com.example.local_loop.data.model.LoggedInUser;
 import com.example.local_loop.database.DatabaseHelper;
 
@@ -18,6 +19,11 @@ public class Login {
 
 
     public Result<LoggedInUser> login(String username, String password) {
+        if(dbHelper.checkLogin(username, password)){
+            User currentSession = new
+        }
+
+
         String role = dbHelper.getRoleByUsername(username);
         if (dbHelper.checkLogin(username, password)) {
             return new Result.Success<>(new LoggedInUser(username, username, role));

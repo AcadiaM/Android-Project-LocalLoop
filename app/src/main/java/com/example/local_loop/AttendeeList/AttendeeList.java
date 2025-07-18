@@ -5,24 +5,16 @@ import static com.example.local_loop.Event.EventDetailsActivity.EXTRA_SOURCE;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.graphics.Insets;
-import androidx.core.view.ViewCompat;
-import androidx.core.view.WindowInsetsCompat;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.example.local_loop.CreateAccount.Organizer;
 import com.example.local_loop.CreateAccount.User;
 import com.example.local_loop.Event.EventDetailsActivity;
 import com.example.local_loop.R;
-import com.example.local_loop.AttendeeList.RecycleAdapterByEvent;
-import com.example.local_loop.Welcome.AdminWelcomePage;
-import com.example.local_loop.Welcome.OrganizerWelcomePage;
 import com.example.local_loop.database.DatabaseHelper;
 
 import java.util.List;

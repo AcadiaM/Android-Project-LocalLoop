@@ -3,7 +3,7 @@ package com.example.local_loop.Login;
 import androidx.annotation.Nullable;
 
 /**
- * Data validation state of the login form.
+ * UserFactory validation state of the login form.
  */
 class LoginFormState {
     @Nullable

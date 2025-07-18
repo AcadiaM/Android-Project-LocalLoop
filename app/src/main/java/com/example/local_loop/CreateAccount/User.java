@@ -1,31 +1,56 @@
 package com.example.local_loop.CreateAccount;
 
+import android.os.Parcel;
+import android.os.Parcelable;
+
+import androidx.annotation.NonNull;
+
 /**
- * A User class, extended by all types of users: Admin, Participant and Organizer.
+ * A User class, extended by all types of users: Admin,  and .
  */
 
-public class User {
+public class User implements Parcelable {
 
-    private final String firstName, lastName, username, email, password, role;
+    private final int userID;
+    private final String role;
+    private final String username, email, password, firstName, lastName;
 
-//    private boolean isActive = true;
 
-    public User(String firstName, String lastName,String username, String email, String password, String role) {
-        this.firstName = firstName;
-        this.lastName = lastName;
+    public User(int userID, String role, String username, String email, String password, String firstName, String lastName) {
+        this.userID = userID;
+        this.role = role;
+
         this.username = username;
         this.password = password;
         this.email = email;
-        this.role = role;
+
+        this.firstName = firstName;
+        this.lastName = lastName;
     }
 
-    /*public String getDisplayName(){
-        return
-    } */
+    protected User(Parcel in) {
+        userID = in.readInt();
+        role = in.readString();
+        username = in.readString();
+        email = in.readString();
+        password = in.readString();
+        firstName = in.readString();
+        lastName = in.readString();
+    }
 
-//    public void deActivate(){
-//        isActive = false;
-//    }
+    public static final Creator<User> CREATOR = new Creator<User>() {
+        @Override
+        public User createFromParcel(Parcel in) {
+            return new User(in);
+        }
+
+        @Override
+        public User[] newArray(int size) {
+            return new User[size];
+        }
+    };
+
+    public long getUserID(){return this.userID; }
 
     public String getUsername() {
         return this.username;
@@ -45,5 +70,21 @@ public class User {
     }
     public String getRole() {
         return this.role;
+    }
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(@NonNull Parcel parcel, int i) {
+        parcel.writeInt(userID);
+        parcel.writeString(role);
+        parcel.writeString(username);
+        parcel.writeString(email);
+        parcel.writeString(password);
+        parcel.writeString(firstName);
+        parcel.writeString(lastName);
     }
 }

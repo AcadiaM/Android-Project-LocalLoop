@@ -1,7 +1,7 @@
 package com.example.local_loop.data.model;
 
 /**
- * Data class that captures user information for logged in users retrieved from LoginRepository
+ * UserFactory class that captures user information for logged in users retrieved from LoginRepository
  */
 public class LoggedInUser {
 

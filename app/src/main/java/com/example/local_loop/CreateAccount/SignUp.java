@@ -22,11 +22,10 @@ import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
 public class SignUp extends AppCompatActivity {
-    private EditText firstNameInput, lastNameInput, usernameInput,emailInput,passwordInput;
-    private String role, user, first, last, email, password;
+    private EditText usernameInput,emailInput,passwordInput, firstNameInput, lastNameInput;
+    private String role, username, email, password, first, last;
     Spinner roleInput;
     DatabaseHelper dbHelper;
-
     private View decorView;
 
     @Override
@@ -34,6 +33,7 @@ public class SignUp extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         EdgeToEdge.enable(this);
         setContentView(R.layout.activity_signup);
+
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main), (v, insets) -> {
             Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
@@ -70,7 +70,7 @@ public class SignUp extends AppCompatActivity {
 
     public boolean isValid(){
         boolean valid = true;
-        if(user.isEmpty() || dbHelper.checkUsername(user) ){
+        if(username.isEmpty() || dbHelper.checkUsername(username) ){
             usernameInput.setError("Invalid Username");
             valid = false;
         }
@@ -100,7 +100,7 @@ public class SignUp extends AppCompatActivity {
 
     public void initialize(){
         role = String.valueOf(roleInput.getSelectedItem());
-        user = usernameInput.getText().toString().trim();
+        username = usernameInput.getText().toString().trim();
         email =emailInput.getText().toString().trim();
         password = passwordInput.getText().toString().trim();
         first = firstNameInput.getText().toString().trim();
@@ -120,30 +120,28 @@ public class SignUp extends AppCompatActivity {
             Toast.makeText(this,"Sign Up failed: Invalid inputs.",Toast.LENGTH_SHORT).show();
         }
         else{
-            User newUser;
-            if(role.equalsIgnoreCase("organizer")){
-                newUser = new Organizer(first,last, user, email, password);
+
+            UserFactory newUser = new UserFactory(role, username, email, password, first,last);
+            newUser.setUserID(dbHelper.insertUser(newUser));
+
+            if(newUser.getUserID() != -1){
+                Intent intent;
+                User currentSession = newUser.signUpUser();
+
+                switch(currentSession.getRole()){
+                    case "participant":
+                        intent = new Intent(getApplicationContext(), WelcomePage.class);
+                        break;
+
+                    default:
+                        intent = new Intent(getApplicationContext(), OrganizerWelcomePage.class);
+                        break;
+                }
+                Toast.makeText(SignUp.this, "Welcome " + first + "! You are logged in as " + role + ".", Toast.LENGTH_SHORT).show();
+                intent.putExtra("user", currentSession);
+                startActivity(intent);
             }
             else {
-                newUser = new Participant(first,last, user, email, password);
-            }
-
-            boolean successful = dbHelper.insertUser(newUser);
-            if(successful){
-                Intent intent;
-                if(role.equalsIgnoreCase("organizer")){
-                    intent = new Intent(getApplicationContext(), OrganizerWelcomePage.class);
-                }
-                else{
-                    intent = new Intent(getApplicationContext(), WelcomePage.class);
-                }
-                intent.putExtra("username", first);
-                intent.putExtra("userType", role);
-
-                Toast.makeText(SignUp.this, "Welcome " + first + "! You are logged in as " + role + ".", Toast.LENGTH_SHORT).show();
-
-                startActivity(intent);
-            } else {
                 Toast.makeText(this, "Error", Toast.LENGTH_SHORT).show();
             }
         }
