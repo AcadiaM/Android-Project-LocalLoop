@@ -5,7 +5,6 @@ import static com.example.local_loop.Event.EventDetailsActivity.EXTRA_SOURCE;
 import android.app.DatePickerDialog;
 import android.app.TimePickerDialog;
 import android.content.DialogInterface;
-import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.Typeface;
 import android.view.Gravity;
@@ -28,9 +27,6 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.local_loop.Category.Category;
 import com.example.local_loop.R;
-import com.example.local_loop.Welcome.AdminWelcomePage;
-import com.example.local_loop.Welcome.OrganizerWelcomePage;
-import com.example.local_loop.Welcome.WelcomePage;
 import com.example.local_loop.database.DatabaseHelper;
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.android.material.textfield.TextInputLayout;
@@ -56,6 +52,7 @@ public class EventActivity extends AppCompatActivity {
     private String userName;
     private View decorView;
 
+    @SuppressWarnings("deprecation")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -150,17 +147,17 @@ public class EventActivity extends AppCompatActivity {
 
         //this is to hide the system bars and make the app immersive
         decorView = getWindow().getDecorView();
-        decorView.setOnSystemUiVisibilityChangeListener(new View.OnSystemUiVisibilityChangeListener() {
-            @Override
-            public void onSystemUiVisibilityChange(int visibility) {
-                if (visibility == 0) {
-                    decorView.setSystemUiVisibility(hideSystemBars());
-                }
+        decorView.setOnSystemUiVisibilityChangeListener(visibility -> {
+            if (visibility == 0) {
+                decorView.setSystemUiVisibility(hideSystemBars());
             }
         });
 
+        Button backButton = findViewById(R.id.eventBackButton);
+        backButton.setOnClickListener(v -> onBackPressed());
     }
     //this method is called when the activity gains or loses focus
+    @SuppressWarnings("deprecation")
     @Override
     public void onWindowFocusChanged(boolean hasFocus) {
         super.onWindowFocusChanged(hasFocus);
@@ -168,6 +165,8 @@ public class EventActivity extends AppCompatActivity {
             decorView.setSystemUiVisibility(hideSystemBars());
         }
     }
+
+    @SuppressWarnings("deprecation")
     private int hideSystemBars(){
         return (View.SYSTEM_UI_FLAG_LAYOUT_STABLE
                 | View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY
@@ -526,6 +525,8 @@ public class EventActivity extends AppCompatActivity {
         eventAdapter.setSelectedEventIds(selectedEventIds);
     }
 
+
+    @SuppressWarnings("deprecation")
     @Override
     public void onBackPressed() {
         if (isDeleteMode) {
@@ -606,28 +607,5 @@ public class EventActivity extends AppCompatActivity {
         datePickerDialog.show();
     }
 
-    public void backButtonPressed(View view) {
-        String userName = getIntent().getStringExtra("username");
-        String userType = getIntent().getStringExtra("userType");
-        // Handle back button press
-        if (isDeleteMode) {
-            exitDeleteMode();
-            Toast.makeText(this, "Delete mode cancelled", Toast.LENGTH_SHORT).show();
-        } else if (isEditMode) {
-            exitEditMode();
-        } else {
-            if (userType.equalsIgnoreCase("organizer")) {
-                Intent intent = new Intent(EventActivity.this, OrganizerWelcomePage.class);
-                intent.putExtra("username", userName);
-                intent.putExtra("userType", userType);
-                startActivity(intent);
-            } else if (userType.equalsIgnoreCase("admin")) {
-                Intent intent = new Intent(EventActivity.this, AdminWelcomePage.class);
-                intent.putExtra("username", userName);
-                intent.putExtra("userType", userType);
-                startActivity(intent);
-            }
-        }
-    }
 }
 

@@ -2,12 +2,12 @@ package com.example.local_loop.Event;
 
 import static com.example.local_loop.Event.EventDetailsActivity.EXTRA_SOURCE;
 
-import android.content.Intent;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.View;
 import android.os.Bundle;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.Toast;
 import android.widget.EditText;
 import android.widget.Spinner;
@@ -21,7 +21,6 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.local_loop.Category.Category;
 import com.example.local_loop.R;
-import com.example.local_loop.Welcome.WelcomePage;
 import com.example.local_loop.database.DatabaseHelper;
 
 import java.util.ArrayList;
@@ -29,7 +28,6 @@ import java.util.List;
 
 
 public class UserEventActivity extends AppCompatActivity {
-    private RecyclerView recyclerView;
     private EventAdapter eventAdapter;
     private DatabaseHelper dbHelper;
     private String userName;
@@ -42,6 +40,7 @@ public class UserEventActivity extends AppCompatActivity {
     private View decorView;
 
 
+    @SuppressWarnings("deprecation")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -70,18 +69,18 @@ public class UserEventActivity extends AppCompatActivity {
 
         //this is to hide the system bars and make the app immersive
         decorView = getWindow().getDecorView();
-        decorView.setOnSystemUiVisibilityChangeListener(new View.OnSystemUiVisibilityChangeListener() {
-            @Override
-            public void onSystemUiVisibilityChange(int visibility) {
-                if (visibility == 0) {
-                    decorView.setSystemUiVisibility(hideSystemBars());
-                }
+        decorView.setOnSystemUiVisibilityChangeListener(visibility -> {
+            if (visibility == 0) {
+                decorView.setSystemUiVisibility(hideSystemBars());
             }
         });
 
+        Button backButton = findViewById(R.id.browseEventBackButton);
+        backButton.setOnClickListener(v -> onBackPressed());
     }
 
     //this method is called when the activity gains or loses focus
+    @SuppressWarnings("deprecation")
     @Override
     public void onWindowFocusChanged(boolean hasFocus) {
         super.onWindowFocusChanged(hasFocus);
@@ -89,6 +88,7 @@ public class UserEventActivity extends AppCompatActivity {
             decorView.setSystemUiVisibility(hideSystemBars());
         }
     }
+    @SuppressWarnings("deprecation")
     private int hideSystemBars(){
         return (View.SYSTEM_UI_FLAG_LAYOUT_STABLE
                 | View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY
@@ -111,16 +111,6 @@ public class UserEventActivity extends AppCompatActivity {
         List<Event> events = dbHelper.searchEvents(query, selectedCategory);
         Toast.makeText(this, "Loading " + events.size() + " events for: " + userName, Toast.LENGTH_SHORT).show();
         eventAdapter.updateEvents(events);
-    }
-
-    //Method to handle back button press which redirects to previous page, in this case, the WelcomePage
-    public void backButtonPressed(View view) {
-        Intent intent = new Intent(UserEventActivity.this, WelcomePage.class);
-        intent.putExtra("username", userName);
-        intent.putExtra("userType", getIntent().getStringExtra("userType"));
-
-        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
-        startActivity(intent);
     }
 
     private void setupCategorySpinner() {

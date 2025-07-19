@@ -25,21 +25,25 @@
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recyclerViewEvents"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
+        android:layout_width="318dp"
+        android:layout_height="635dp"
+        android:layout_marginStart="35dp"
+        android:layout_marginTop="1dp"
+        android:layout_marginEnd="35dp"
+        app:layout_constraintBottom_toTopOf="@+id/browseEventBackButton"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/searchBar" />
+        app:layout_constraintTop_toBottomOf="@+id/categorySpinner"
+        app:layout_constraintVertical_bias="0.0" />
 
     <com.google.android.material.button.MaterialButton
-        android:id="@+id/signOut"
+        android:id="@+id/browseEventBackButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
         android:layout_marginBottom="8dp"
         android:backgroundTint="@color/black"
         android:contentDescription="@string/back_button"
-        android:onClick="backButtonPressed"
         android:text=""
         android:gravity="center"
         app:icon="@drawable/undo_icon"
@@ -56,9 +60,12 @@
         android:id="@+id/searchBar"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:autofillHints=""
         android:drawableStart="@android:drawable/ic_menu_search"
         android:hint="@string/search_events"
+        android:inputType=""
         android:padding="10dp"
+        android:textColorHint="@android:color/black"
         app:layout_constraintEnd_toStartOf="@+id/categorySpinner"
         app:layout_constraintStart_toStartOf="@id/recyclerViewEvents"
         app:layout_constraintTop_toBottomOf="@id/events"

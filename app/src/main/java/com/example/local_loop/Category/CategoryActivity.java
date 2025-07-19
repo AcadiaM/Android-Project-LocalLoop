@@ -20,11 +20,7 @@ import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.example.local_loop.CreateAccount.User;
-import com.example.local_loop.Event.EventActivity;
 import com.example.local_loop.R;
-import com.example.local_loop.Welcome.AdminWelcomePage;
-import com.example.local_loop.Welcome.OrganizerWelcomePage;
 import com.example.local_loop.database.DatabaseHelper;
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.android.material.textfield.TextInputLayout;
@@ -46,6 +42,7 @@ public class CategoryActivity extends AppCompatActivity {
     private ImageButton editCategoryButton;
     private boolean isEditMode = false;
 
+    @SuppressWarnings("deprecation")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -145,6 +142,9 @@ public class CategoryActivity extends AppCompatActivity {
                 categoryAdapter.setEditMode(true);
             }
         });
+
+        Button backButton = findViewById(R.id.categoryBackButton);
+        backButton.setOnClickListener(v -> onBackPressed());
     }
 
     private void loadCategories() {
@@ -305,27 +305,6 @@ public class CategoryActivity extends AppCompatActivity {
         });
 
         dialog.show();
-    }
-
-    @SuppressWarnings("deprecation")
-    //@Override
-    public void onBackPressed(View view) {
-        if (isDeleteMode) {
-            isDeleteMode = false;
-            selectedCategoryIds.clear();
-            categoryAdapter.setDeleteMode(false);
-            removeCategoryButton.setImageResource(R.drawable.baseline_delete_forever_24);
-            addCategoryButton.setEnabled(true);
-            Toast.makeText(this, "Delete mode cancelled", Toast.LENGTH_SHORT).show();
-        } else if (isEditMode) {
-            exitEditMode();
-        } else{
-            Intent intent = new Intent(CategoryActivity.this, AdminWelcomePage.class);
-            User userName;
-            intent.putExtra("username", getIntent().getStringExtra("username"));
-            intent.putExtra("userType", getIntent().getStringExtra("userType"));
-            startActivity(intent);
-        }
     }
 
     private void exitEditMode() {

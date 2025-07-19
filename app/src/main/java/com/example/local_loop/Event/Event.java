@@ -5,7 +5,7 @@ public class Event {
     private final String title;
     private String description;
     private final int categoryId;
-    private String organizer;
+    private final String organizer;
     private final double fee;
     private final String dateTime;
 
@@ -27,7 +27,6 @@ public class Event {
     public void setDescription(String description) { this.description = description; }
     public int getCategoryId() { return categoryId; }
     public String getOrganizer() { return this.organizer; }
-    public void setOrganizer(String organizer) { this.organizer = organizer; }
     public double getFee() { return fee; }
     public String getDateTime() { return dateTime; }
 }

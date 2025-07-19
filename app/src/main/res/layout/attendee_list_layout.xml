@@ -11,6 +11,7 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:baselineAligned="false"
         android:orientation="horizontal">
 
         <LinearLayout
@@ -140,9 +141,9 @@
             <com.google.android.material.button.MaterialButton
                 android:id="@+id/disable"
                 android:layout_width="wrap_content"
-                android:layout_height="45dp"
+                android:layout_height="48dp"
                 android:backgroundTint="@android:color/transparent"
-                android:hint="User is not approved."
+                android:hint="@string/hint_approve"
                 android:text=""
                 android:textSize="20sp"
                 app:icon="@drawable/baseline_group_add_24"
@@ -154,9 +155,9 @@
             <com.google.android.material.button.MaterialButton
                 android:id="@+id/delete"
                 android:layout_width="wrap_content"
-                android:layout_height="45dp"
+                android:layout_height="48dp"
                 android:backgroundTint="@android:color/transparent"
-                android:hint="Refuse user (cannot be undone)."
+                android:hint="@string/hint_refuse"
                 android:text=""
                 android:textSize="20sp"
                 app:icon="@drawable/baseline_group_remove_24"

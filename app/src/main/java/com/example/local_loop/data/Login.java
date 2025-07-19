@@ -22,11 +22,8 @@ public class Login {
         if (dbHelper.checkLogin(username, password)) {
             return new Result.Success<>(new LoggedInUser(username, username, role));
         } else {
-            return new Result.Error(new IOException("Invalid credentials"));
+            return new Result.Error<>(new IOException("Invalid credentials"));
         }
     }
 
-    public void logout() {
-        // Not needed for local DB
-    }
 }

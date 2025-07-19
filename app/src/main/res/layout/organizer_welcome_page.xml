@@ -43,7 +43,7 @@
         android:layout_marginBottom="8dp"
         android:backgroundTint="@color/black"
         android:onClick="OnLogoutButton"
-        android:text="Sign Out"
+        android:text="@string/sign_out"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.047"

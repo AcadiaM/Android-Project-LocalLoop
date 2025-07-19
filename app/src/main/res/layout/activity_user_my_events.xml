@@ -29,7 +29,7 @@
         android:id="@+id/recyclerViewEvents"
         android:layout_width="0dp"
         android:layout_height="0dp"
-        app:layout_constraintBottom_toTopOf="@id/signOut"
+        app:layout_constraintBottom_toTopOf="@id/myEventsBackButton"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
@@ -37,14 +37,13 @@
         app:layout_constraintVertical_bias="1.0" />
 
     <com.google.android.material.button.MaterialButton
-        android:id="@+id/signOut"
+        android:id="@+id/myEventsBackButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
         android:layout_marginBottom="8dp"
         android:backgroundTint="@color/black"
         android:contentDescription="@string/back_button"
-        android:onClick="backButtonPressed"
         android:text=""
         android:gravity="center"
         app:icon="@drawable/undo_icon"

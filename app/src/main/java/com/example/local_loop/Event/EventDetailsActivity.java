@@ -1,26 +1,18 @@
 package com.example.local_loop.Event;
 
 import android.annotation.SuppressLint;
-import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.local_loop.AttendeeList.AttendeeList;
-import com.example.local_loop.AttendeeList.RecycleAdapterByEvent;
 import com.example.local_loop.Category.Category;
-import com.example.local_loop.Category.CategoryDetailsActivity;
 import com.example.local_loop.R;
-import com.example.local_loop.UserList.UserList;
-import com.example.local_loop.Welcome.AdminWelcomePage;
 import com.example.local_loop.database.DatabaseHelper;
 
 import java.util.Objects;
@@ -33,7 +25,9 @@ public class EventDetailsActivity extends AppCompatActivity {
     public static final String SOURCE_ADMIN = "admin_page";
     public static final String SOURCE_ORGANIZER = "organizer_page";
     public static final String SOURCE_PARTICIPANT = "participant_page";
+
     @SuppressLint("SetTextI18n")
+    @SuppressWarnings("deprecation")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -50,7 +44,7 @@ public class EventDetailsActivity extends AppCompatActivity {
         Button joinButton = findViewById(R.id.joinButton);
 
         // Get data passed from intent
-        int eventID = getIntent().getIntExtra("eventId",-1);
+        int eventID = getIntent().getIntExtra("eventId", -1);
         String attendeeID = getIntent().getStringExtra("attendeeId");
 
         String title = getIntent().getStringExtra("title");
@@ -59,7 +53,7 @@ public class EventDetailsActivity extends AppCompatActivity {
         String datetime = getIntent().getStringExtra("datetime");
 
         String organizer = getIntent().getStringExtra("organizer");
-        int categoryID = getIntent().getIntExtra("categoryId",-1);
+        int categoryID = getIntent().getIntExtra("categoryId", -1);
         Category category = dBHelper.getCategoryById(categoryID);
         String categoryName = category.getName();
 
@@ -96,47 +90,30 @@ public class EventDetailsActivity extends AppCompatActivity {
 
         } else {
             contextInfoText.setText("Category: " + categoryName + "\n" + "\n" + "Organizer: " + organizer);  // Or "Unknown Source"
-            if (dBHelper.hasJoinRequest(eventID, attendeeID)){
+            if (dBHelper.hasJoinRequest(eventID, attendeeID)) {
                 joinButton.setEnabled(false);
-                joinButton.setText(dBHelper.getStatus(eventID,attendeeID));
-                if (Objects.equals(dBHelper.getStatus(eventID, attendeeID), "Approved")){
-                    joinButton.setBackgroundColor(getResources().getColor(R.color.dark_green));
+                joinButton.setText(dBHelper.getStatus(eventID, attendeeID));
+                if (Objects.equals(dBHelper.getStatus(eventID, attendeeID), "Approved")) {
+                    joinButton.setBackgroundColor(getColor(R.color.dark_green));
                     joinButton.setTextColor(Color.WHITE);
-                } else if (Objects.equals(dBHelper.getStatus(eventID, attendeeID), "Refused")){
-                    joinButton.setBackgroundColor(getResources().getColor(R.color.red));
+                } else if (Objects.equals(dBHelper.getStatus(eventID, attendeeID), "Refused")) {
+                    joinButton.setBackgroundColor(getColor(R.color.red));
                     joinButton.setTextColor(Color.WHITE);
                 } else {
                     joinButton.setBackgroundColor(Color.LTGRAY);
                 }
-            }
-            else{
+            } else {
                 joinButton.setText("Join");
                 joinButton.setOnClickListener(v -> {
-                            dBHelper.submitJoinRequest(eventID, attendeeID);
-                            joinButton.setEnabled(false);
-                            joinButton.setBackgroundColor(Color.LTGRAY);
-                            joinButton.setText(dBHelper.getStatus(eventID,attendeeID));
+                    dBHelper.submitJoinRequest(eventID, attendeeID);
+                    joinButton.setEnabled(false);
+                    joinButton.setBackgroundColor(Color.LTGRAY);
+                    joinButton.setText(dBHelper.getStatus(eventID, attendeeID));
                 });
             }
         }
-    }
 
-    public void OnEventBackButtonPressed(View view) {
-        String className = getIntent().getStringExtra("sourceContext");
-        try {
-            Class<?> targetActivity = Class.forName(className);
-            Intent intent = new Intent(EventDetailsActivity.this, targetActivity);
-            intent.putExtra(EXTRA_SOURCE, getIntent().getStringExtra(EXTRA_SOURCE));
-            intent.putExtra("username", getIntent().getStringExtra("username"));
-            intent.putExtra("userType", getIntent().getStringExtra("userType"));
-            if (className.endsWith("CategoryDetailsActivity")){
-                intent.putExtra("categoryId", getIntent().getIntExtra("categoryId",-1));
-            }
-            startActivity(intent);
-        } catch (ClassNotFoundException e) {
-            e.printStackTrace();
-            Toast.makeText(this, "Activity not found.", Toast.LENGTH_SHORT).show();
-        }
+        Button backButton = findViewById(R.id.eventDetailsBackButton);
+        backButton.setOnClickListener(v -> onBackPressed());
     }
-
 }

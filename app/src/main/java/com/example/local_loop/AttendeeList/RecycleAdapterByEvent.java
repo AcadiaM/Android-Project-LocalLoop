@@ -15,13 +15,14 @@ import com.example.local_loop.database.DatabaseHelper;
 import java.util.List;
 
 public class RecycleAdapterByEvent extends RecyclerView.Adapter<AttendeeListViewer> {
-
         Context context;
+        DatabaseHelper db;
         List<User> users;
         int eventId;
 
     public RecycleAdapterByEvent(Context context, List < User > users, int eventId) {
         this.context = context;
+        db = new DatabaseHelper(context);
         this.users = users;
         this.eventId = eventId;
     }
@@ -58,18 +59,15 @@ public class RecycleAdapterByEvent extends RecyclerView.Adapter<AttendeeListView
                 deleteEntry(users.get(holder.getAdapterPosition()).getEmail());
                 notifyItemRemoved(holder.getAdapterPosition());
             });
-            DatabaseHelper db = new DatabaseHelper(context);
         }
 
         public void onApprove (int eventId, String attendeeId){
-        DatabaseHelper db = new DatabaseHelper(context);
-        db.updateStatus(eventId, attendeeId, "Approved");
+        db.updateRequestStatus(eventId, attendeeId, "Approved");
         Toast.makeText(context.getApplicationContext(), "User " + attendeeId + " was approved.", Toast.LENGTH_SHORT).show();
         }
 
         public void onRefuse (int eventId, String attendeeId){
-        DatabaseHelper db = new DatabaseHelper(context);
-        db.updateStatus(eventId, attendeeId, "Refused");
+        db.updateRequestStatus(eventId, attendeeId, "Refused");
         Toast.makeText(context.getApplicationContext(), "User " + attendeeId + " was refused.", Toast.LENGTH_SHORT).show();
     }
         @Override

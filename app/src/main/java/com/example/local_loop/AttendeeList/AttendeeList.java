@@ -1,39 +1,34 @@
 package com.example.local_loop.AttendeeList;
 
-import static com.example.local_loop.Event.EventDetailsActivity.EXTRA_SOURCE;
-
-import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
-import android.widget.TextView;
+import android.widget.Button;
 import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.graphics.Insets;
-import androidx.core.view.ViewCompat;
-import androidx.core.view.WindowInsetsCompat;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.example.local_loop.CreateAccount.Organizer;
 import com.example.local_loop.CreateAccount.User;
-import com.example.local_loop.Event.EventDetailsActivity;
 import com.example.local_loop.R;
-import com.example.local_loop.AttendeeList.RecycleAdapterByEvent;
-import com.example.local_loop.Welcome.AdminWelcomePage;
-import com.example.local_loop.Welcome.OrganizerWelcomePage;
 import com.example.local_loop.database.DatabaseHelper;
 
 import java.util.List;
 
 public class AttendeeList extends AppCompatActivity {
 
+    DatabaseHelper db;
+    private View decorView;
+
+    @SuppressWarnings({"CallToPrintStackTrace", "deprecation"})
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         EdgeToEdge.enable(this);
         setContentView(R.layout.activity_attendee_list);
+
+        db = new DatabaseHelper(this);
 
         int eventID = getIntent().getIntExtra("eventId", -1);
         RecyclerView attendeeRecycler = findViewById(R.id.attendee_recycler);
@@ -45,27 +40,40 @@ public class AttendeeList extends AppCompatActivity {
             e.printStackTrace();
         }
 
+        //this is to hide the system bars and make the app immersive
+        decorView = getWindow().getDecorView();
+        decorView.setOnSystemUiVisibilityChangeListener(visibility -> {
+            if (visibility == 0) {
+                decorView.setSystemUiVisibility(hideSystemBars());
+            }
+        });
+
+        Button backButton = findViewById(R.id.attendeeBackButton);
+        backButton.setOnClickListener(v -> onBackPressed());
+
     }
 
     private List<User> getData(int eventID) {
-        DatabaseHelper db = new DatabaseHelper(this);
         return db.getPendingRequestsByEvent(eventID);
     }
 
-    public void OnAttendeeBackButtonPressed(View view) {
-        Intent intent = new Intent(com.example.local_loop.AttendeeList.AttendeeList.this, EventDetailsActivity.class);
-        intent.putExtra("username", getIntent().getStringExtra("organizer"));
-        intent.putExtra("userType", "organizer");
-        intent.putExtra(EXTRA_SOURCE, getIntent().getStringExtra(EXTRA_SOURCE));
-        intent.putExtra("sourceContext", getIntent().getStringExtra("sourceContext"));
-        intent.putExtra("eventId", getIntent().getIntExtra("eventId",-1));
-        intent.putExtra("title", getIntent().getStringExtra("title"));
-        intent.putExtra("description", getIntent().getStringExtra("description"));
-        intent.putExtra("fee", getIntent().getStringExtra("fee"));
-        intent.putExtra("datetime", getIntent().getStringExtra("datetime"));
-        intent.putExtra("categoryId", getIntent().getIntExtra("categoryId",-1));
-        intent.putExtra("organizer", getIntent().getStringExtra("organizer"));
-        startActivity(intent);
+    //this method is called when the activity gains or loses focus
+    @SuppressWarnings("deprecation")
+    @Override
+    public void onWindowFocusChanged(boolean hasFocus) {
+        super.onWindowFocusChanged(hasFocus);
+        if(hasFocus) {
+            decorView.setSystemUiVisibility(hideSystemBars());
+        }
     }
 
+    @SuppressWarnings("deprecation")
+    private int hideSystemBars(){
+        return (View.SYSTEM_UI_FLAG_LAYOUT_STABLE
+                | View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY
+                | View.SYSTEM_UI_FLAG_FULLSCREEN
+                | View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
+                | View.SYSTEM_UI_FLAG_FULLSCREEN
+                | View.SYSTEM_UI_FLAG_HIDE_NAVIGATION);
+    }
 }

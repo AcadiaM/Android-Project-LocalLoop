@@ -2,9 +2,9 @@ package com.example.local_loop.Category;
 
 import static com.example.local_loop.Event.EventDetailsActivity.EXTRA_SOURCE;
 
-import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -14,7 +14,6 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.local_loop.Event.Event;
 import com.example.local_loop.Event.EventAdapter;
-import com.example.local_loop.Event.EventDetailsActivity;
 import com.example.local_loop.R;
 import com.example.local_loop.database.DatabaseHelper;
 
@@ -22,7 +21,9 @@ import java.util.List;
 
 public class CategoryDetailsActivity extends AppCompatActivity {
     DatabaseHelper dbHelper;
+    private View decorView;
 
+    @SuppressWarnings("deprecation")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -54,13 +55,36 @@ public class CategoryDetailsActivity extends AppCompatActivity {
         eventRecyclerView.setLayoutManager(new GridLayoutManager(this,2));
         EventAdapter eventAdapter = new EventAdapter(getIntent().getStringExtra(EXTRA_SOURCE), events, this);
         eventRecyclerView.setAdapter(eventAdapter);
+
+        //this is to hide the system bars and make the app immersive
+        decorView = getWindow().getDecorView();
+        decorView.setOnSystemUiVisibilityChangeListener(visibility -> {
+            if (visibility == 0) {
+                decorView.setSystemUiVisibility(hideSystemBars());
+            }
+        });
+
+        Button backButton = findViewById(R.id.categoryDetailsBackButton);
+        backButton.setOnClickListener(v -> onBackPressed());
     }
 
-    public void OnCategoryBackButtonPressed(View view) {
-        Intent intent = new Intent(CategoryDetailsActivity.this, CategoryActivity.class);
-        intent.putExtra(EXTRA_SOURCE, getIntent().getStringExtra(EXTRA_SOURCE));
-        intent.putExtra("username", getIntent().getStringExtra("username"));
-        intent.putExtra("userType", getIntent().getStringExtra("userType"));
-        startActivity(intent);
+    //this method is called when the activity gains or loses focus
+    @SuppressWarnings("deprecation")
+    @Override
+    public void onWindowFocusChanged(boolean hasFocus) {
+        super.onWindowFocusChanged(hasFocus);
+        if(hasFocus) {
+            decorView.setSystemUiVisibility(hideSystemBars());
+        }
+    }
+
+    @SuppressWarnings("deprecation")
+    private int hideSystemBars(){
+        return (View.SYSTEM_UI_FLAG_LAYOUT_STABLE
+                | View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY
+                | View.SYSTEM_UI_FLAG_FULLSCREEN
+                | View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
+                | View.SYSTEM_UI_FLAG_FULLSCREEN
+                | View.SYSTEM_UI_FLAG_HIDE_NAVIGATION);
     }
 }

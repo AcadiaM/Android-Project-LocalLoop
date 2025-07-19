@@ -24,7 +24,7 @@
         app:layout_constraintTop_toTopOf="parent" />
 
     <com.google.android.material.button.MaterialButton
-        android:id="@+id/signOut"
+        android:id="@+id/attendeeBackButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="24dp"
@@ -32,7 +32,6 @@
         android:backgroundTint="@color/black"
         android:contentDescription="@string/back_button"
         android:gravity="center"
-        android:onClick="OnAttendeeBackButtonPressed"
         android:text=""
         android:elevation="8dp"
         app:icon="@drawable/undo_icon"
@@ -51,7 +50,7 @@
         android:paddingBottom="24dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintBottom_toTopOf="@id/signOut"
+        app:layout_constraintBottom_toTopOf="@id/attendeeBackButton"
         app:layout_constraintTop_toBottomOf="@id/attendeeListTitle" />
 
 

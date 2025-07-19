@@ -187,24 +187,6 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     }
 
     /**
-     * This function finds the attendeeID of a user with it's username.
-     *
-     * @param username the username of the given user.
-     * @return the ID if the username is found in the database, -1 otherwise.
-     */
-    public int getIDByUsername(String username) {
-        SQLiteDatabase db = this.getReadableDatabase();
-        Cursor cursor = db.query(TABLE_USERS, new String[]{"id"}, "username = ?", new String[]{username}, null, null, null);
-        if (cursor.moveToFirst()) {
-            int attendeeID = cursor.getInt(0);
-            cursor.close();
-            return attendeeID;
-        }
-        cursor.close();
-        return -1;
-    }
-
-    /**
      * This function finds the username of a user from their email.
      *
      * @param email the email of the desired user.
@@ -496,42 +478,6 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     }
 
     /**
-     * This function gets a list of all the events in a given category.
-     *
-     * @param categoryId the row id of the desired category.
-     * @return a list of event objects with all events in the given category.
-     */
-    public List<Event> getEventsByCategory(int categoryId) {
-        List<Event> eventList = new ArrayList<>();
-        SQLiteDatabase db = this.getReadableDatabase();
-
-        String query = "SELECT e.id, e.title, e.description, e.category_id, " +
-                "e.organizer, e.fee, e.datetime " +
-                "FROM events e " +
-                "JOIN categories c ON e.category_id = c.id " +
-                "WHERE e.category_id = ?";
-
-        Cursor cursor = db.rawQuery(query, new String[]{String.valueOf(categoryId)});
-
-        if (cursor.moveToFirst()) {
-            do {
-                int id = cursor.getInt(cursor.getColumnIndexOrThrow("id"));
-                String title = cursor.getString(cursor.getColumnIndexOrThrow("title"));
-                String description = cursor.getString(cursor.getColumnIndexOrThrow("description"));
-                int catId = cursor.getInt(cursor.getColumnIndexOrThrow("category_id"));
-                String organizer = cursor.getString(cursor.getColumnIndexOrThrow("organizer"));
-                double fee = cursor.getDouble(cursor.getColumnIndexOrThrow("fee"));
-                String datetime = cursor.getString(cursor.getColumnIndexOrThrow("datetime"));
-
-                eventList.add(new Event(id, title, description, catId, organizer, fee, datetime));
-            } while (cursor.moveToNext());
-        }
-
-        cursor.close();
-        return eventList;
-    }
-
-    /**
      * This function gets a list of all the events created by a given organizer.
      *
      * @param organizer the username of the desired organizer.
@@ -569,37 +515,6 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         cursor.close();
         db.close();
         return events;
-    }
-
-    /**
-     * This function gets and returns a list of all events in the database.
-     *
-     * @return a list of event objects with all events in the database.
-     */
-    public List<Event> getAllEvents(){
-        List<Event> eventList = new ArrayList<>();
-        SQLiteDatabase db = this.getReadableDatabase();
-        String query = "SELECT e.id, e.title, e.description, e.category_id, " +
-                "e.organizer, e.fee, e.datetime " +
-                "FROM events e";
-        Cursor cursor = db.rawQuery(query, null);
-
-        if (cursor.moveToFirst()){
-            do {
-                int id = cursor.getInt(cursor.getColumnIndexOrThrow("id"));
-                String title = cursor.getString(cursor.getColumnIndexOrThrow("title"));
-                String description = cursor.getString(cursor.getColumnIndexOrThrow("description"));
-                int categoryId = cursor.getInt(cursor.getColumnIndexOrThrow("category_id"));
-                String organizer = cursor.getString(cursor.getColumnIndexOrThrow("organizer"));
-                double fee = cursor.getDouble(cursor.getColumnIndexOrThrow("fee"));
-                String dateTime = cursor.getString(cursor.getColumnIndexOrThrow("datetime"));
-
-                eventList.add(new Event(id, title, description, categoryId, organizer, fee, dateTime));
-            } while (cursor.moveToNext());
-        }
-        cursor.close();
-        return eventList;
-
     }
 
     /**
@@ -770,23 +685,6 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         return requests;
     }
 
-    /**
-     * This function changes the status of a given request, allowing an organizer to accept or reject a participant's join request.
-     *
-     * @param requestId the row id of the given request.
-     * @param newStatus the new status of the request.
-     * @return true if the status was changed, false otherwise.
-     */
-    public boolean updateRequestStatus(int requestId, String newStatus) {
-        SQLiteDatabase db = this.getWritableDatabase();
-        ContentValues values = new ContentValues();
-        values.put("status", newStatus);
-
-        int rows = db.update("requests", values, "request_id=?", new String[]{String.valueOf(requestId)});
-        db.close();
-        return rows > 0;
-    }
-
     public boolean hasJoinRequest(int eventId, String attendeeId) {
         SQLiteDatabase db = this.getReadableDatabase();
 
@@ -917,17 +815,16 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     /**
      * Updates the status of a join request for a specific attendee and event.
      *
-     * @param eventId The ID of the event.
+     * @param eventId    The ID of the event.
      * @param attendeeId The ID of the attendee (username).
-     * @param newStatus The new status to set (e.g. "Approved", "Rejected").
-     * @return true if the update was successful (at least one row affected), false otherwise.
+     * @param newStatus  The new status to set (e.g. "Approved", "Rejected").
      */
-    public boolean updateStatus(int eventId, String attendeeId, String newStatus) {
+    public void updateRequestStatus(int eventId, String attendeeId, String newStatus) {
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues values = new ContentValues();
         values.put("status", newStatus);
 
-        int rows = db.update(
+        db.update(
                 "requests",
                 values,
                 "event_id = ? AND attendee_id = ?",
@@ -935,7 +832,6 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         );
 
         db.close();
-        return rows > 0;  // Returns true if at least one row was updated
     }
 
 

@@ -244,7 +244,7 @@
             android:layout_gravity="center"
             android:backgroundTint="@android:color/transparent"
             android:onClick="haveAccountClick"
-            android:text="Already have an account? Click here to sign in!"
+            android:text="@string/yes_account"
             android:textAlignment="center"
             android:textColor="@android:color/holo_blue_dark"
             android:textSize="15sp"
@@ -256,7 +256,7 @@
 
 
     <com.google.android.material.button.MaterialButton
-        android:id="@+id/signOut"
+        android:id="@+id/signBackButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="24dp"
@@ -264,7 +264,6 @@
         android:backgroundTint="@color/black"
         android:contentDescription="@string/back_button"
         android:gravity="center"
-        android:onClick="backButtonPressed"
         android:text=""
         android:textSize="20sp"
         app:icon="@drawable/undo_icon"

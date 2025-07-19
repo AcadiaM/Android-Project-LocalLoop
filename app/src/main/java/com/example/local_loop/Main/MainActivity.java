@@ -19,6 +19,7 @@ public class MainActivity extends AppCompatActivity {
     DatabaseHelper dbHelper;
     private View decorView;
 
+    @SuppressWarnings("deprecation")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -35,17 +36,15 @@ public class MainActivity extends AppCompatActivity {
 
         //this is to hide the system bars and make the app immersive
         decorView = getWindow().getDecorView();
-        decorView.setOnSystemUiVisibilityChangeListener(new View.OnSystemUiVisibilityChangeListener() {
-            @Override
-            public void onSystemUiVisibilityChange(int visibility) {
-                if (visibility == 0) {
-                    decorView.setSystemUiVisibility(hideSystemBars());
-                }
+        decorView.setOnSystemUiVisibilityChangeListener(visibility -> {
+            if (visibility == 0) {
+                decorView.setSystemUiVisibility(hideSystemBars());
             }
         })
     ;}
 
     //this method is called when the activity gains or loses focus
+    @SuppressWarnings("deprecation")
     @Override
     public void onWindowFocusChanged(boolean hasFocus) {
         super.onWindowFocusChanged(hasFocus);
@@ -53,6 +52,8 @@ public class MainActivity extends AppCompatActivity {
             decorView.setSystemUiVisibility(hideSystemBars());
         }
     }
+
+    @SuppressWarnings("deprecation")
     private int hideSystemBars(){
         return (View.SYSTEM_UI_FLAG_LAYOUT_STABLE
                 | View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY
@@ -62,10 +63,12 @@ public class MainActivity extends AppCompatActivity {
                 | View.SYSTEM_UI_FLAG_HIDE_NAVIGATION);
     }
 
+    @SuppressWarnings("deprecation")
     public void OnSignButton(View view) {
         Intent intent = new Intent(getApplicationContext(), LoginActivity.class);
         startActivityForResult(intent,0);
     }
+    @SuppressWarnings("deprecation")
     public void OnCreateButton(View view) {
         // Application Context and Activity
         Intent intent = new Intent(getApplicationContext(), SignUp.class);

@@ -9,7 +9,8 @@
     <string name="invalid_username">Not a valid username</string>
     <string name="invalid_password">Password must be >5 characters</string>
     <string name="login_failed">"Login failed"</string>
-    <string name="sign_up">"Sign Up"</string>>
+    <string name="sign_up">"Sign Up"</string>
+    <string name="sign_out">Sign Out</string>
     <string name = "browse_events">Browse Events</string>
 
     <string name="create_button">Create an account</string>
@@ -28,13 +29,19 @@
     <string name="account_creation">Create an Account</string>
     <string name="submit_button">Submit</string>
     <string name="sign_in">Sign In</string>
+    <string name="no_account">Don\'t have an account? Click here to sign up!</string>
+    <string name="yes_account">Already have an account? Click here to sign in!</string>
 
+    <string name="category_name">Category Name</string>
+    <string name="category_description">Category Description</string>
     <string name="edit_category">Edit Category</string>
     <string name="add_category">Add a Category</string>
-    <string name="back_button">Back Button</string>
+    <string name="remove_category">Remove a Category</string>
+    <string name="back_button">Return to previous screen</string>
 
     <string name="add_event">Add an Event</string>
     <string name="edit_event">Edit Event</string>
+    <string name="remove_event">Remove an Event</string>
     <string name ="search_events">Search for an Event</string>
     <string name="categoriesManagement">Categories Management</string>
     <string name="userManagement">User Management</string>
@@ -48,6 +55,17 @@
     <string name="type">Type: </string>
 
     <string name="event">Events</string>
+    <string name="event_name">Event Name</string>
+    <string name="event_description">Event Description</string>
+    <string name="fee">Event Fee ($)</string>
+    <string name="date_and_time">Event Date and Time</string>
+    <string name="select_category">Select a Category</string>
+    <string name="extra_info">Extra Info</string>
+    <string name="unknown">Unknown</string>
+    <string name="hint_delete">Delete user (cannot be undone).</string>
+    <string name="hint_disable">User is not disabled.</string>
+    <string name="hint_approve">User is not approved.</string>
+    <string name="hint_refuse">Refuse user (cannot be undone).</string>
 
     <!-- Custom Date/Time Picker style -->
     <style name="MyDatePickerDialogTheme" parent="Theme.MaterialComponents.DayNight.Dialog">

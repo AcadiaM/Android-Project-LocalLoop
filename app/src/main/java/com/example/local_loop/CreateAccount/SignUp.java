@@ -1,7 +1,6 @@
 package com.example.local_loop.CreateAccount;
 
 import com.example.local_loop.Login.LoginActivity;
-import com.example.local_loop.Main.MainActivity;
 import com.example.local_loop.R;
 import com.example.local_loop.database.DatabaseHelper;
 import com.example.local_loop.Welcome.OrganizerWelcomePage;
@@ -11,6 +10,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.util.Patterns;
 import android.view.View;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.Toast;
@@ -29,6 +29,7 @@ public class SignUp extends AppCompatActivity {
 
     private View decorView;
 
+    @SuppressWarnings("deprecation")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -49,24 +50,16 @@ public class SignUp extends AppCompatActivity {
 
         //this is to hide the system bars and make the app immersive
         decorView = getWindow().getDecorView();
-        decorView.setOnSystemUiVisibilityChangeListener(new View.OnSystemUiVisibilityChangeListener() {
-            @Override
-            public void onSystemUiVisibilityChange(int visibility) {
-                if (visibility == 0) {
-                    decorView.setSystemUiVisibility(hideSystemBars());
-                }
+        decorView.setOnSystemUiVisibilityChangeListener(visibility -> {
+            if (visibility == 0) {
+                decorView.setSystemUiVisibility(hideSystemBars());
             }
         });
+
+        Button backButton = findViewById(R.id.signBackButton);
+        backButton.setOnClickListener(v -> onBackPressed());
     }
 
-
-    public void backButtonPressed(View view) {
-        // Handle back button press
-        Intent intent = new Intent(SignUp.this, MainActivity.class);
-        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
-        startActivity(intent);
-        finish();
-    }
 
     public boolean isValid(){
         boolean valid = true;
@@ -151,6 +144,7 @@ public class SignUp extends AppCompatActivity {
 
 
     //this method is called when the activity gains or loses focus
+    @SuppressWarnings("deprecation")
     @Override
     public void onWindowFocusChanged(boolean hasFocus) {
         super.onWindowFocusChanged(hasFocus);
@@ -158,6 +152,8 @@ public class SignUp extends AppCompatActivity {
             decorView.setSystemUiVisibility(hideSystemBars());
         }
     }
+
+    @SuppressWarnings("deprecation")
     private int hideSystemBars(){
         return (View.SYSTEM_UI_FLAG_LAYOUT_STABLE
                 | View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY

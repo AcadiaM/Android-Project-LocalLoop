@@ -28,7 +28,7 @@
             android:layout_width="240dp"
             android:layout_height="138dp"
             android:layout_gravity="center"
-            android:contentDescription="TODO"
+            android:contentDescription="@string/app_name"
             app:srcCompat="@drawable/ic_logo" />
 
         <Space

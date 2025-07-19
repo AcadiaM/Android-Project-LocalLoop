@@ -2,9 +2,9 @@ package com.example.local_loop.Event;
 
 import static com.example.local_loop.Event.EventDetailsActivity.EXTRA_SOURCE;
 
-import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.Button;
 
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -12,19 +12,19 @@ import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.local_loop.R;
-import com.example.local_loop.Welcome.WelcomePage;
 import com.example.local_loop.database.DatabaseHelper;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public class UserMyEvent extends AppCompatActivity {
-    private RecyclerView recyclerView;
     private EventAdapter eventAdapter;
     private DatabaseHelper dbHelper;
     private String userName;
     private View decorView;
 
+    @SuppressWarnings("deprecation")
+    @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_user_my_events);
@@ -46,19 +46,19 @@ public class UserMyEvent extends AppCompatActivity {
 
         //this is to hide the system bars and make the app immersive
         decorView = getWindow().getDecorView();
-        decorView.setOnSystemUiVisibilityChangeListener(new View.OnSystemUiVisibilityChangeListener() {
-            @Override
-            public void onSystemUiVisibilityChange(int visibility) {
-                if (visibility == 0) {
-                    decorView.setSystemUiVisibility(hideSystemBars());
-                }
+        decorView.setOnSystemUiVisibilityChangeListener(visibility -> {
+            if (visibility == 0) {
+                decorView.setSystemUiVisibility(hideSystemBars());
             }
         });
 
+        Button backButton = findViewById(R.id.myEventsBackButton);
+        backButton.setOnClickListener(v -> onBackPressed());
     }
 
 
     //this method is called when the activity gains or loses focus
+    @SuppressWarnings("deprecation")
     @Override
     public void onWindowFocusChanged(boolean hasFocus) {
         super.onWindowFocusChanged(hasFocus);
@@ -66,6 +66,8 @@ public class UserMyEvent extends AppCompatActivity {
             decorView.setSystemUiVisibility(hideSystemBars());
         }
     }
+
+    @SuppressWarnings("deprecation")
     private int hideSystemBars(){
         return (View.SYSTEM_UI_FLAG_LAYOUT_STABLE
                 | View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY
@@ -79,16 +81,6 @@ public class UserMyEvent extends AppCompatActivity {
     private void loadEventsForUser() {
         List<Event> events = dbHelper.getEventsUserRequested(userName);
         eventAdapter.updateEvents(events);
-    }
-
-
-    public void backButtonPressed(View view) {
-        Intent intent = new Intent(UserMyEvent.this, WelcomePage.class);
-        intent.putExtra("username", userName);
-        intent.putExtra("userType", getIntent().getStringExtra("userType"));
-
-        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
-        startActivity(intent);
     }
 
 }

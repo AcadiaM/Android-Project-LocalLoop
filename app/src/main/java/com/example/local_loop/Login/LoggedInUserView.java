@@ -4,22 +4,16 @@ package com.example.local_loop.Login;
  * Class exposing authenticated user details to the UI.
  */
 class LoggedInUserView {
-    private String displayName;
-    private String userType;
+    private final String displayName;
     //... other data fields that may be accessible to the UI
 
-    LoggedInUserView(String displayName, String userType) {
+    LoggedInUserView(String displayName) {
         this.displayName = displayName;
-        this.userType = userType;
     }
 
 
     String getDisplayName() {
         return displayName;
-    }
-
-    String getUserType(){
-        return userType;
     }
 
 }

@@ -13,6 +13,9 @@
         android:id="@+id/welcomeTextView"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
+        android:layout_marginLeft="2dp"
+        android:layout_marginTop="15dp"
+        android:layout_marginRight="2dp"
         android:gravity="center"
         android:text="@string/welcome"
         android:textAlignment="center"
@@ -36,7 +39,8 @@
         android:textSize="20sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/welcomeTextView" />
+        app:layout_constraintTop_toBottomOf="@id/welcomeTextView"
+        tools:ignore="VisualLintButtonSize" />
 
     <Button
         android:id="@+id/signOut"
@@ -46,7 +50,7 @@
         android:layout_marginBottom="8dp"
         android:backgroundTint="@color/black"
         android:onClick="OnLogoutButton"
-        android:text="Sign Out"
+        android:text="@string/sign_out"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.047"
@@ -65,7 +69,8 @@
         android:textSize="20sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/welcomeTextView" />
+        app:layout_constraintTop_toBottomOf="@id/welcomeTextView"
+        tools:ignore="VisualLintButtonSize" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

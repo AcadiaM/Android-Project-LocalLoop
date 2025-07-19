@@ -20,9 +20,11 @@ public class RecycleAdapter extends RecyclerView.Adapter<UserListViewer>{
 
     Context context;
     List<User> users;
+    DatabaseHelper db;
 
     public RecycleAdapter(Context context, List<User> users) {
         this.context = context;
+        db = new DatabaseHelper(context);
         this.users = users;
     }
 
@@ -53,11 +55,9 @@ public class RecycleAdapter extends RecyclerView.Adapter<UserListViewer>{
             onDelete(email, holder.getAdapterPosition());
         });
         holder.disable.setOnClickListener(v -> {
-            String email = holder.emailView.getText().toString();
             String username = holder.userView.getText().toString();
             onDisable(holder, username, holder.getAdapterPosition());
         });
-        DatabaseHelper db = new DatabaseHelper(context);
         if (db.isActive(users.get(position).getUsername()) == 0) {
             holder.disable.setIconTint(ColorStateList.valueOf(Color.RED));
             holder.disable.setHint("User is disabled.");
@@ -75,7 +75,6 @@ public class RecycleAdapter extends RecyclerView.Adapter<UserListViewer>{
      * Disabled or re-enables the selected user when clicking the disable button. Displays the button's icon in red when user is disabled and displays Toast indicating a change was made.
      */
     public void onDisable(UserListViewer holder, String username, int pos){
-        DatabaseHelper db = new DatabaseHelper(context);
         switch (db.isActive(username)) {
             case 1:
                 //The user is active and must be deactivated.
@@ -95,7 +94,6 @@ public class RecycleAdapter extends RecyclerView.Adapter<UserListViewer>{
     }
 
     public void onDelete(String email, int pos){
-        DatabaseHelper db = new DatabaseHelper(context);
         String username = db.getUsernameByEmail(email);
         db.deleteUser(email);
         this.deleteEntry(email);

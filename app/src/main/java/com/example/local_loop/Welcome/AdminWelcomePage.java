@@ -2,7 +2,6 @@ package com.example.local_loop.Welcome;
 
 import static com.example.local_loop.Event.EventDetailsActivity.EXTRA_SOURCE;
 import static com.example.local_loop.Event.EventDetailsActivity.SOURCE_ADMIN;
-import static com.example.local_loop.Event.EventDetailsActivity.SOURCE_ORGANIZER;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -26,6 +25,8 @@ import com.example.local_loop.UserList.UserList;
 public class AdminWelcomePage extends AppCompatActivity {
     private View decorView;
     private String username, userType;
+
+    @SuppressWarnings("deprecation")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -49,12 +50,9 @@ public class AdminWelcomePage extends AppCompatActivity {
 
         //this is to hide the system bars and make the app immersive
         decorView = getWindow().getDecorView();
-        decorView.setOnSystemUiVisibilityChangeListener(new View.OnSystemUiVisibilityChangeListener() {
-            @Override
-            public void onSystemUiVisibilityChange(int visibility) {
-                if (visibility == 0) {
-                    decorView.setSystemUiVisibility(hideSystemBars());
-                }
+        decorView.setOnSystemUiVisibilityChangeListener(visibility -> {
+            if (visibility == 0) {
+                decorView.setSystemUiVisibility(hideSystemBars());
             }
         });
 
@@ -98,6 +96,7 @@ public class AdminWelcomePage extends AppCompatActivity {
     }
 
     //this method is called when the activity gains or loses focus
+    @SuppressWarnings("deprecation")
     @Override
     public void onWindowFocusChanged(boolean hasFocus) {
         super.onWindowFocusChanged(hasFocus);
@@ -105,6 +104,8 @@ public class AdminWelcomePage extends AppCompatActivity {
             decorView.setSystemUiVisibility(hideSystemBars());
         }
     }
+
+    @SuppressWarnings("deprecation")
     private int hideSystemBars(){
         return (View.SYSTEM_UI_FLAG_LAYOUT_STABLE
                 | View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY
