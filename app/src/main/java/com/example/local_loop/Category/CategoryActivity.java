@@ -150,6 +150,14 @@ public class CategoryActivity extends AppCompatActivity {
     private void loadCategories() {
         List<Category> categories = dbHelper.getAllCategories();
         categoryAdapter.updateCategories(categories);
+
+        TextView noEventsTextView = findViewById(R.id.noCategoriesTextView);
+
+        if (categories == null || categories.isEmpty()) {
+            noEventsTextView.setVisibility(View.VISIBLE);
+        } else {
+            noEventsTextView.setVisibility(View.GONE);
+        }
     }
 
     private void showCategoryOptions(Category category) {

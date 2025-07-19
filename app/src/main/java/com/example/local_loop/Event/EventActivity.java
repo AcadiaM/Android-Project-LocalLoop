@@ -180,6 +180,14 @@ public class EventActivity extends AppCompatActivity {
     private void loadEvents() {
         List<Event> events = dbHelper.getEventsByOrganizer(userName);
         eventAdapter.updateEvents(events);
+
+        TextView noEventsTextView = findViewById(R.id.noEventsTextView);
+
+        if (events == null || events.isEmpty()) {
+            noEventsTextView.setVisibility(View.VISIBLE);
+        } else {
+            noEventsTextView.setVisibility(View.GONE);
+        }
     }
 
     private void showEventOptions(Event event) {

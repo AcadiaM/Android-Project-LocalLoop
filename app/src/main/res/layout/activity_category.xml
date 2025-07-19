@@ -85,5 +85,16 @@
         app:layout_constraintStart_toStartOf="parent"
         />
 
+    <TextView
+        android:id="@+id/noCategoriesTextView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="No Categories Found!"
+        android:visibility="invisible"
+        app:layout_constraintBottom_toBottomOf="@+id/categoryRecyclerView"
+        app:layout_constraintEnd_toEndOf="@+id/categoryRecyclerView"
+        app:layout_constraintStart_toStartOf="@+id/categoryRecyclerView"
+        app:layout_constraintTop_toTopOf="@+id/categoryRecyclerView" />
+
 
 </androidx.constraintlayout.widget.ConstraintLayout>

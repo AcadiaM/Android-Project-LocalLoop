@@ -52,6 +52,13 @@ public class CategoryDetailsActivity extends AppCompatActivity {
 
         // Load and display events in that category
         List<Event> events = dbHelper.getEventsByCategoryId(categoryId);
+        TextView noEventsTextView = findViewById(R.id.noEventsDetailsTextView);
+
+        if (events == null || events.isEmpty()) {
+            noEventsTextView.setVisibility(View.VISIBLE);
+        } else {
+            noEventsTextView.setVisibility(View.GONE);
+        }
         eventRecyclerView.setLayoutManager(new GridLayoutManager(this,2));
         EventAdapter eventAdapter = new EventAdapter(getIntent().getStringExtra(EXTRA_SOURCE), events, this);
         eventRecyclerView.setAdapter(eventAdapter);

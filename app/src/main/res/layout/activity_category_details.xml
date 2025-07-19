@@ -68,5 +68,16 @@
         app:layout_constraintHorizontal_bias="0.063"
         app:layout_constraintStart_toStartOf="parent" />
 
+    <TextView
+        android:id="@+id/noEventsDetailsTextView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="No Events Found!"
+        android:visibility="invisible"
+        app:layout_constraintBottom_toBottomOf="@+id/eventRecyclerView"
+        app:layout_constraintEnd_toEndOf="@+id/eventRecyclerView"
+        app:layout_constraintStart_toStartOf="@+id/eventRecyclerView"
+        app:layout_constraintTop_toTopOf="@+id/eventRecyclerView" />
+
 
 </androidx.constraintlayout.widget.ConstraintLayout>
