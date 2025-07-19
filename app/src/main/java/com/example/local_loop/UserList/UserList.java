@@ -3,6 +3,7 @@ package com.example.local_loop.UserList;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
@@ -13,8 +14,11 @@ import androidx.core.view.WindowInsetsCompat;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.local_loop.CreateAccount.User;
 import com.example.local_loop.R;
 import com.example.local_loop.database.DatabaseHelper;
+
+import java.util.List;
 
 
 public class UserList extends AppCompatActivity {
@@ -36,9 +40,16 @@ public class UserList extends AppCompatActivity {
         });
 
         RecyclerView recyclerView = findViewById(R.id.recycler);
+        TextView noUsersTextView = findViewById(R.id.noUsersTextView);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
         try {
-            recyclerView.setAdapter(new RecycleAdapter(getApplicationContext(), db.getUsers()));
+            List<User> users = db.getUsers();
+            if (users == null || users.isEmpty()) {
+                noUsersTextView.setVisibility(View.VISIBLE);
+            } else {
+                noUsersTextView.setVisibility(View.GONE);
+            }
+            recyclerView.setAdapter(new RecycleAdapter(getApplicationContext(), users));
         }catch (Exception e){
             Toast.makeText(this, "adapter crash:" + e.getMessage(), Toast.LENGTH_LONG).show();
             e.printStackTrace();

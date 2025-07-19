@@ -5,6 +5,7 @@ import static com.example.local_loop.Event.EventDetailsActivity.EXTRA_SOURCE;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
+import android.widget.TextView;
 
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -80,6 +81,12 @@ public class UserMyEvent extends AppCompatActivity {
     //Method to load the events for the user from the database
     private void loadEventsForUser() {
         List<Event> events = dbHelper.getEventsUserRequested(userName);
+        TextView noMyEventsTextView = findViewById(R.id.noMyEventsTextView);
+        if (events == null || events.isEmpty()) {
+            noMyEventsTextView.setVisibility(View.VISIBLE);
+        } else {
+            noMyEventsTextView.setVisibility(View.GONE);
+        }
         eventAdapter.updateEvents(events);
     }
 

@@ -56,4 +56,15 @@
         app:layout_constraintStart_toStartOf="parent"
         tools:ignore="RedundantDescriptionCheck" />
 
+    <TextView
+        android:id="@+id/noMyEventsTextView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/no_events_joined"
+        android:visibility="invisible"
+        app:layout_constraintBottom_toBottomOf="@+id/recyclerViewEvents"
+        app:layout_constraintEnd_toEndOf="@+id/recyclerViewEvents"
+        app:layout_constraintStart_toStartOf="@+id/recyclerViewEvents"
+        app:layout_constraintTop_toBottomOf="@+id/events" />
+
 </androidx.constraintlayout.widget.ConstraintLayout>

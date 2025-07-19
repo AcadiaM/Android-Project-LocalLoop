@@ -186,6 +186,18 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         return null;
     }
 
+    public String getFirstByUsername(String username) {
+        SQLiteDatabase db = this.getReadableDatabase();
+        Cursor cursor = db.query(TABLE_USERS, new String[]{"firstName"}, "username = ?", new String[]{username}, null, null, null);
+        if (cursor.moveToFirst()) {
+            String role = cursor.getString(0);
+            cursor.close();
+            return role;
+        }
+        cursor.close();
+        return null;
+    }
+
     /**
      * This function finds the username of a user from their email.
      *
@@ -833,6 +845,5 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
         db.close();
     }
-
 
 }

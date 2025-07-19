@@ -34,10 +34,11 @@ public class OrganizerWelcomePage extends AppCompatActivity {
         TextView welcomeTextView = findViewById(R.id.organizerWelcomeTextView);
 
         // Retrieve the username and userType from the Intent
+        String firstname = getIntent().getStringExtra("firstname");
         username = getIntent().getStringExtra("username");
         userType = getIntent().getStringExtra("userType");
 
-        String welcomeMessage = "Welcome " + username + ".\nYou are logged in as " + userType + ".";
+        String welcomeMessage = "Welcome " + firstname + ".\nYou are logged in as " + userType + ".";
         welcomeTextView.setText(welcomeMessage);
 
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.organizerWelcomeTextView), (v, insets) -> {

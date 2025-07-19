@@ -8,6 +8,7 @@ import android.view.View;
 import android.os.Bundle;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.TextView;
 import android.widget.Toast;
 import android.widget.EditText;
 import android.widget.Spinner;
@@ -109,6 +110,12 @@ public class UserEventActivity extends AppCompatActivity {
         }
 
         List<Event> events = dbHelper.searchEvents(query, selectedCategory);
+        TextView noEventsUserTextView = findViewById(R.id.noEventsUserTextView);
+        if (events == null || events.isEmpty()) {
+            noEventsUserTextView.setVisibility(View.VISIBLE);
+        } else {
+            noEventsUserTextView.setVisibility(View.GONE);
+        }
         Toast.makeText(this, "Loading " + events.size() + " events for: " + userName, Toast.LENGTH_SHORT).show();
         eventAdapter.updateEvents(events);
     }

@@ -72,7 +72,7 @@
         android:id="@+id/noEventsDetailsTextView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="No Events Found!"
+        android:text="@string/no_events_created"
         android:visibility="invisible"
         app:layout_constraintBottom_toBottomOf="@+id/eventRecyclerView"
         app:layout_constraintEnd_toEndOf="@+id/eventRecyclerView"

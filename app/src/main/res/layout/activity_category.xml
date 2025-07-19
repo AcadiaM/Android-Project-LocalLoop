@@ -89,7 +89,7 @@
         android:id="@+id/noCategoriesTextView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="No Categories Found!"
+        android:text="@string/no_categories_created"
         android:visibility="invisible"
         app:layout_constraintBottom_toBottomOf="@+id/categoryRecyclerView"
         app:layout_constraintEnd_toEndOf="@+id/categoryRecyclerView"

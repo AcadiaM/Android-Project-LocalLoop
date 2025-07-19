@@ -81,5 +81,16 @@
         app:layout_constraintStart_toEndOf="@id/searchBar"
         app:layout_constraintWidth_percent="0.35" />
 
+    <TextView
+        android:id="@+id/noEventsUserTextView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/no_events_found"
+        android:visibility="invisible"
+        app:layout_constraintBottom_toBottomOf="@+id/recyclerViewEvents"
+        app:layout_constraintEnd_toEndOf="@+id/recyclerViewEvents"
+        app:layout_constraintStart_toStartOf="@+id/recyclerViewEvents"
+        app:layout_constraintTop_toTopOf="@+id/recyclerViewEvents" />
+
 
 </androidx.constraintlayout.widget.ConstraintLayout>

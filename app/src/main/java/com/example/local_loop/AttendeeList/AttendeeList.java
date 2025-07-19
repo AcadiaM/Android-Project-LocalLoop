@@ -3,6 +3,7 @@ package com.example.local_loop.AttendeeList;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
@@ -32,9 +33,16 @@ public class AttendeeList extends AppCompatActivity {
 
         int eventID = getIntent().getIntExtra("eventId", -1);
         RecyclerView attendeeRecycler = findViewById(R.id.attendee_recycler);
+        TextView noUsersTextView = findViewById(R.id.noAttendeesTextView);
         attendeeRecycler.setLayoutManager(new LinearLayoutManager(this));
         try {
-            attendeeRecycler.setAdapter(new RecycleAdapterByEvent(getApplicationContext(), getData(eventID), eventID));
+            List<User> users = db.getPendingRequestsByEvent(eventID);
+            if (users == null || users.isEmpty()) {
+                noUsersTextView.setVisibility(View.VISIBLE);
+            } else {
+                noUsersTextView.setVisibility(View.GONE);
+            }
+            attendeeRecycler.setAdapter(new RecycleAdapterByEvent(getApplicationContext(), db.getPendingRequestsByEvent(eventID), eventID));
         }catch (Exception e){
             Toast.makeText(this, "adapter crash:" + e.getMessage(), Toast.LENGTH_LONG).show();
             e.printStackTrace();
@@ -51,10 +59,6 @@ public class AttendeeList extends AppCompatActivity {
         Button backButton = findViewById(R.id.attendeeBackButton);
         backButton.setOnClickListener(v -> onBackPressed());
 
-    }
-
-    private List<User> getData(int eventID) {
-        return db.getPendingRequestsByEvent(eventID);
     }
 
     //this method is called when the activity gains or loses focus

@@ -74,4 +74,11 @@
         <item name="colorAccent">@android:color/holo_blue_dark</item>
     </style>
 
+    <string name="no_attendees">No Attendees Joined Yet!</string>
+    <string name="no_users">No Users Created Yet!</string>
+    <string name="no_events_created">No Events Created Yet!</string>
+    <string name="no_events_found">No Events Found Yet!</string>
+    <string name="no_events_joined">No Events Joined Yet!</string>
+    <string name="no_categories_created">No Categories Created Yet!</string>
+
 </resources>

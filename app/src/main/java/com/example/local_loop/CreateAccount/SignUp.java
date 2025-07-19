@@ -75,8 +75,8 @@ public class SignUp extends AppCompatActivity {
             emailInput.setError("Email exists, please head to login page.");
             valid = false;
         }
-        if(password.isEmpty() || password.length()<5){
-            passwordInput.setError("Invalid Password:must be more than 5 characters");
+        if(password.isEmpty() || password.length()<6){
+            passwordInput.setError("Invalid Password:must be more than 6 characters");
            valid = false;
         }
         if(first.isEmpty() || last.isEmpty()){
@@ -130,7 +130,8 @@ public class SignUp extends AppCompatActivity {
                 else{
                     intent = new Intent(getApplicationContext(), WelcomePage.class);
                 }
-                intent.putExtra("username", first);
+                intent.putExtra("firstname", first);
+                intent.putExtra("username", user);
                 intent.putExtra("userType", role);
 
                 Toast.makeText(SignUp.this, "Welcome " + first + "! You are logged in as " + role + ".", Toast.LENGTH_SHORT).show();

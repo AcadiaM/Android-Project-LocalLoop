@@ -138,23 +138,27 @@ public class LoginActivity extends AppCompatActivity {
     }
 
     private void updateUiWithUser(LoggedInUserView loggedInUser) {
+        String firstname = db.getFirstByUsername(loggedInUser.getDisplayName());
         String userType = db.getRoleByUsername(loggedInUser.getDisplayName());
         userType = userType.trim().toLowerCase();
         Toast.makeText(this, "UserType: " + userType, Toast.LENGTH_LONG).show();
         if (userType.equalsIgnoreCase("admin")) {
             Intent intent = new Intent(getApplicationContext(), AdminWelcomePage.class);
+            intent.putExtra("firstname", firstname);
             intent.putExtra("username", loggedInUser.getDisplayName());// Pass the username to the WelcomePage
             intent.putExtra("userType", userType); // Pass the userType to the WelcomePage
             startActivity(intent);
         }
         else if (userType.equalsIgnoreCase("organizer")) {
                 Intent intent = new Intent(getApplicationContext(), OrganizerWelcomePage.class);
+                intent.putExtra("firstname", firstname);
                 intent.putExtra("username", loggedInUser.getDisplayName());// Pass the username to the WelcomePage
                 intent.putExtra("userType", userType); // Pass the userType to the WelcomePage
                 startActivity(intent);
             }
         else if (userType.equalsIgnoreCase("participant")) {
             Intent intent = new Intent(getApplicationContext(), WelcomePage.class);
+            intent.putExtra("firstname", firstname);
             intent.putExtra("username", loggedInUser.getDisplayName());// Pass the username to the WelcomePage
             intent.putExtra("userType", userType); // Pass the userType to the WelcomePage
             startActivity(intent);

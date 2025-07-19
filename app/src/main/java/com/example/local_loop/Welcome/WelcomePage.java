@@ -36,10 +36,10 @@ public class WelcomePage extends AppCompatActivity {
         TextView welcomeTextView = findViewById(R.id.welcomeTextView);
 
         // Retrieve the username and userType from the Intent
-        String username = getIntent().getStringExtra("username");
+        String firstname = getIntent().getStringExtra("firstname");
         String userType = getIntent().getStringExtra("userType");
 
-        String welcomeMessage = "Welcome " + username + ".\nYou are logged in as " + userType + ".";
+        String welcomeMessage = "Welcome " + firstname + ".\nYou are logged in as " + userType + ".";
         welcomeTextView.setText(welcomeMessage);
 
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main), (v, insets) -> {
