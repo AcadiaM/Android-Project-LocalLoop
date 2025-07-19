@@ -1,8 +1,7 @@
 package com.example.local_loop.Welcome;
 
-import static com.example.local_loop.Event.EventDetailsActivity.EXTRA_SOURCE;
-import static com.example.local_loop.Event.EventDetailsActivity.SOURCE_ADMIN;
-import static com.example.local_loop.Event.EventDetailsActivity.SOURCE_ORGANIZER;
+//import static com.example.local_loop.Event.EventDetailsActivity.EXTRA_SOURCE;
+//import static com.example.local_loop.Event.EventDetailsActivity.SOURCE_ADMIN;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -16,11 +15,11 @@ import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
-import com.example.local_loop.Category.CategoryActivity;
-import com.example.local_loop.Event.EventActivity;
+//import com.example.local_loop.Category.CategoryActivity;
+//import com.example.local_loop.Event.EventActivity;
 import com.example.local_loop.R;
-import com.example.local_loop.Login.LoginActivity;
-import com.example.local_loop.UserList.UserList;
+import com.example.local_loop.Account.LoginActivity;
+//import com.example.local_loop.UserList.UserList;
 //The admin welcome page that displays a welcome message with the username and user type
 
 public class AdminWelcomePage extends AppCompatActivity {

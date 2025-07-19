@@ -1,11 +1,10 @@
-package com.example.local_loop.CreateAccount;
+package com.example.local_loop.Account;
 
-import com.example.local_loop.Login.LoginActivity;
 import com.example.local_loop.Main.MainActivity;
 import com.example.local_loop.R;
-import com.example.local_loop.database.DatabaseHelper;
 import com.example.local_loop.Welcome.OrganizerWelcomePage;
 import com.example.local_loop.Welcome.WelcomePage;
+import com.example.local_loop.database.DatabaseHelper;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -115,30 +114,25 @@ public class SignUp extends AppCompatActivity {
     }
     public void onSubmitButton(View view) {
         initialize();
-
         if(!isValid()){
             Toast.makeText(this,"Sign Up failed: Invalid inputs.",Toast.LENGTH_SHORT).show();
         }
         else{
-
-            UserFactory newUser = new UserFactory(role, username, email, password, first,last);
+            User newUser = new User(role, username, email, password, first,last);
             newUser.setUserID(dbHelper.insertUser(newUser));
 
             if(newUser.getUserID() != -1){
                 Intent intent;
-                User currentSession = newUser.signUpUser();
+                Session userSession = new Session(newUser.getUserID(),role,username,first,last);
 
-                switch(currentSession.getRole()){
-                    case "participant":
-                        intent = new Intent(getApplicationContext(), WelcomePage.class);
-                        break;
-
-                    default:
-                        intent = new Intent(getApplicationContext(), OrganizerWelcomePage.class);
-                        break;
+                if(role.equalsIgnoreCase("participant")){
+                    intent = new Intent(getApplicationContext(), WelcomePage.class);
+                } else{
+                    intent = new Intent(getApplicationContext(), OrganizerWelcomePage.class);
                 }
+
                 Toast.makeText(SignUp.this, "Welcome " + first + "! You are logged in as " + role + ".", Toast.LENGTH_SHORT).show();
-                intent.putExtra("user", currentSession);
+                intent.putExtra("user", userSession);
                 startActivity(intent);
             }
             else {

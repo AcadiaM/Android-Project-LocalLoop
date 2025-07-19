@@ -20,11 +20,9 @@ import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.example.local_loop.CreateAccount.User;
-import com.example.local_loop.Event.EventActivity;
+import com.example.local_loop.Account.User;
 import com.example.local_loop.R;
 import com.example.local_loop.Welcome.AdminWelcomePage;
-import com.example.local_loop.Welcome.OrganizerWelcomePage;
 import com.example.local_loop.database.DatabaseHelper;
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.android.material.textfield.TextInputLayout;

@@ -7,7 +7,7 @@
     android:layout_height="match_parent"
     android:background="@color/white"
     android:padding="24dp"
-    tools:context=".Login.LoginActivity">
+    tools:context=".Account.LoginActivity">
 
     <TextView
         android:id="@+id/textView"
@@ -64,6 +64,7 @@
         android:background="@drawable/button_background"
         android:enabled="false"
         android:text="@string/sign_button"
+        android:onClick="onSignIn"
         android:textAllCaps="false"
         android:textColor="@android:color/white"
         android:textSize="20sp"

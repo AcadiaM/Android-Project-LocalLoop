@@ -10,7 +10,7 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.example.local_loop.CreateAccount.User;
+import com.example.local_loop.Account.User;
 import com.example.local_loop.R;
 import com.example.local_loop.database.DatabaseHelper;
 

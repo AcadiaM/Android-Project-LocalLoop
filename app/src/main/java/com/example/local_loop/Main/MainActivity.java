@@ -13,7 +13,7 @@ import androidx.core.view.WindowInsetsCompat;
 
 import com.example.local_loop.R;
 import com.example.local_loop.Login.LoginActivity;
-import com.example.local_loop.CreateAccount.SignUp;
+import com.example.local_loop.Account.SignUp;
 
 public class MainActivity extends AppCompatActivity {
     DatabaseHelper dbHelper;
