@@ -1,7 +1,4 @@
-package com.example.local_loop.Welcome;
-
-import static com.example.local_loop.Event.EventDetailsActivity.EXTRA_SOURCE;
-import static com.example.local_loop.Event.EventDetailsActivity.SOURCE_PARTICIPANT;
+package com.example.local_loop.Activity.WelcomeUser;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -12,19 +9,21 @@ import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
-import com.example.local_loop.Event.UserEventActivity;
-import com.example.local_loop.Event.UserMyEvent;
+//import com.example.local_loop.Event.UserEventActivity;
+//import com.example.local_loop.Event.UserMyEvent;
+import com.example.local_loop.Account.Account;
 import com.example.local_loop.R;
-import com.example.local_loop.Login.LoginActivity;
+import com.example.local_loop.Activity.Main.LoginActivity;
 
 import android.view.View;
 import android.widget.TextView;
 import android.widget.Toast;
 
 //The normal user welcome page that displays a welcome message with the username and user type
-public class WelcomePage extends AppCompatActivity {
+public class ParticipantWelcomePage extends AppCompatActivity {
 
     private View decorView;
+    private Account account;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -32,13 +31,14 @@ public class WelcomePage extends AppCompatActivity {
         EdgeToEdge.enable(this);
         setContentView(R.layout.activity_welcome_page);
 
+        account = getIntent().getParcelableExtra("account");
+        if(account == null){
+            //return to home page
+        }
+
         TextView welcomeTextView = findViewById(R.id.welcomeTextView);
 
-        // Retrieve the username and userType from the Intent
-        String username = getIntent().getStringExtra("username");
-        String userType = getIntent().getStringExtra("userType");
-
-        String welcomeMessage = "Welcome " + username + ".\nYou are logged in as " + userType + ".";
+        String welcomeMessage = "Welcome " + account.getFirstName() + ".\nYou are logged in as " + account.getRole() + ".";
         welcomeTextView.setText(welcomeMessage);
 
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main), (v, insets) -> {
@@ -60,30 +60,30 @@ public class WelcomePage extends AppCompatActivity {
 
     }
 
-    public void OnBrowseEventsButton(View view){
-        Intent intent = new Intent(WelcomePage.this, UserEventActivity.class);
-        intent.putExtra(EXTRA_SOURCE, SOURCE_PARTICIPANT);
-        intent.putExtra("username", getIntent().getStringExtra("username"));// Pass the username to the WelcomePage
-        intent.putExtra("userType", getIntent().getStringExtra("userType")); // Pass the userType to the WelcomePage
-        startActivity(intent);
-    }
+//    public void OnBrowseEventsButton(View view){
+//        Intent intent = new Intent(ParticipantWelcomePage.this, UserEventActivity.class);
+//        intent.putExtra(EXTRA_SOURCE, SOURCE_PARTICIPANT);
+//        intent.putExtra("username", getIntent().getStringExtra("username"));// Pass the username to the ParticipantWelcomePage
+//        intent.putExtra("userType", getIntent().getStringExtra("userType")); // Pass the userType to the ParticipantWelcomePage
+//        startActivity(intent);
+//    }
 
     public void OnLogoutButton(View view) {
-        // Clear the user session and redirect to login
+        // Clear the user account and redirect to login
         Toast.makeText(this, "Logging out...", Toast.LENGTH_SHORT).show();
-        Intent intent = new Intent(WelcomePage.this, LoginActivity.class);
+        Intent intent = new Intent(ParticipantWelcomePage.this, LoginActivity.class);
         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
         startActivity(intent);
         finish();
     }
 
-    public void OnMyEventsButton(View view){
-        Intent intent = new Intent(WelcomePage.this, UserMyEvent.class);
-        intent.putExtra(EXTRA_SOURCE, SOURCE_PARTICIPANT);
-        intent.putExtra("username", getIntent().getStringExtra("username"));// Pass the username to the WelcomePage
-        intent.putExtra("userType", getIntent().getStringExtra("userType")); // Pass the userType to the WelcomePage
-        startActivity(intent);
-    }
+//    public void OnMyEventsButton(View view){
+//        Intent intent = new Intent(ParticipantWelcomePage.this, UserMyEvent.class);
+//        intent.putExtra(EXTRA_SOURCE, SOURCE_PARTICIPANT);
+//        intent.putExtra("username", getIntent().getStringExtra("username"));// Pass the username to the ParticipantWelcomePage
+//        intent.putExtra("userType", getIntent().getStringExtra("userType")); // Pass the userType to the ParticipantWelcomePage
+//        startActivity(intent);
+//    }
 
     //this method is called when the activity gains or loses focus
     @Override

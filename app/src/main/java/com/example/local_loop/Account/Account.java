@@ -2,20 +2,20 @@ package com.example.local_loop.Account;
 
 import android.os.Parcelable;
 
-public class Session implements Parcelable {
+public class Account implements Parcelable {
     private final int userID;
     private final String role;
-    private final String username, firstName, lastName;
-    // Events, Categories or other items?
+    private final String username, email, firstName, lastName;
 
-    public Session(int userID, String role, String username, String firstName, String lastName) {
+
+    public Account(int userID, String role, String username, String email, String firstName, String lastName) {
         this.userID = userID;
         this.role = role;
         this.username = username;
+        this.email = email;
         this.firstName = firstName;
         this.lastName = lastName;
     }
-
 
     @Override
     public int describeContents() {
@@ -27,27 +27,29 @@ public class Session implements Parcelable {
         dest.writeInt(this.userID);
         dest.writeString(this.role);
         dest.writeString(this.username);
+        dest.writeString(this.email);
         dest.writeString(this.firstName);
         dest.writeString(this.lastName);
     }
 
-    protected Session(android.os.Parcel in) {
+    protected Account(android.os.Parcel in) {
         this.userID = in.readInt();
         this.role = in.readString();
         this.username = in.readString();
+        this.email = in.readString();
         this.firstName = in.readString();
         this.lastName = in.readString();
     }
 
-    public static final Creator<Session> CREATOR = new Creator<Session>() {
+    public static final Creator<Account> CREATOR = new Creator<Account>() {
         @Override
-        public Session createFromParcel(android.os.Parcel source) {
-            return new Session(source);
+        public Account createFromParcel(android.os.Parcel source) {
+            return new Account(source);
         }
 
         @Override
-        public Session[] newArray(int size) {
-            return new Session[size];
+        public Account[] newArray(int size) {
+            return new Account[size];
         }
     };
 
@@ -63,11 +65,27 @@ public class Session implements Parcelable {
         return username;
     }
 
+    public String getEmail() {
+        return email;
+    }
+
     public String getFirstName() {
         return firstName;
     }
 
     public String getLastName() {
         return lastName;
+    }
+
+    @Override
+    public String toString() {
+        return "Account{" +
+                "userID=" + userID +
+                ", role='" + role + '\'' +
+                ", username='" + username + '\'' +
+                ", email='" + email + '\'' +
+                ", firstName='" + firstName + '\'' +
+                ", lastName='" + lastName + '\'' +
+                '}';
     }
 }

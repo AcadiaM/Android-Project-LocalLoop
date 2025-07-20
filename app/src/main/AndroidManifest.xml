@@ -23,16 +23,16 @@
             android:name=".Category.CategoryDetailsActivity"
             android:exported="false" />
         <activity
-            android:name=".Welcome.OrganizerWelcomePage"
+            android:name=".Activity.WelcomeUser.OrganizerWelcomePage"
             android:exported="false" />
         <activity
-            android:name=".Welcome.AdminWelcomePage"
+            android:name=".Activity.WelcomeUser.AdminWelcomePage"
             android:exported="false" />
         <activity
-            android:name=".Welcome.WelcomePage"
+            android:name=".Activity.WelcomeUser.ParticipantWelcomePage"
             android:exported="false" />
         <activity
-            android:name=".Account.SignUp"
+            android:name=".Activity.Main.SignUp"
             android:exported="false" />
         <activity
             android:name=".Event.EventActivity"
@@ -53,11 +53,11 @@
             android:name=".AttendeeList.AttendeeList"
             android:exported="false" />
         <activity
-            android:name=".Login.LoginActivity"
+            android:name=".Activity.Main.LoginActivity"
             android:exported="false"
             android:label="@string/title_activity_login" />
         <activity
-            android:name=".Main.MainActivity"
+            android:name=".Activity.Main.MainActivity"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
