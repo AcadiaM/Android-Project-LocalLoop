@@ -15,6 +15,7 @@ import com.example.local_loop.Account.Account;
 import com.example.local_loop.R;
 import com.example.local_loop.Activity.Main.LoginActivity;
 
+import android.util.Log;
 import android.view.View;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -31,13 +32,19 @@ public class ParticipantWelcomePage extends AppCompatActivity {
         EdgeToEdge.enable(this);
         setContentView(R.layout.activity_welcome_page);
 
-        account = getIntent().getParcelableExtra("account");
+        Intent intent = getIntent();
+        account = getIntent().getParcelableExtra("user", Account.class);
+
         if(account == null){
+            Log.d("ParticipantWelcomePage", "account is null");
+            Intent fail = new Intent(ParticipantWelcomePage.this, LoginActivity.class);
+            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
+            startActivity(fail);
+            finish();
             //return to home page
         }
 
         TextView welcomeTextView = findViewById(R.id.welcomeTextView);
-
         String welcomeMessage = "Welcome " + account.getFirstName() + ".\nYou are logged in as " + account.getRole() + ".";
         welcomeTextView.setText(welcomeMessage);
 

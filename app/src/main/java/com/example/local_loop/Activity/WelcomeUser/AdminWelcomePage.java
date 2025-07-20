@@ -10,7 +10,6 @@ import android.widget.Toast;
 import androidx.activity.EdgeToEdge;
 import androidx.activity.result.ActivityResult;
 import androidx.activity.result.ActivityResultCallback;
-import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.IntentCompat;
@@ -24,10 +23,8 @@ import com.example.local_loop.Activity.Main.LoginActivity;
 //The admin welcome page that displays a welcome message with the username and user type
 
 public class AdminWelcomePage extends AppCompatActivity {
-    private static final String TAG = "AdminWelcome";
     private View decorView;
     private Account account;
-    private ActivityResultLauncher<Intent> activityResultLauncher;
 
 
     @Override
@@ -38,25 +35,17 @@ public class AdminWelcomePage extends AppCompatActivity {
 
         TextView welcomeTextView = findViewById(R.id.adminWelcomeTextView);
         Intent intent = getIntent();
-        account = IntentCompat.getParcelableExtra(intent,"account", Account.class);
+
+        account = getIntent().getParcelableExtra("user", Account.class);
 
         if(account == null){
+            Log.d("AdminWelcomePage", "account is null");
             Intent fail = new Intent(AdminWelcomePage.this, LoginActivity.class);
             intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
             startActivity(fail);
             finish();
             //return to home page
         }
-
-        activityResultLauncher = registerForActivityResult(
-                new ActivityResultContracts.StartActivityForResult(),
-                new ActivityResultCallback<ActivityResult>() {
-                    @Override
-                    public void onActivityResult(ActivityResult o) {
-                        Log.d(TAG,"OnActivityResult: ");
-                    }
-                }
-        );
 
         String welcomeMessage = "Welcome " + account.getFirstName() + ".\nYou are logged in as " + account.getRole() + ".";
         welcomeTextView.setText(welcomeMessage);

@@ -29,8 +29,6 @@ import com.example.local_loop.Activity.Main.LoginActivity;
 public class OrganizerWelcomePage extends AppCompatActivity {
     private Account account;
     private View decorView;
-    private static final String TAG = "LoginActivity";
-    private ActivityResultLauncher<Intent> activityResultLauncher;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -40,26 +38,16 @@ public class OrganizerWelcomePage extends AppCompatActivity {
         TextView welcomeTextView = findViewById(R.id.organizerWelcomeTextView);
 
         Intent intent = getIntent();
-        account = getParcelableExtra(intent,"account", Account.class);
+        account = getIntent().getParcelableExtra("user", Account.class);
 
         if(account == null){
+            Log.d("OrganizerWelcomePage", "account is null");
             Intent fail = new Intent(OrganizerWelcomePage.this, LoginActivity.class);
             intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
             startActivity(fail);
             finish();
             //return to home page
         }
-
-        activityResultLauncher = registerForActivityResult(
-                new ActivityResultContracts.StartActivityForResult(),
-                new ActivityResultCallback<ActivityResult>() {
-                    @Override
-                    public void onActivityResult(ActivityResult o) {
-                        Log.d(TAG,"OnActivityResult: ");
-                    }
-                }
-        );
-
 
         String welcomeMessage = "Welcome " + account.getFirstName() + ".\nYou are logged in as " + account.getRole() + ".";
         welcomeTextView.setText(welcomeMessage);

@@ -192,7 +192,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         Account session = null;
 
         Cursor cursor = db.query(TABLE_USERS, new String[]{USERS_ID,USERS_ROLE,USERS_EMAIL,USERS_FIRSTNAME,USERS_LASTNAME},
-                "username = ? AND password = ? AND active = ?", new String[]{username, password, "1"}, null, null, null);
+                USERS_USERNAME + " = ? AND " + USERS_PASSWORD + " = ? AND " + USERS_ISACTIVE + " = ?", new String[]{username, password, "1"}, null, null, null);
 
         if (cursor.moveToFirst()) {
             int id = cursor.getInt(0);

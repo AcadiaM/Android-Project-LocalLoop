@@ -110,6 +110,7 @@ public class LoginActivity  extends AppCompatActivity{
         account = db.checkLogin(username,password);
 
         if(account == null){
+            Log.d("LoginPage", "checkLogin returned null");
             Toast.makeText(getApplicationContext(), "Invalid Credentials, please try again!", Toast.LENGTH_SHORT).show();
             return false;
         }else{
