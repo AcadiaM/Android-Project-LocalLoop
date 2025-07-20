@@ -125,6 +125,7 @@ public class SignUp extends AppCompatActivity {
             boolean successful = dbHelper.insertUser(newUser);
             if(successful){
                 Intent intent = new Intent(getApplicationContext(), WelcomePage.class);
+                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
                 intent.putExtra("firstname", first);
                 intent.putExtra("username", user);
                 intent.putExtra("userType", role);
@@ -132,6 +133,7 @@ public class SignUp extends AppCompatActivity {
                 Toast.makeText(SignUp.this, "Welcome " + first + "! You are logged in as " + role + ".", Toast.LENGTH_SHORT).show();
 
                 startActivity(intent);
+                finish();
             } else {
                 Toast.makeText(this, "Error", Toast.LENGTH_SHORT).show();
             }
