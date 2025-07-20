@@ -32,35 +32,46 @@ import java.util.List;
 
 
 public class UserEventActivity extends AppCompatActivity {
+
     private DisplayItemAdapter eventAdapter;
     private DatabaseHelper dbHelper;
     private String username;
+    private boolean isMyEventsMode;
+
     private EditText searchBar;
     private Spinner categorySpinner;
     private final Handler handler = new Handler(Looper.getMainLooper());
     private Runnable searchRunnable;
     private static final long SEARCH_DELAY = 600; // ms
-
     private View decorView;
-
 
     @SuppressWarnings("deprecation")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_event_user_list);
+        setContentView(R.layout.activity_event_user_list);  // Use shared layout
 
         dbHelper = new DatabaseHelper(this);
-
         username = getIntent().getStringExtra("username");
-
-
+        isMyEventsMode = getIntent().getBooleanExtra("isMyEventsMode", false);
 
         RecyclerView eventRecyclerView = findViewById(R.id.recyclerViewEvents);
-        searchBar = findViewById(R.id.searchBar);
-        categorySpinner = findViewById(R.id.categorySpinner);
         eventRecyclerView.setLayoutManager(new GridLayoutManager(this, 2));
 
+        searchBar = findViewById(R.id.searchBar);
+        categorySpinner = findViewById(R.id.categorySpinner);
+        TextView titleTextView = findViewById(R.id.events);
+
+        // Handle UI visibility
+        if (isMyEventsMode) {
+            searchBar.setVisibility(View.GONE);
+            categorySpinner.setVisibility(View.GONE);
+            // Set the title or any text view you want:
+            titleTextView.setText(R.string.my_events);
+        } else {
+            setupCategorySpinner();
+            setupSearchBar();
+        }
         eventAdapter = new DisplayItemAdapter(new ArrayList<>(), new DisplayItemAdapter.OnItemClickListener() {
             @Override
             public void onClick(DisplayItem item) {
@@ -79,26 +90,32 @@ public class UserEventActivity extends AppCompatActivity {
                     intent.putExtra("organizer", event.getOrganizer());
                     startActivity(intent);
                 }
+                    // Do something with event
             }
 
             @Override
             public void onLongClick(DisplayItem item) {
-                // Optional: Handle long press if needed
+                // Optional
             }
 
             @Override
             public void onRenameClick(DisplayItem item) {
-                // Not needed in CategoryDetailsActivity
+                // Optional
             }
         });
 
         eventRecyclerView.setAdapter(eventAdapter);
-        setupCategorySpinner();
-        setupSearchBar();
 
-        loadEventsForUser();
+        if (isMyEventsMode) {
+            findViewById(R.id.searchBar).setVisibility(View.GONE);
+            findViewById(R.id.categorySpinner).setVisibility(View.GONE);
+        } else {
+            setupCategorySpinner();
+            setupSearchBar();
+        }
 
-        //this is to hide the system bars and make the app immersive
+        loadEvents();
+
         decorView = getWindow().getDecorView();
         decorView.setOnSystemUiVisibilityChangeListener(visibility -> {
             if (visibility == 0) {
@@ -109,6 +126,25 @@ public class UserEventActivity extends AppCompatActivity {
         Button backButton = findViewById(R.id.browseEventBackButton);
         backButton.setOnClickListener(v -> onBackPressed());
     }
+
+    private void loadEvents() {
+        List<Event> events;
+        if (isMyEventsMode) {
+            events = dbHelper.getEventsUserRequested(username);
+        } else {
+            String query = searchBar.getText().toString().trim();
+            String selectedCategory = categorySpinner.getSelectedItem().toString();
+            if (selectedCategory.equals("All")) selectedCategory = "";
+            events = dbHelper.searchEvents(query, selectedCategory);
+        }
+
+        TextView emptyView = findViewById(R.id.noEventsUserTextView);
+        emptyView.setVisibility(events == null || events.isEmpty() ? View.VISIBLE : View.GONE);
+
+        assert events != null;
+        eventAdapter.updateItems(new ArrayList<>(events));
+    }
+
 
     //this method is called when the activity gains or loses focus
     @SuppressWarnings("deprecation")

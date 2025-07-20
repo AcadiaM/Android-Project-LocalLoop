@@ -21,7 +21,6 @@ import androidx.core.view.WindowInsetsCompat;
 
 import com.example.local_loop.Category.DisplayItemActivity;
 import com.example.local_loop.Event.UserEventActivity;
-import com.example.local_loop.Event.UserMyEvent;
 import com.example.local_loop.R;
 import com.example.local_loop.Login.LoginActivity;
 import com.example.local_loop.UserList.UserList;
@@ -127,14 +126,16 @@ public class WelcomePage extends AppCompatActivity {
     public void OnBrowseEventsButton(View view){
         Intent intent = new Intent(WelcomePage.this, UserEventActivity.class);
         intent.putExtra(EXTRA_SOURCE, SOURCE_PARTICIPANT);
+        intent.putExtra("isMyEventsMode",false);
         intent.putExtra("username", getIntent().getStringExtra("username"));// Pass the username to the WelcomePage
         intent.putExtra("userType", getIntent().getStringExtra("userType")); // Pass the userType to the WelcomePage
         startActivity(intent);
     }
 
     public void OnMyEventsButton(View view){
-        Intent intent = new Intent(WelcomePage.this, UserMyEvent.class);
+        Intent intent = new Intent(WelcomePage.this, UserEventActivity.class);
         intent.putExtra(EXTRA_SOURCE, SOURCE_PARTICIPANT);
+        intent.putExtra("isMyEventsMode",true);
         intent.putExtra("username", getIntent().getStringExtra("username"));// Pass the username to the WelcomePage
         intent.putExtra("userType", getIntent().getStringExtra("userType")); // Pass the userType to the WelcomePage
         startActivity(intent);
