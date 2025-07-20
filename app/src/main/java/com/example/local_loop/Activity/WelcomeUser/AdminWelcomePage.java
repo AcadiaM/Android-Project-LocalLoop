@@ -8,17 +8,14 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
-import androidx.activity.result.ActivityResult;
-import androidx.activity.result.ActivityResultCallback;
-import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.content.IntentCompat;
 
 //import com.example.local_loop.Category.CategoryActivity;
 //import com.example.local_loop.Event.EventActivity;
 import com.example.local_loop.Account.Account;
 import com.example.local_loop.R;
 import com.example.local_loop.Activity.Main.LoginActivity;
+import com.example.local_loop.TEMP.CategoryActivity;
 //import com.example.local_loop.UserList.UserList;
 //The admin welcome page that displays a welcome message with the username and user type
 
@@ -88,17 +85,14 @@ public class AdminWelcomePage extends AppCompatActivity {
                 | View.SYSTEM_UI_FLAG_HIDE_NAVIGATION);
     }
 
-    /*
+
     public void OnListCategoriesButton(View view) {
-        username = getIntent().getStringExtra("username");
-        userType = getIntent().getStringExtra("userType");
         Intent intent = new Intent(AdminWelcomePage.this, CategoryActivity.class);
-        intent.putExtra(EXTRA_SOURCE, SOURCE_ADMIN);
-        intent.putExtra("username", username);// Pass the username to the ParticipantWelcomePage
-        intent.putExtra("userType", userType); // Pass the userType to the ParticipantWelcomePage
+        intent.putExtra("admin", account);
         startActivity(intent);
     }
 
+    /*
     public void OnUsersButton(View view) {
         username = getIntent().getStringExtra("username");
         userType = getIntent().getStringExtra("userType");

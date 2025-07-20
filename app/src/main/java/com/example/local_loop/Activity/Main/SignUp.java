@@ -2,6 +2,7 @@ package com.example.local_loop.Activity.Main;
 
 import com.example.local_loop.Account.Account;
 import com.example.local_loop.Account.User;
+import com.example.local_loop.Helpers.InputValidation;
 import com.example.local_loop.R;
 import com.example.local_loop.Activity.WelcomeUser.OrganizerWelcomePage;
 import com.example.local_loop.Activity.WelcomeUser.ParticipantWelcomePage;
@@ -32,6 +33,7 @@ public class SignUp extends AppCompatActivity {
     Spinner roleInput;
     DatabaseHelper dbHelper;
     private View decorView;
+    private InputValidation validation;
 
 
     @Override
@@ -39,6 +41,8 @@ public class SignUp extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         EdgeToEdge.enable(this);
         setContentView(R.layout.activity_signup);
+        validation = new InputValidation(this,dbHelper);
+
 
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main), (v, insets) -> {
             Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
@@ -141,64 +145,12 @@ public class SignUp extends AppCompatActivity {
     }
 
     public boolean isValid(){
-        boolean valid = isInputFilled(usernameInput, username) & isInputFilled(emailInput, email) & isInputFilled(passwordInput, password) &
-                isInputFilled(firstNameInput, first) & isInputFilled(lastNameInput, last);
-
+        //Check if all values are filled
         //Do not evaluate values until all inputs are filled
-        if(!valid){
-            return false;
-        }
-
-        //Check Role
-        if(role.isEmpty()){
-            Toast.makeText(this, "Please select a valid role.", Toast.LENGTH_SHORT).show();
-            valid = false;
-        }
-
-        //Check Username
-        if(dbHelper.checkUsername(username)){
-            usernameInput.setText(null);
-            usernameInput.setError("Username Invalid: This username is in use.");
-            valid = false;
-        }else{
-            usernameInput.setError(null);
-        }
-
-        //Check email
-        if(!Patterns.EMAIL_ADDRESS.matcher(email).matches()){
-            emailInput.setText(null);
-            emailInput.setError("Invalid Email");
-            valid = false;
-        }
-
-        if(dbHelper.checkEmail(email)){
-            emailInput.setText(null);
-            emailInput.setError("Email exists, please head to login page.");
-            valid = false;
-        }else{
-            emailInput.setError(null);
-        }
-
-        //Check Password
-        if(password.isEmpty() || password.length()<5){
-            passwordInput.setText(null);
-            passwordInput.setError("Password must be at least 5 characters long.");
-            valid = false;
-        }else{
-            passwordInput.setError(null);
-        }
-
-        return valid;
-    }
-
-    //This code checks if any inputs are empty and then sends an error message
-    private boolean isInputFilled(EditText input, String value){
-        if(value.isEmpty()){
-            input.setError("This field is required.");
-            return false;
-        }
-        input.setError(null);
-        return true;
+       if(!(validation.isFilled(usernameInput,emailInput,passwordInput,firstNameInput,lastNameInput) & validation.validateRole(role))){
+           return false;
+       }
+       return validation.validatePassword(passwordInput) && validation.validateEmail(emailInput) && validation.validateUsername(usernameInput) ;
     }
 
     private void hideKeyboard(View view) {

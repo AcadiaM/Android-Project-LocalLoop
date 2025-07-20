@@ -7,10 +7,10 @@
     android:layout_height="match_parent"
     android:background="@color/white"
     android:padding="24dp"
-    tools:context=".Category.CategoryActivity">
+    tools:context=".TEMP.CategoryActivity">
 
     <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/categoryRecyclerView"
+        android:id="@+id/CategoryListing"
         android:layout_width="0dp"
         android:layout_height="0dp"
         android:layout_marginStart="10dp"
@@ -27,6 +27,7 @@
 
     <ImageButton
         android:id="@+id/addCategoryButton"
+        android:onClick="onAddCategories"
         android:layout_width="48dp"
         android:layout_height="48dp"
         android:layout_marginTop="26dp"
@@ -34,33 +35,35 @@
         android:layout_marginBottom="20dp"
         android:background="?attr/selectableItemBackgroundBorderless"
         android:contentDescription="Add"
-        app:layout_constraintBottom_toTopOf="@+id/categoryRecyclerView"
+        app:layout_constraintBottom_toTopOf="@+id/CategoryListing"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:srcCompat="@drawable/outline_add_box_24" />
 
     <ImageButton
         android:id="@+id/removeCategoryButton"
+        android:onClick="onRemoveCategories"
         android:layout_width="48dp"
         android:layout_height="48dp"
         android:layout_marginTop="26dp"
         android:layout_marginBottom="20dp"
         android:background="?attr/selectableItemBackgroundBorderless"
         android:contentDescription="Remove"
-        app:layout_constraintBottom_toTopOf="@+id/categoryRecyclerView"
+        app:layout_constraintBottom_toTopOf="@+id/CategoryListing"
         app:layout_constraintEnd_toStartOf="@+id/addCategoryButton"
         app:layout_constraintTop_toTopOf="parent"
         app:srcCompat="@drawable/baseline_delete_forever_24" />
 
     <ImageButton
         android:id="@+id/editCategoryButton"
+        android:onClick="onEditCategories"
         android:layout_width="48dp"
         android:layout_height="48dp"
         android:layout_marginTop="26dp"
         android:layout_marginBottom="20dp"
         android:background="?attr/selectableItemBackgroundBorderless"
         android:contentDescription="Rename"
-        app:layout_constraintBottom_toTopOf="@+id/categoryRecyclerView"
+        app:layout_constraintBottom_toTopOf="@+id/CategoryListing"
         app:layout_constraintEnd_toStartOf="@+id/removeCategoryButton"
         app:layout_constraintTop_toTopOf="parent"
         app:srcCompat="@drawable/outline_box_edit_24" />

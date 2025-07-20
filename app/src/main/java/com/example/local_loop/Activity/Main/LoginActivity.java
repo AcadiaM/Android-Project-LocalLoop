@@ -25,6 +25,7 @@ import com.example.local_loop.Activity.WelcomeUser.*;
 
 public class LoginActivity  extends AppCompatActivity{
     private View decorView;
+    private InputValidation validation;
     private EditText usernameInput,passwordInput;
     private String username, password;
     private Account account;
@@ -37,6 +38,7 @@ public class LoginActivity  extends AppCompatActivity{
         super.onCreate(savedInstanceState);
         EdgeToEdge.enable(this);
         setContentView(R.layout.activity_login);
+        validation = new InputValidation(this,db);
 
         decorView = getWindow().getDecorView();
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.container), (v, insets) -> {
@@ -103,7 +105,8 @@ public class LoginActivity  extends AppCompatActivity{
     }
 
     public boolean isValid(){
-        if(!(isInputFilled(usernameInput, username) & isInputFilled(passwordInput, password))){
+
+        if(!(validation.isFilled(usernameInput,passwordInput))){
             return false;
         }
         //Check login

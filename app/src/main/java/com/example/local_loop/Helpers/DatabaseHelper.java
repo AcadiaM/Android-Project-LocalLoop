@@ -10,6 +10,7 @@ import android.util.Log;
 
 import com.example.local_loop.Account.Account;
 import com.example.local_loop.Account.User;
+import com.example.local_loop.Category.Category;
 //import com.example.local_loop.Category.Category;
 //import com.example.local_loop.Event.Event;
 //import com.example.local_loop.Event.Request;
@@ -289,5 +290,81 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         cursor.close();
         return users;
     }
+
+    public void deleteCategory(int category_ID) {
+        SQLiteDatabase db = getWritableDatabase();
+        db.delete(TABLE_CATEGORIES, CATEGORIES_ID+" = ?", new String[]{String.valueOf(category_ID)});
+        db.close();
+    }
+
+    public List<Category> getAllCategories() {
+        List<Category> categories = new ArrayList<>();
+        SQLiteDatabase db = this.getReadableDatabase();
+
+        Cursor cursor = db.query(TABLE_CATEGORIES,new String[]{CATEGORIES_ID,CATEGORIES_NAME,CATEGORIES_DESCRIPTION},
+                null,null,null,null,null);
+
+        if (cursor.moveToFirst()) {
+            do {
+                Category category  = new Category(
+                        cursor.getInt(0),     // Cat_ID
+                        cursor.getString(1),  // Cat_Name
+                        cursor.getString(2)  // Cat_Desc.
+                );
+                categories.add(category);
+            } while (cursor.moveToNext());
+        }
+        cursor.close();
+        return categories;
+    }
+
+    public Category getCategoryById(int categoryId) {
+        SQLiteDatabase db = this.getReadableDatabase();
+        Cursor cursor = db.query(TABLE_CATEGORIES, null, "id=?", new String[]{String.valueOf(categoryId)}, null, null, null);
+        if (cursor.moveToFirst()) {
+            Category category = new Category(
+                    cursor.getInt(cursor.getColumnIndexOrThrow(CATEGORIES_ID)),
+                    cursor.getString(cursor.getColumnIndexOrThrow(CATEGORIES_NAME)),
+                    cursor.getString(cursor.getColumnIndexOrThrow(CATEGORIES_DESCRIPTION))
+            );
+            cursor.close();
+            return category;
+        }
+        return null;
+    }
+
+    public boolean categoryNameExists(String name) {
+        SQLiteDatabase db = this.getReadableDatabase();
+        Cursor cursor = db.query(TABLE_CATEGORIES, new String[]{"id"}, "name = ?", new String[]{name}, null, null, null);
+        boolean exists = cursor.getCount() > 0;
+        cursor.close();
+        return exists;
+    }
+
+    public void renameCategory(int id, String newName, String newDescription) {
+        SQLiteDatabase db = getWritableDatabase();
+        ContentValues values = new ContentValues();
+        values.put("name", newName);
+        values.put("description", newDescription);
+        db.update("categories", values, "id=?", new String[]{String.valueOf(id)});
+    }
+
+
+
+    public void addCategory(String name, String description) {
+        SQLiteDatabase db = getWritableDatabase();
+        ContentValues values = new ContentValues();
+        values.put("name", name);
+        values.put("description", description);
+        db.insert("categories", null, values);
+    }
+
+
+
+
+
+
 }
+
+
 
