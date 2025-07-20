@@ -25,7 +25,7 @@ import com.example.local_loop.Category.Category;
 import com.example.local_loop.Category.DisplayItem;
 import com.example.local_loop.Category.DisplayItemAdapter;
 import com.example.local_loop.R;
-import com.example.local_loop.database.DatabaseHelper;
+import com.example.local_loop.Helpers.DatabaseHelper;
 
 import java.util.ArrayList;
 import java.util.List;

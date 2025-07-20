@@ -1,8 +1,6 @@
-package com.example.local_loop.Welcome;
+package com.example.local_loop.Activity;
 
 import static com.example.local_loop.Event.EventDetailsActivity.EXTRA_SOURCE;
-import static com.example.local_loop.Event.EventDetailsActivity.SOURCE_ADMIN;
-import static com.example.local_loop.Event.EventDetailsActivity.SOURCE_ORGANIZER;
 import static com.example.local_loop.Event.EventDetailsActivity.SOURCE_PARTICIPANT;
 
 import android.annotation.SuppressLint;
@@ -19,15 +17,16 @@ import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
+import com.example.local_loop.Account.Account;
 import com.example.local_loop.Category.DisplayItemActivity;
 import com.example.local_loop.Event.UserEventActivity;
 import com.example.local_loop.R;
-import com.example.local_loop.Login.LoginActivity;
 import com.example.local_loop.UserDisplay.UserDisplayActivity;
 
 public class WelcomePage extends AppCompatActivity {
     private View decorView;
-    private String username, userRole;
+    private Account session;
+
 
     @SuppressLint("SetTextI18n")
     @SuppressWarnings("deprecation")
@@ -37,24 +36,22 @@ public class WelcomePage extends AppCompatActivity {
         EdgeToEdge.enable(this);
         setContentView(R.layout.activity_welcome_page);
 
+        session = getIntent().getParcelableExtra("user", Account.class);
+
         TextView welcomeTextView = findViewById(R.id.welcomeTextView);
         Button button1 = findViewById(R.id.firstButton);
         Button button2 = findViewById(R.id.secondButton);
         Button button3 = findViewById(R.id.thirdButton);
 
-        // Retrieve the username and userType from the Intent
-        String firstname = getIntent().getStringExtra("firstname");
-        username = getIntent().getStringExtra("username");
-        userRole = getIntent().getStringExtra("userType");
-
-        String welcomeMessage = "Welcome " + firstname + ".\nYou are logged in as " + userRole + ".";
+        String role = session.getRole();
+        String welcomeMessage = "Welcome " + session.getFirstName() + ".\nYou are logged in as " + role + ".";
         welcomeTextView.setText(welcomeMessage);
 
-        if (userRole.equals("admin")){
+        if (role == "admin"){
             button1.setOnClickListener(this::OnUsersButton);
             button2.setOnClickListener(this::OnListCategoriesButton);
             button3.setOnClickListener(this::OnEventsButton);
-        } else if (userRole.equals("organizer")){
+        } else if (role == "organizer"){
             button1.setText("Event Management");
             button1.setOnClickListener(this::OnEventsButton);
             button2.setVisibility(View.INVISIBLE);
@@ -85,15 +82,6 @@ public class WelcomePage extends AppCompatActivity {
         });
 
     }
-    public void OnListCategoriesButton(View view) {
-        username = getIntent().getStringExtra("username");
-        userRole = getIntent().getStringExtra("userType");
-        Intent intent = new Intent(WelcomePage.this, DisplayItemActivity.class);
-        intent.putExtra(EXTRA_SOURCE, SOURCE_ADMIN);
-        intent.putExtra("username", username);// Pass the username to the WelcomePage
-        intent.putExtra("userRole", userRole); // Pass the userType to the WelcomePage
-        startActivity(intent);
-    }
 
     public void OnLogoutButton(View view) {
         // Clear the user session and redirect to login
@@ -104,23 +92,22 @@ public class WelcomePage extends AppCompatActivity {
         finish();
     }
 
-    public void OnUsersButton(View view) {
-        username = getIntent().getStringExtra("username");
-        userRole = getIntent().getStringExtra("userType");
-        Intent intent = new Intent(WelcomePage.this, UserDisplayActivity.class);
-        intent.putExtra(EXTRA_SOURCE, SOURCE_ADMIN);
-        intent.putExtra("username", username);// Pass the username to the WelcomePage
-        intent.putExtra("userRole", userRole); // Pass the userType to the WelcomePage
+    //TODO --> Fix DisplayItemActivity and UserDisplayActivity to take parcelable
+
+    //ADMIN BUTTONS
+    public void OnListCategoriesButton(View view) {
+        Intent intent = new Intent(WelcomePage.this, DisplayItemActivity.class);
+        intent.putExtra("user", session);
         startActivity(intent);
     }
-
+    public void OnUsersButton(View view) {
+        Intent intent = new Intent(WelcomePage.this, UserDisplayActivity.class);
+        intent.putExtra("user", session);
+        startActivity(intent);
+    }
     public void OnEventsButton(View view) {
-        username = getIntent().getStringExtra("username");
-        userRole = getIntent().getStringExtra("userType");
         Intent intent = new Intent(WelcomePage.this, DisplayItemActivity.class);
-        intent.putExtra(EXTRA_SOURCE, SOURCE_ORGANIZER);
-        intent.putExtra("username", username);// Pass the username to the WelcomePage
-        intent.putExtra("userRole", userRole); // Pass the userType to the WelcomePage
+        intent.putExtra("user", session);
         startActivity(intent);
     }
 

@@ -31,7 +31,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.example.local_loop.Event.Event;
 import com.example.local_loop.Event.EventDetailsActivity;
 import com.example.local_loop.R;
-import com.example.local_loop.database.DatabaseHelper;
+import com.example.local_loop.Helpers.DatabaseHelper;
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.android.material.textfield.TextInputLayout;
 

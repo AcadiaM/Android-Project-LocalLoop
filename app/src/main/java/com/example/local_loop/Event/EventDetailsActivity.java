@@ -13,7 +13,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import com.example.local_loop.Category.Category;
 import com.example.local_loop.R;
 import com.example.local_loop.UserDisplay.UserDisplayActivity;
-import com.example.local_loop.database.DatabaseHelper;
+import com.example.local_loop.Helpers.DatabaseHelper;
 
 import java.util.Objects;
 

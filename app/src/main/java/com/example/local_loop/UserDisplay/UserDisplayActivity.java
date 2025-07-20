@@ -17,9 +17,10 @@ import androidx.core.view.WindowInsetsCompat;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.example.local_loop.CreateAccount.User;
+import com.example.local_loop.Account.Account;
+import com.example.local_loop.Account.User;
 import com.example.local_loop.R;
-import com.example.local_loop.database.DatabaseHelper;
+import com.example.local_loop.Helpers.DatabaseHelper;
 
 import java.util.List;
 
@@ -27,6 +28,7 @@ public class UserDisplayActivity extends AppCompatActivity {
 
     DatabaseHelper db;
     private View decorView;
+    Account session;
 
     @SuppressWarnings({"CallToPrintStackTrace", "deprecation"})
     @Override
@@ -42,8 +44,9 @@ public class UserDisplayActivity extends AppCompatActivity {
         });
 
         db = new DatabaseHelper(this);
+        session = getIntent().getParcelableExtra("user", Account.class);
 
-        boolean isAttendeeMode = SOURCE_ORGANIZER.equals(getIntent().getStringExtra(EXTRA_SOURCE));
+        boolean listAttendeeMode =session.getRole() == "organizer";
         int eventId = getIntent().getIntExtra("eventId", -1);
 
         RecyclerView recyclerView = findViewById(R.id.recycler);
@@ -51,9 +54,11 @@ public class UserDisplayActivity extends AppCompatActivity {
         TextView pageTitleTextView = findViewById(R.id.pageTitleTextView);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
 
+
+
         try {
             List<User> users;
-            if (isAttendeeMode) {
+            if (listAttendeeMode) {
                 users = db.getPendingRequestsByEvent(eventId);
                 setTitle("Attendees");
                 pageTitleTextView.setText(R.string.attendeeList);
@@ -71,7 +76,7 @@ public class UserDisplayActivity extends AppCompatActivity {
                 noUsersTextView.setVisibility(View.GONE);
             }
 
-            recyclerView.setAdapter(new UserDisplayAdapter(this, users, isAttendeeMode, eventId));
+            recyclerView.setAdapter(new UserDisplayAdapter(this, users, listAttendeeMode, eventId));
 
 
         } catch (Exception e) {

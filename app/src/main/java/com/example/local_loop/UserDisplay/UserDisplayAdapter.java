@@ -10,21 +10,21 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.example.local_loop.CreateAccount.User;
+import com.example.local_loop.Account.Account;
 import com.example.local_loop.R;
-import com.example.local_loop.database.DatabaseHelper;
+import com.example.local_loop.Helpers.DatabaseHelper;
 
 import java.util.List;
 
 public class UserDisplayAdapter extends RecyclerView.Adapter<UserDisplayViewHolder> {
 
     private final Context context;
-    private final List<User> users;
+    private final List<Account> users;
     private final DatabaseHelper db;
     private final boolean isAttendeeMode;
     private final int eventId;  // Only relevant for attendee mode
 
-    public UserDisplayAdapter(Context context, List<User> users, boolean isAttendeeMode, int eventId) {
+    public UserDisplayAdapter(Context context, List<Account> users, boolean isAttendeeMode, int eventId) {
         this.context = context;
         this.users = users;
         this.isAttendeeMode = isAttendeeMode;
@@ -44,7 +44,7 @@ public class UserDisplayAdapter extends RecyclerView.Adapter<UserDisplayViewHold
 
     @Override
     public void onBindViewHolder(@NonNull UserDisplayViewHolder holder, int position) {
-        User user = users.get(position);
+        Account user = users.get(position);
         holder.firstView.setText(user.getFirstName());
         holder.lastView.setText(user.getLastName());
         holder.userView.setText(user.getUsername());

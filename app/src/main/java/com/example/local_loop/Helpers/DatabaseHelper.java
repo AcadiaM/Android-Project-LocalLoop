@@ -1,4 +1,4 @@
-package com.example.local_loop.database;
+package com.example.local_loop.Helpers;
 
 import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
@@ -7,9 +7,9 @@ import android.content.ContentValues;
 import android.database.Cursor;
 import android.util.Log;
 
+import com.example.local_loop.Account.Account;
 import com.example.local_loop.Category.Category;
-import com.example.local_loop.CreateAccount.Admin;
-import com.example.local_loop.CreateAccount.User;
+import com.example.local_loop.Account.User;
 import com.example.local_loop.Event.Event;
 import com.example.local_loop.Event.Request;
 
@@ -19,7 +19,39 @@ import java.util.List;
 public class DatabaseHelper extends SQLiteOpenHelper {
     private static final String DATABASE_NAME = "LocalLoop.db";
     private static final int DATABASE_VERSION = 1;
-    public static final String TABLE_USERS = "users";
+    //User Table Values
+    private static final String TABLE_USERS = "users";
+    private static final String USERS_ID = "id";
+    private static final String USERS_ROLE = "role";
+    private static final String USERS_USERNAME = "username";
+    private static final String USERS_EMAIL = "email";
+    private static final String USERS_PASSWORD = "password";
+    private static final String USERS_FIRSTNAME = "firstName";
+    private static final String USERS_LASTNAME = "lastName";
+    private static final String USERS_ISACTIVE = "isActive";
+
+    //Category Table Values
+    private static final String TABLE_CATEGORIES = "categories";
+    private static final String CATEGORIES_ID = "id";
+    private static final String CATEGORIES_NAME = "name";
+    private static final String CATEGORIES_DESCRIPTION = "description";
+
+    //Events table Values
+    private static final String TABLE_EVENTS = "events";
+    private static final String EVENTS_ID = "id";
+    private static final String EVENTS_TITLE = "title";
+    private static final String EVENTS_DESCRIPTION = "description";
+    private static final String EVENTS_FEE = "fee";
+    private static final String EVENTS_DATETIME = "datetime";
+    private static final String EVENTS_CATEGORY_ID = "category_id";
+    private static final String EVENTS_ORGANIZER = "organizer";
+
+    //Requests
+    private static final String TABLE_REQUESTS = "requests";
+    private static final String REQUESTS_REQUEST_ID = "request_id";
+    private static final String REQUESTS_EVENT_ID = "event_id";
+    private static final String REQUESTS_ATTENDEE_ID = "attendee_id";
+    private static final String REQUESTS_STATUS = "status";
 
     public DatabaseHelper(Context context) {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
@@ -32,41 +64,40 @@ public class DatabaseHelper extends SQLiteOpenHelper {
      */
     @Override
     public void onCreate(SQLiteDatabase db) {
-        db.execSQL("PRAGMA foreign_keys=ON;");
 
-        db.execSQL("CREATE TABLE users (" +
-                "id INTEGER PRIMARY KEY AUTOINCREMENT, " +
-                "firstName TEXT NOT NULL," +
-                "lastName TEXT NOT NULL," +
-                "username TEXT UNIQUE NOT NULL, " +
-                "email TEXT UNIQUE NOT NULL, " +
-                "password TEXT NOT NULL, " +
-                "role TEXT NOT NULL, " +
-                "active INTEGER NOT NULL DEFAULT 1);");
+        db.execSQL("CREATE TABLE " + TABLE_USERS + " (" +
+            USERS_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " +
+            USERS_ROLE + " TEXT NOT NULL CHECK(" + USERS_ROLE + " IN ('admin', 'organizer', 'participant')), " +
+            USERS_USERNAME + " TEXT UNIQUE NOT NULL, " +
+            USERS_EMAIL + " TEXT UNIQUE NOT NULL, " +
+            USERS_PASSWORD + " TEXT NOT NULL, " +
+            USERS_FIRSTNAME + " TEXT NOT NULL, " +
+            USERS_LASTNAME + " TEXT NOT NULL, " +
+            USERS_ISACTIVE + " INTEGER NOT NULL DEFAULT 1);");
 
-        db.execSQL("CREATE TABLE categories (" +
-                "id INTEGER PRIMARY KEY AUTOINCREMENT, " +
-                "name TEXT NOT NULL, " +
-                "description TEXT NOT NULL);");
+        db.execSQL("CREATE TABLE " + TABLE_CATEGORIES + " (" +
+                CATEGORIES_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " +
+                CATEGORIES_NAME + " TEXT NOT NULL, " +
+                CATEGORIES_DESCRIPTION + " TEXT NOT NULL);");
 
-        db.execSQL("CREATE TABLE events (" +
-                "id INTEGER PRIMARY KEY AUTOINCREMENT, " +
-                "title TEXT NOT NULL, " +
-                "description TEXT, " +
-                "fee REAL, " +
-                "datetime TEXT, " +
-                "category_id INTEGER, " +
-                "organizer TEXT NOT NULL, " +  // Track who created it
-                "FOREIGN KEY(category_id) REFERENCES categories(id) ON DELETE CASCADE, " +
-                "FOREIGN KEY(organizer) REFERENCES users(username) ON DELETE CASCADE);");
+        db.execSQL("CREATE TABLE " + TABLE_EVENTS + " (" +
+                EVENTS_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " +
+                EVENTS_TITLE + " TEXT NOT NULL, " +
+                EVENTS_DESCRIPTION + " TEXT, " +
+                EVENTS_FEE + " REAL, " +
+                EVENTS_DATETIME + " TEXT, " +
+                EVENTS_CATEGORY_ID + " INTEGER NOT NULL, " +
+                EVENTS_ORGANIZER + " INTEGER NOT NULL, " +
+                "FOREIGN KEY(" + EVENTS_CATEGORY_ID + ") REFERENCES " + TABLE_CATEGORIES + "(" + CATEGORIES_ID + ") ON DELETE CASCADE, " +
+                "FOREIGN KEY(" + EVENTS_ORGANIZER + ") REFERENCES " + TABLE_USERS + "(" + USERS_ID + ") ON DELETE CASCADE);");
 
-        db.execSQL("CREATE TABLE requests (" +
-                "request_id INTEGER PRIMARY KEY AUTOINCREMENT, " +
-                "event_id INTEGER, " +
-                "attendee_id TEXT NOT NULL, " +
-                "status TEXT DEFAULT 'pending', " +
-                "FOREIGN KEY(event_id) REFERENCES events(id) ON DELETE CASCADE, " +
-                "FOREIGN KEY(attendee_id) REFERENCES users(username) ON DELETE CASCADE);");
+        db.execSQL("CREATE TABLE " + TABLE_REQUESTS + " (" +
+                REQUESTS_REQUEST_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " +
+                REQUESTS_EVENT_ID + " INTEGER, " +
+                REQUESTS_ATTENDEE_ID + " TEXT NOT NULL, " +
+                REQUESTS_STATUS + " TEXT DEFAULT 'pending', " +
+                "FOREIGN KEY(" + REQUESTS_EVENT_ID + ") REFERENCES " + TABLE_EVENTS + "(" + EVENTS_ID + ") ON DELETE CASCADE, " +
+                "FOREIGN KEY(" + REQUESTS_ATTENDEE_ID + ") REFERENCES " + TABLE_USERS + "(" + USERS_USERNAME + ") ON DELETE CASCADE);");
     }
 
     /**
@@ -100,6 +131,21 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     // USER FUNCTIONS
 
     /**
+     * This function is called at the beginning of the main activity to add the predetermined admin user to the database.
+     * The admin data is taken from the function getAdmin in the admin class.
+     */
+
+    public void insertAdmin() {
+        SQLiteDatabase db = this.getWritableDatabase();
+        Cursor cursor = db.query("users", null, "username = ?", new String[]{"admin"}, null, null, null);
+        if (cursor.getCount() == 0) {
+            User admin = new User("admin","admin","-","XPI76SZUqyCjVxgnUjm0","ADMIN","-");
+            admin.setUserID(insertUser(admin));
+        }
+        cursor.close();
+    }
+
+    /**
      * This function checks if the desired username has already been taken by another user in the database.
      *
      * @param username entered username.
@@ -107,7 +153,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
      */
     public boolean checkUsername(String username) {
         SQLiteDatabase db = this.getReadableDatabase();
-        Cursor cursor = db.query("users", new String[]{"id"}, "username = ?", new String[]{username}, null, null, null);
+        Cursor cursor = db.query(TABLE_USERS,new String[]{USERS_ID},USERS_USERNAME+" =?",new String[]{username},null,null,null);
         boolean exists = cursor.moveToFirst();
         cursor.close();
         return exists;
@@ -121,7 +167,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
      */
     public boolean checkEmail(String email) {
         SQLiteDatabase db = this.getReadableDatabase();
-        Cursor cursor = db.query("users", new String[]{"id"}, "email = ?", new String[]{email}, null, null, null);
+        Cursor cursor = db.query(TABLE_USERS,new String[]{USERS_ID},USERS_EMAIL+" =?",new String[]{email},null,null,null);
         boolean exists = cursor.moveToFirst();
         cursor.close();
         return exists;
@@ -133,23 +179,23 @@ public class DatabaseHelper extends SQLiteOpenHelper {
      * @param user The user object to be added to the database.
      * @return true if the insertion into the database was successful, false otherwise. Also logs the result of the insert.
      */
-    public boolean insertUser(User user) {
+    public long insertUser(User user) {
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues values = new ContentValues();
-        values.put("firstName", user.getFirstName());
-        values.put("lastName", user.getLastName());
-        values.put("username", user.getUsername());
-        values.put("email", user.getEmail());
-        values.put("password", user.getPassword());
-        values.put("role", user.getRole());
+        values.put(USERS_FIRSTNAME, user.getFirstName());
+        values.put(USERS_LASTNAME, user.getLastName());
+        values.put(USERS_USERNAME, user.getUsername());
+        values.put(USERS_EMAIL, user.getEmail());
+        values.put(USERS_PASSWORD, user.getPassword());
+        values.put(USERS_ROLE, user.getRole());
 
         try {
             long result = db.insert(TABLE_USERS, null, values);
             Log.d("DB", "Insert result: " + result);
-            return result != -1;
+            return result;
         } catch (Exception e) {
             Log.e("DB", "Insert failed", e);
-            return false;
+            return -1;
         }
     }
 
@@ -160,42 +206,24 @@ public class DatabaseHelper extends SQLiteOpenHelper {
      * @param password the desired user's password.
      * @return true if the user exists in the database, false otherwise.
      */
-    public boolean checkLogin(String username, String password) {
+    public Account checkLogin(String username, String password) {
         SQLiteDatabase db = this.getReadableDatabase();
-        Cursor cursor = db.query(TABLE_USERS, null, "username = ? AND password = ? AND active = ?", new String[]{username, password, "1"}, null, null, null);
-        boolean exists = cursor.getCount() > 0;
-        cursor.close();
-        return exists;
-    }
+        Account session = null;
 
-    /**
-     * This function finds the role of a user from their username.
-     *
-     * @param username the username of the desired user.
-     * @return the role of the user if found, null otherwise.
-     */
-    public String getRoleByUsername(String username) {
-        SQLiteDatabase db = this.getReadableDatabase();
-        Cursor cursor = db.query(TABLE_USERS, new String[]{"role"}, "username = ?", new String[]{username}, null, null, null);
-        if (cursor.moveToFirst()) {
-            String role = cursor.getString(0);
-            cursor.close();
-            return role;
-        }
-        cursor.close();
-        return null;
-    }
+        Cursor cursor = db.query(TABLE_USERS, new String[]{USERS_ID,USERS_ROLE,USERS_EMAIL,USERS_FIRSTNAME,USERS_LASTNAME},
+                USERS_USERNAME + " = ? AND " + USERS_PASSWORD + " = ? AND " + USERS_ISACTIVE + " = ?", new String[]{username, password, "1"}, null, null, null);
 
-    public String getFirstByUsername(String username) {
-        SQLiteDatabase db = this.getReadableDatabase();
-        Cursor cursor = db.query(TABLE_USERS, new String[]{"firstName"}, "username = ?", new String[]{username}, null, null, null);
         if (cursor.moveToFirst()) {
-            String role = cursor.getString(0);
-            cursor.close();
-            return role;
+            int id = cursor.getInt(0);
+            String role = cursor.getString(1);
+            String email = cursor.getString(2);
+            String firstName = cursor.getString(3);
+            String lastName = cursor.getString(4);
+            session = new Account(id, role, username,email, firstName, lastName);
         }
+
         cursor.close();
-        return null;
+        return session;
     }
 
     /**
@@ -204,89 +232,45 @@ public class DatabaseHelper extends SQLiteOpenHelper {
      * @param email the email of the desired user.
      * @return the username of the user if found, null otherwise.
      */
-    public String getUsernameByEmail(String email) {
-        SQLiteDatabase db = this.getReadableDatabase();
-        Cursor cursor = db.query(TABLE_USERS, new String[]{"username"}, "email = ?", new String[]{email}, null, null, null);
-        if (cursor.moveToFirst()) {
-            String username = cursor.getString(0);
-            cursor.close();
-            return username;
-        }
-        cursor.close();
-        return null;
-    }
-
-    /**
-     * This function is called at the beginning of the main activity to add the predetermined admin user to the database.
-     * The admin data is taken from the function getAdmin in the admin class.
-     */
-    public void insertAdmin() {
-        SQLiteDatabase db = this.getWritableDatabase();
-        Cursor cursor = db.query("users", null, "username = ?", new String[]{"admin"}, null, null, null);
-        if (cursor.getCount() == 0) {
-            User admin = Admin.getAdmin();
-            insertUser(admin);
-        }
-        cursor.close();
-    }
 
     /**
      * This function searches for a user in the database. If found and the user is an organizer, its created events are deleted. Then, the user is deleted.
      *
-     * @param email the email of the desired user.
+     * @param userID the email of the desired user.
      */
-    public void deleteUser(String email) {
+    public void deleteUser(int userID) {
         SQLiteDatabase db = getWritableDatabase();
-
-        // Get the user ID
-        Cursor cursor = db.query("users", new String[]{"id"}, "email = ?", new String[]{email}, null, null, null);
-        if (cursor.moveToFirst()) {
-            int userId = cursor.getInt(0);
-            // Delete events created by this user
-            db.delete("events", "organizer = ?", new String[]{String.valueOf(userId)});
-        }
-        cursor.close();
-
-        // Then delete user
-        db.delete("users", "email = ?", new String[]{email});
+        db.delete(TABLE_USERS, USERS_ID+" = ?", new String[]{String.valueOf(userID)});
+        db.close();
     }
 
     /**
      * This function searches for a user in the database with a username, setting its active value to 0 (inactive).
      *
-     * @param username the username of the desired user.
+     * @param  userID username of the desired user.
      */
-    public void deactivateUser(String username) {
-        //The user is active (active=1) and is set to inactive=0
+    public void setUserActivity(int userID, boolean isActive) {
+        //Takes a bool and changes the value of isActive. No need to worry about if its a valid call, no errors!
         SQLiteDatabase db = getWritableDatabase();
         ContentValues values = new ContentValues();
-        values.put("active", 0);
-        db.update(TABLE_USERS, values, "username = ?", new String[]{username});
-    }
-
-    /**
-     * This function searches for a user in the database with a username, setting its active value to 1 (active).
-     *
-     * @param username the username of the desired user.
-     */
-    public void reactivateUser(String username) {
-        //The user is inactive (active=0) and is set to active=1.
-        SQLiteDatabase db = getWritableDatabase();
-        ContentValues values = new ContentValues();
-        values.put("active", 1);
-        db.update(TABLE_USERS, values, "username = ?", new String[]{username});
+        //Updating
+        values.put(USERS_ISACTIVE, isActive ? 1: 0);
+        db.update(TABLE_USERS, values, USERS_ID+" = ?", new String[]{String.valueOf(userID)});
+        db.close();
     }
 
     /**
      * This function searches for a user with its username and verifies if the user is set to active or inactive.
      *
-     * @param username the username of the desired user.
+     * @param userID the username of the desired user.
      * @return the active value of the user, 1 if the user is active, 0 otherwise.
      */
-    public int isActive(String username) {
+    public int isActive(int userID) {
         int active = 1; // Default to active.
         SQLiteDatabase db = getReadableDatabase();
-        Cursor cursor = db.query(TABLE_USERS, new String[]{"active"}, "username = ?", new String[]{username}, null, null, null);
+        Cursor cursor = db.query(TABLE_USERS, new String[]{USERS_ISACTIVE}, USERS_ID+" = ?",
+                new String[]{String.valueOf(userID)}, null, null, null);
+
         if (cursor.moveToFirst()) {
             active = cursor.getInt(0);
         }
@@ -299,21 +283,21 @@ public class DatabaseHelper extends SQLiteOpenHelper {
      *
      * @return a list of user objects comprising all users other than the admin user.
      */
-    public List<User> getUsers() {
-        List<User> users = new ArrayList<>();
+    public List<Account> getUsers() {
+        List<Account> users = new ArrayList<>();
         SQLiteDatabase db = this.getReadableDatabase();
 
-        Cursor cursor = db.query(TABLE_USERS, null, "role != ?", new String[]{"admin"}, null, null, null);
-
+        Cursor cursor = db.query(TABLE_USERS,new String[]{USERS_ID,USERS_ROLE,USERS_USERNAME,USERS_EMAIL,USERS_FIRSTNAME,USERS_LASTNAME}
+                , USERS_ROLE+"!= ?", new String[]{"admin"}, USERS_ROLE, null, USERS_ID);
         if (cursor.moveToFirst()) {
             do {
-                User user = new User(
-                        cursor.getString(1), // firstName
-                        cursor.getString(2), // lastName
-                        cursor.getString(3), // username
-                        cursor.getString(4), // email
-                        cursor.getString(5), // password
-                        cursor.getString(6)  // role
+                Account user = new Account(
+                        cursor.getInt(0),     // userID
+                        cursor.getString(1),  // role
+                        cursor.getString(2),  // username
+                        cursor.getString(3),  // email
+                        cursor.getString(4),  // firstName
+                        cursor.getString(5)   // lastName
                 );
                 users.add(user);
             } while (cursor.moveToNext());
@@ -330,12 +314,23 @@ public class DatabaseHelper extends SQLiteOpenHelper {
      * @param name the name of the new category.
      * @param description the description of the new category.
      */
-    public void addCategory(String name, String description) {
+
+    //to set category ID to tableID
+    public long addCategory(String name, String description) {
         SQLiteDatabase db = getWritableDatabase();
         ContentValues values = new ContentValues();
         values.put("name", name);
         values.put("description", description);
         db.insert("categories", null, values);
+
+        try {
+            long result = db.insert(TABLE_USERS, null, values);
+            Log.d("DB", "Insert result: " + result);
+            return result;
+        } catch (Exception e) {
+            Log.e("DB", "Insert failed", e);
+            return -1;
+        }
     }
 
     /**
@@ -345,12 +340,19 @@ public class DatabaseHelper extends SQLiteOpenHelper {
      * @param newName the new name of the category.
      * @param newDescription the new description of the category.
      */
+
+    //Error if 1 input is null?
     public void renameCategory(int id, String newName, String newDescription) {
+
         SQLiteDatabase db = getWritableDatabase();
         ContentValues values = new ContentValues();
         values.put("name", newName);
         values.put("description", newDescription);
-        db.update("categories", values, "id=?", new String[]{String.valueOf(id)});
+
+        int check = db.update("categories", values, "id=?", new String[]{String.valueOf(id)});
+        if(check<=0){
+            Log.d("renameCatDB","renameCatfailed?");
+        }
     }
 
     /**
