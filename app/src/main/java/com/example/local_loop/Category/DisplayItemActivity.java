@@ -247,6 +247,15 @@ public class DisplayItemActivity extends AppCompatActivity {
     private void showItemDialog(DisplayItem itemToEdit) {
         boolean isEvent = SOURCE_ORGANIZER.equals(source);
 
+        if (isEvent) {
+            List<Category> categories = dbHelper.getAllCategories();
+            if (categories == null || categories.isEmpty()) {
+                Toast.makeText(this, "No categories exist. Please create a category first.", Toast.LENGTH_LONG).show();
+                return;  // Stop here, do not open dialog
+            }
+        }
+
+
         LayoutInflater inflater = LayoutInflater.from(this);
         View dialogView = inflater.inflate(
                 isEvent ? R.layout.dialog_event_item : R.layout.dialog_category_item, null
@@ -283,12 +292,8 @@ public class DisplayItemActivity extends AppCompatActivity {
 
             List<Category> categories = dbHelper.getAllCategories();
             List<String> categoryNames = new ArrayList<>();
-            for (Category cat : categories) {
-                categoryNames.add(cat.getName());
-            }
-            ArrayAdapter<String> spinnerAdapter = new ArrayAdapter<>(
-                    this, android.R.layout.simple_spinner_item, categoryNames
-            );
+            for (Category cat : categories) categoryNames.add(cat.getName());
+            ArrayAdapter<String> spinnerAdapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, categoryNames);
             spinnerAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
             categorySpinner.setAdapter(spinnerAdapter);
         } else {
@@ -304,7 +309,7 @@ public class DisplayItemActivity extends AppCompatActivity {
                 Event event = (Event) itemToEdit;
                 nameInput.setText(event.getTitle());
                 descriptionInput.setText(event.getDescription());
-                if (feeInput != null) feeInput.setText(String.valueOf(event.getFee()));
+                feeInput.setText(String.valueOf(event.getFee()));
                 datetimeInput.setText(event.getDateTime());
             } else {
                 Category category = (Category) itemToEdit;
@@ -313,13 +318,9 @@ public class DisplayItemActivity extends AppCompatActivity {
             }
         }
 
-        String dialogTitle;
-        if (itemToEdit == null) {
-            dialogTitle = isEvent ? "Add Event" : "Add Category";
-        } else {
-            dialogTitle = isEvent ? "Edit Event" : "Edit Category";
-        }
-
+        String dialogTitle = (itemToEdit == null)
+                ? (isEvent ? "Add Event" : "Add Category")
+                : (isEvent ? "Edit Event" : "Edit Category");
 
         AlertDialog dialog = new AlertDialog.Builder(this)
                 .setCustomTitle(createDialogTitle(dialogTitle))
@@ -332,112 +333,104 @@ public class DisplayItemActivity extends AppCompatActivity {
                 .create();
 
         dialog.setOnShowListener(dialogInterface -> {
-                Button confirmButton = dialog.getButton(AlertDialog.BUTTON_POSITIVE);
-                Button cancelButton = dialog.getButton(AlertDialog.BUTTON_NEGATIVE);
-                // Set button colors
-                confirmButton.setTextColor(ContextCompat.getColor(this, android.R.color.holo_blue_dark));
-                cancelButton.setTextColor(ContextCompat.getColor(this, android.R.color.darker_gray));
-                    confirmButton.setOnClickListener(v -> {
-                        String name = Objects.requireNonNull(nameInput.getText()).toString().trim();
-                        String description = Objects.requireNonNull(descriptionInput.getText()).toString().trim();
+            Button confirmButton = dialog.getButton(AlertDialog.BUTTON_POSITIVE);
+            Button cancelButton = dialog.getButton(AlertDialog.BUTTON_NEGATIVE);
+            confirmButton.setTextColor(ContextCompat.getColor(this, android.R.color.holo_blue_dark));
+            cancelButton.setTextColor(ContextCompat.getColor(this, android.R.color.darker_gray));
 
-                        nameLayout.setError(null);
-                        descriptionLayout.setError(null);
+            confirmButton.setOnClickListener(v -> {
+                String name = Objects.requireNonNull(nameInput.getText()).toString().trim();
+                String description = Objects.requireNonNull(descriptionInput.getText()).toString().trim();
+                nameLayout.setError(null);
+                descriptionLayout.setError(null);
 
-                        boolean valid = true;
+                boolean valid = true;
 
-                        // Empty field checks
-                        if (name.isEmpty()) {
-                            nameLayout.setError("This field cannot be blank.");
+                if (name.isEmpty()) {
+                    nameLayout.setError("This field cannot be blank.");
+                    valid = false;
+                }
+                if (description.isEmpty()) {
+                    descriptionLayout.setError("This field cannot be blank.");
+                    valid = false;
+                }
+
+                if (isEvent) {
+                    boolean nameExists = dbHelper.eventTitleExists(name);
+                    if (nameExists && (itemToEdit == null || !name.equals(((Event) itemToEdit).getTitle()))) {
+                        nameLayout.setError("Event title already exists.");
+                        valid = false;
+                    }
+                } else {
+                    boolean nameExists = dbHelper.categoryNameExists(name);
+                    if (nameExists && (itemToEdit == null || !name.equals(itemToEdit.getName()))) {
+                        nameLayout.setError("Category name already exists.");
+                        valid = false;
+                    }
+                }
+
+                double fee = 0.0;
+                String datetime = "";
+                int categoryId = 1;
+
+                if (isEvent) {
+                    String feeText = Objects.requireNonNull(feeInput.getText()).toString().trim();
+                    String datetimeText = Objects.requireNonNull(datetimeInput.getText()).toString().trim();
+
+                    feeLayout.setError(null);
+                    datetimeLayout.setError(null);
+
+                    if (feeText.isEmpty()) {
+                        feeLayout.setError("Fee is required.");
+                        valid = false;
+                    } else {
+                        try {
+                            fee = Double.parseDouble(feeText);
+                        } catch (NumberFormatException e) {
+                            feeLayout.setError("Invalid fee value.");
                             valid = false;
                         }
-                        if (description.isEmpty()) {
-                            descriptionLayout.setError("This field cannot be blank.");
-                            valid = false;
-                        }
+                    }
 
-                        // Duplicate checks (only when adding new)
-                        if (itemToEdit == null) {
-                            if (isEvent) {
-                                if (dbHelper.eventTitleExists(name)) {
-                                    nameLayout.setError("Event title already exists.");
-                                    valid = false;
-                                }
-                            } else {
-                                if (dbHelper.categoryNameExists(name)) {
-                                    nameLayout.setError("Category name already exists.");
-                                    valid = false;
-                                }
-                            }
-                        }
+                    if (datetimeText.isEmpty()) {
+                        datetimeLayout.setError("Date/Time is required.");
+                        valid = false;
+                    } else {
+                        datetime = datetimeText;
+                    }
 
-                        double fee = 0.0;
-                        String datetime = "";
-                        int categoryId = 1;
+                    int selectedPosition = categorySpinner.getSelectedItemPosition();
+                    if (selectedPosition >= 0) {
+                        categoryId = dbHelper.getAllCategories().get(selectedPosition).getID();
+                    } else {
+                        Toast.makeText(this, "Please select a category.", Toast.LENGTH_SHORT).show();
+                        valid = false;
+                    }
+                }
 
-                        // Event-specific checks
+                if (valid) {
+                    if (itemToEdit == null) {
                         if (isEvent) {
-                            assert feeInput != null;
-                            String feeText = Objects.requireNonNull(feeInput.getText()).toString().trim();
-                            String datetimeText = Objects.requireNonNull(datetimeInput.getText()).toString().trim();
-
-                            if (feeText.isEmpty()) {
-                                feeLayout.setError("Fee is required.");
-                                valid = false;
-                            } else {
-                                try {
-                                    fee = Double.parseDouble(feeText);
-                                } catch (NumberFormatException e) {
-                                    feeLayout.setError("Invalid fee value.");
-                                    valid = false;
-                                }
-                            }
-
-                            if (datetimeText.isEmpty()) {
-                                datetimeLayout.setError("Date/Time is required.");
-                                valid = false;
-                            } else {
-                                datetime = datetimeText;
-                            }
-
-                            int selectedPosition = categorySpinner.getSelectedItemPosition();
-                            if (selectedPosition >= 0) {
-                                categoryId = dbHelper.getAllCategories().get(selectedPosition).getID();
-                            } else {
-                                Toast.makeText(this, "Please select a category.", Toast.LENGTH_SHORT).show();
-                                valid = false;
-                            }
+                            dbHelper.addEvent(name, description, categoryId, datetime, fee, organizerUsername);
+                        } else {
+                            dbHelper.addCategory(name, description);
                         }
-
-                        // Final decision to save or not
-                        if (valid) {
-                            if (itemToEdit == null) {
-                                // Adding new
-                                if (isEvent) {
-                                    dbHelper.addEvent(name, description, categoryId, datetime, fee, organizerUsername);
-                                    Toast.makeText(this, "Event added", Toast.LENGTH_SHORT).show();
-                                } else {
-                                    dbHelper.addCategory(name, description);
-                                    Toast.makeText(this, "Category added", Toast.LENGTH_SHORT).show();
-                                }
-                            } else {
-                                // Updating existing
-                                if (isEvent) {
-                                    dbHelper.updateEvent(itemToEdit.getID(), name, description, fee, datetime, categoryId);
-                                    Toast.makeText(this, "Event updated", Toast.LENGTH_SHORT).show();
-                                } else {
-                                    dbHelper.renameCategory(itemToEdit.getID(), name, description);
-                                    Toast.makeText(this, "Category updated", Toast.LENGTH_SHORT).show();
-                                }
-                                exitEditMode();
-                            }
-                            loadItems();
-                            dialog.dismiss();
+                    } else {
+                        if (isEvent) {
+                            dbHelper.updateEvent(itemToEdit.getID(), name, description, fee, datetime, categoryId);
+                        } else {
+                            dbHelper.renameCategory(itemToEdit.getID(), name, description);
                         }
-                    });
-                });
-            dialog.show();
+                        exitEditMode();
+                    }
+                    loadItems();
+                    dialog.dismiss();
+                }
+            });
+        });
+        dialog.show();
     }
+
 
     private void enterEditMode() {
         isEditMode = true;
@@ -464,6 +457,7 @@ public class DisplayItemActivity extends AppCompatActivity {
             Toast.makeText(this, "Delete mode cancelled", Toast.LENGTH_SHORT).show();
         } else if (isEditMode) {
             exitEditMode();
+            Toast.makeText(this, "Edit mode cancelled", Toast.LENGTH_SHORT).show();
         } else {
             super.onBackPressed();
         }
