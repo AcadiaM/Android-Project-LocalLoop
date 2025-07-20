@@ -2,6 +2,7 @@ package com.example.local_loop.Event;
 
 import static com.example.local_loop.Event.EventDetailsActivity.EXTRA_SOURCE;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
@@ -12,6 +13,9 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.local_loop.Category.DisplayItem;
+import com.example.local_loop.Category.DisplayItemActivity;
+import com.example.local_loop.Category.DisplayItemAdapter;
 import com.example.local_loop.R;
 import com.example.local_loop.database.DatabaseHelper;
 
@@ -19,9 +23,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class UserMyEvent extends AppCompatActivity {
-    private EventAdapter eventAdapter;
+    private DisplayItemAdapter eventAdapter;
     private DatabaseHelper dbHelper;
-    private String userName;
+    private String username;
     private View decorView;
 
     @SuppressWarnings("deprecation")
@@ -32,15 +36,42 @@ public class UserMyEvent extends AppCompatActivity {
 
         dbHelper = new DatabaseHelper(this);
 
-        String categoryName = getIntent().getStringExtra("categoryName");
-        userName = getIntent().getStringExtra("username");
-
-        setTitle("Events - " + (categoryName != null ? categoryName : ""));
+        username = getIntent().getStringExtra("username");
 
         RecyclerView eventRecyclerView = findViewById(R.id.recyclerViewEvents);
         eventRecyclerView.setLayoutManager(new GridLayoutManager(this, 2));
 
-        eventAdapter = new EventAdapter(getIntent().getStringExtra(EXTRA_SOURCE), userName, new ArrayList<>(), this);
+        eventAdapter = new DisplayItemAdapter(new ArrayList<>(), new DisplayItemAdapter.OnItemClickListener() {
+            @Override
+            public void onClick(DisplayItem item) {
+                if (item instanceof Event) {
+                    Event event = (Event) item;
+                    Intent intent = new Intent(UserMyEvent.this, EventDetailsActivity.class);
+                    intent.putExtra(EXTRA_SOURCE, getIntent().getStringExtra(EXTRA_SOURCE));
+                    intent.putExtra("sourceContext", UserMyEvent.class.getSimpleName());
+                    intent.putExtra("attendeeId", username);
+                    intent.putExtra("eventId", event.getID());
+                    intent.putExtra("title", event.getTitle());
+                    intent.putExtra("description", event.getDescription());
+                    intent.putExtra("fee", String.valueOf(event.getFee()));
+                    intent.putExtra("datetime", event.getDateTime());
+                    intent.putExtra("categoryId", event.getCategoryId());
+                    intent.putExtra("organizer", event.getOrganizer());
+                    startActivity(intent);
+                }
+            }
+
+            @Override
+            public void onLongClick(DisplayItem item) {
+                // Optional: Handle long press if needed
+            }
+
+            @Override
+            public void onRenameClick(DisplayItem item) {
+                // Not needed in CategoryDetailsActivity
+            }
+        });
+
         eventRecyclerView.setAdapter(eventAdapter);
 
         loadEventsForUser();
@@ -80,14 +111,16 @@ public class UserMyEvent extends AppCompatActivity {
 
     //Method to load the events for the user from the database
     private void loadEventsForUser() {
-        List<Event> events = dbHelper.getEventsUserRequested(userName);
+        List<Event> events = dbHelper.getEventsUserRequested(username);
         TextView noMyEventsTextView = findViewById(R.id.noMyEventsTextView);
         if (events == null || events.isEmpty()) {
             noMyEventsTextView.setVisibility(View.VISIBLE);
         } else {
             noMyEventsTextView.setVisibility(View.GONE);
         }
-        eventAdapter.updateEvents(events);
+        assert events != null;
+        List<DisplayItem> displayItems = new ArrayList<>(events);
+        eventAdapter.updateItems(displayItems);
     }
 
 }

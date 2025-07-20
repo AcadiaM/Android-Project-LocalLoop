@@ -36,7 +36,7 @@
         <activity android:name=".Event.UserMyEvent"
             android:exported="false" />
         <activity
-            android:name=".Category.CategoryActivity"
+            android:name=".Category.DisplayItemActivity"
             android:exported="false" />
         <activity
             android:name=".UserList.UserList"

@@ -1,6 +1,8 @@
 package com.example.local_loop.Event;
 
-public class Event {
+import com.example.local_loop.Category.DisplayItem;
+
+public class Event implements DisplayItem {
     private int id;
     private final String title;
     private String description;
@@ -20,7 +22,10 @@ public class Event {
         this.dateTime = dateTime;
     }
 
+    @Override
     public int getID() { return id; }
+    @Override
+    public String getName(){return title;}
     public void setId(int id) { this.id = id; }
     public String getTitle() { return title; }
     public String getDescription() { return description; }

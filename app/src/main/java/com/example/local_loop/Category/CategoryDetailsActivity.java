@@ -2,21 +2,24 @@ package com.example.local_loop.Category;
 
 import static com.example.local_loop.Event.EventDetailsActivity.EXTRA_SOURCE;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.local_loop.Event.Event;
-import com.example.local_loop.Event.EventAdapter;
+import com.example.local_loop.Event.EventDetailsActivity;
 import com.example.local_loop.R;
 import com.example.local_loop.database.DatabaseHelper;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class CategoryDetailsActivity extends AppCompatActivity {
@@ -60,7 +63,8 @@ public class CategoryDetailsActivity extends AppCompatActivity {
             noEventsTextView.setVisibility(View.GONE);
         }
         eventRecyclerView.setLayoutManager(new GridLayoutManager(this,2));
-        EventAdapter eventAdapter = new EventAdapter(getIntent().getStringExtra(EXTRA_SOURCE), events, this);
+        DisplayItemAdapter eventAdapter = getDisplayItemAdapter(events);
+
         eventRecyclerView.setAdapter(eventAdapter);
 
         //this is to hide the system bars and make the app immersive
@@ -73,6 +77,43 @@ public class CategoryDetailsActivity extends AppCompatActivity {
 
         Button backButton = findViewById(R.id.categoryDetailsBackButton);
         backButton.setOnClickListener(v -> onBackPressed());
+    }
+
+    @NonNull
+    private DisplayItemAdapter getDisplayItemAdapter(List<Event> events) {
+        assert events != null;
+        List<DisplayItem> displayItems = new ArrayList<>(events);  // Events implement DisplayItem
+        // Optional: Handle long press if needed
+        // Not needed in CategoryDetailsActivity
+        return new DisplayItemAdapter(displayItems, new DisplayItemAdapter.OnItemClickListener() {
+            @Override
+            public void onClick(DisplayItem item) {
+                if (item instanceof Event) {
+                    Event event = (Event) item;
+                    Intent intent = new Intent(CategoryDetailsActivity.this, EventDetailsActivity.class);
+                    intent.putExtra(EXTRA_SOURCE, getIntent().getStringExtra(EXTRA_SOURCE));
+                    intent.putExtra("sourceContext", getIntent().getStringExtra("sourceContext"));
+                    intent.putExtra("eventId", event.getID());
+                    intent.putExtra("title", event.getTitle());
+                    intent.putExtra("description", event.getDescription());
+                    intent.putExtra("fee", String.valueOf(event.getFee()));
+                    intent.putExtra("datetime", event.getDateTime());
+                    intent.putExtra("categoryId", event.getCategoryId());
+                    intent.putExtra("organizer", event.getOrganizer());
+                    startActivity(intent);
+                }
+            }
+
+            @Override
+            public void onLongClick(DisplayItem item) {
+                // Optional: Handle long press if needed
+            }
+
+            @Override
+            public void onRenameClick(DisplayItem item) {
+                // Not needed in CategoryDetailsActivity
+            }
+        });
     }
 
     //this method is called when the activity gains or loses focus

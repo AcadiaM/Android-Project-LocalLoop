@@ -2,6 +2,7 @@ package com.example.local_loop.Event;
 
 import static com.example.local_loop.Event.EventDetailsActivity.EXTRA_SOURCE;
 
+import android.content.Intent;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.View;
@@ -21,6 +22,8 @@ import androidx.recyclerview.widget.RecyclerView;
 
 
 import com.example.local_loop.Category.Category;
+import com.example.local_loop.Category.DisplayItem;
+import com.example.local_loop.Category.DisplayItemAdapter;
 import com.example.local_loop.R;
 import com.example.local_loop.database.DatabaseHelper;
 
@@ -29,9 +32,9 @@ import java.util.List;
 
 
 public class UserEventActivity extends AppCompatActivity {
-    private EventAdapter eventAdapter;
+    private DisplayItemAdapter eventAdapter;
     private DatabaseHelper dbHelper;
-    private String userName;
+    private String username;
     private EditText searchBar;
     private Spinner categorySpinner;
     private final Handler handler = new Handler(Looper.getMainLooper());
@@ -49,11 +52,8 @@ public class UserEventActivity extends AppCompatActivity {
 
         dbHelper = new DatabaseHelper(this);
 
-        // Get category info passed from CategoryActivity
-        String categoryName = getIntent().getStringExtra("categoryName");
-        userName = getIntent().getStringExtra("username");
+        username = getIntent().getStringExtra("username");
 
-        setTitle("Events - " + (categoryName != null ? categoryName : ""));
 
 
         RecyclerView eventRecyclerView = findViewById(R.id.recyclerViewEvents);
@@ -61,7 +61,37 @@ public class UserEventActivity extends AppCompatActivity {
         categorySpinner = findViewById(R.id.categorySpinner);
         eventRecyclerView.setLayoutManager(new GridLayoutManager(this, 2));
 
-        eventAdapter = new EventAdapter(getIntent().getStringExtra(EXTRA_SOURCE), userName, new ArrayList<>(), this);
+        eventAdapter = new DisplayItemAdapter(new ArrayList<>(), new DisplayItemAdapter.OnItemClickListener() {
+            @Override
+            public void onClick(DisplayItem item) {
+                if (item instanceof Event) {
+                    Event event = (Event) item;
+                    Intent intent = new Intent(UserEventActivity.this, EventDetailsActivity.class);
+                    intent.putExtra(EXTRA_SOURCE, getIntent().getStringExtra(EXTRA_SOURCE));
+                    intent.putExtra("sourceContext", UserEventActivity.class.getSimpleName());
+                    intent.putExtra("attendeeId", username);
+                    intent.putExtra("eventId", event.getID());
+                    intent.putExtra("title", event.getTitle());
+                    intent.putExtra("description", event.getDescription());
+                    intent.putExtra("fee", String.valueOf(event.getFee()));
+                    intent.putExtra("datetime", event.getDateTime());
+                    intent.putExtra("categoryId", event.getCategoryId());
+                    intent.putExtra("organizer", event.getOrganizer());
+                    startActivity(intent);
+                }
+            }
+
+            @Override
+            public void onLongClick(DisplayItem item) {
+                // Optional: Handle long press if needed
+            }
+
+            @Override
+            public void onRenameClick(DisplayItem item) {
+                // Not needed in CategoryDetailsActivity
+            }
+        });
+
         eventRecyclerView.setAdapter(eventAdapter);
         setupCategorySpinner();
         setupSearchBar();
@@ -116,8 +146,11 @@ public class UserEventActivity extends AppCompatActivity {
         } else {
             noEventsUserTextView.setVisibility(View.GONE);
         }
-        Toast.makeText(this, "Loading " + events.size() + " events for: " + userName, Toast.LENGTH_SHORT).show();
-        eventAdapter.updateEvents(events);
+        assert events != null;
+        Toast.makeText(this, "Loading " + events.size() + " events for: " + username, Toast.LENGTH_SHORT).show();
+        List<DisplayItem> displayItems = new ArrayList<>(events);
+        eventAdapter.updateItems(displayItems);
+
     }
 
     private void setupCategorySpinner() {

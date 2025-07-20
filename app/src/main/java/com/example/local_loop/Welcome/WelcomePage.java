@@ -19,8 +19,7 @@ import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
-import com.example.local_loop.Category.CategoryActivity;
-import com.example.local_loop.Event.EventActivity;
+import com.example.local_loop.Category.DisplayItemActivity;
 import com.example.local_loop.Event.UserEventActivity;
 import com.example.local_loop.Event.UserMyEvent;
 import com.example.local_loop.R;
@@ -29,7 +28,7 @@ import com.example.local_loop.UserList.UserList;
 
 public class WelcomePage extends AppCompatActivity {
     private View decorView;
-    private String username, userType;
+    private String username, userRole;
 
     @SuppressLint("SetTextI18n")
     @SuppressWarnings("deprecation")
@@ -47,16 +46,16 @@ public class WelcomePage extends AppCompatActivity {
         // Retrieve the username and userType from the Intent
         String firstname = getIntent().getStringExtra("firstname");
         username = getIntent().getStringExtra("username");
-        userType = getIntent().getStringExtra("userType");
+        userRole = getIntent().getStringExtra("userType");
 
-        String welcomeMessage = "Welcome " + firstname + ".\nYou are logged in as " + userType + ".";
+        String welcomeMessage = "Welcome " + firstname + ".\nYou are logged in as " + userRole + ".";
         welcomeTextView.setText(welcomeMessage);
 
-        if (userType.equals("admin")){
+        if (userRole.equals("admin")){
             button1.setOnClickListener(this::OnUsersButton);
             button2.setOnClickListener(this::OnListCategoriesButton);
             button3.setOnClickListener(this::OnEventsButton);
-        } else if (userType.equals("organizer")){
+        } else if (userRole.equals("organizer")){
             button1.setText("Event Management");
             button1.setOnClickListener(this::OnEventsButton);
             button2.setVisibility(View.INVISIBLE);
@@ -89,11 +88,11 @@ public class WelcomePage extends AppCompatActivity {
     }
     public void OnListCategoriesButton(View view) {
         username = getIntent().getStringExtra("username");
-        userType = getIntent().getStringExtra("userType");
-        Intent intent = new Intent(WelcomePage.this, CategoryActivity.class);
+        userRole = getIntent().getStringExtra("userType");
+        Intent intent = new Intent(WelcomePage.this, DisplayItemActivity.class);
         intent.putExtra(EXTRA_SOURCE, SOURCE_ADMIN);
         intent.putExtra("username", username);// Pass the username to the WelcomePage
-        intent.putExtra("userType", userType); // Pass the userType to the WelcomePage
+        intent.putExtra("userRole", userRole); // Pass the userType to the WelcomePage
         startActivity(intent);
     }
 
@@ -108,20 +107,20 @@ public class WelcomePage extends AppCompatActivity {
 
     public void OnUsersButton(View view) {
         username = getIntent().getStringExtra("username");
-        userType = getIntent().getStringExtra("userType");
+        userRole = getIntent().getStringExtra("userType");
         Intent intent = new Intent(WelcomePage.this, UserList.class);
         intent.putExtra("username", username);// Pass the username to the WelcomePage
-        intent.putExtra("userType", userType); // Pass the userType to the WelcomePage
+        intent.putExtra("userRole", userRole); // Pass the userType to the WelcomePage
         startActivity(intent);
     }
 
     public void OnEventsButton(View view) {
         username = getIntent().getStringExtra("username");
-        userType = getIntent().getStringExtra("userType");
-        Intent intent = new Intent(WelcomePage.this, EventActivity.class);
+        userRole = getIntent().getStringExtra("userType");
+        Intent intent = new Intent(WelcomePage.this, DisplayItemActivity.class);
         intent.putExtra(EXTRA_SOURCE, SOURCE_ORGANIZER);
         intent.putExtra("username", username);// Pass the username to the WelcomePage
-        intent.putExtra("userType", userType); // Pass the userType to the WelcomePage
+        intent.putExtra("userRole", userRole); // Pass the userType to the WelcomePage
         startActivity(intent);
     }
 

@@ -7,10 +7,10 @@
     android:layout_height="match_parent"
     android:background="@color/white"
     android:padding="24dp"
-    tools:context=".Event.EventActivity">
+    tools:context=".Category.DisplayItemActivity">
 
     <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/recyclerViewEvents"
+        android:id="@+id/recyclerView"
         android:layout_width="0dp"
         android:layout_height="0dp"
         android:layout_marginStart="10dp"
@@ -26,47 +26,47 @@
     <!-- Button to remove a new category -->
 
     <ImageButton
-        android:id="@+id/addEventButton"
+        android:id="@+id/addButton"
         android:layout_width="48dp"
         android:layout_height="48dp"
         android:layout_marginTop="26dp"
         android:layout_marginEnd="16dp"
         android:layout_marginBottom="20dp"
         android:background="?attr/selectableItemBackgroundBorderless"
-        android:contentDescription="@string/add_event"
-        app:layout_constraintBottom_toTopOf="@+id/recyclerViewEvents"
+        android:contentDescription="@string/add_category"
+        app:layout_constraintBottom_toTopOf="@+id/recyclerView"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:srcCompat="@drawable/outline_add_box_24" />
 
     <ImageButton
-        android:id="@+id/removeEventButton"
+        android:id="@+id/removeButton"
         android:layout_width="48dp"
         android:layout_height="48dp"
         android:layout_marginTop="26dp"
         android:layout_marginBottom="20dp"
         android:background="?attr/selectableItemBackgroundBorderless"
-        android:contentDescription="@string/remove_event"
-        app:layout_constraintBottom_toTopOf="@+id/recyclerViewEvents"
-        app:layout_constraintEnd_toStartOf="@+id/addEventButton"
+        android:contentDescription="@string/remove_category"
+        app:layout_constraintBottom_toTopOf="@+id/recyclerView"
+        app:layout_constraintEnd_toStartOf="@+id/addButton"
         app:layout_constraintTop_toTopOf="parent"
         app:srcCompat="@drawable/baseline_delete_forever_24" />
 
     <ImageButton
-        android:id="@+id/editEventButton"
+        android:id="@+id/editButton"
         android:layout_width="48dp"
         android:layout_height="48dp"
         android:layout_marginTop="26dp"
         android:layout_marginBottom="20dp"
         android:background="?attr/selectableItemBackgroundBorderless"
-        android:contentDescription="@string/edit_event"
-        app:layout_constraintBottom_toTopOf="@+id/recyclerViewEvents"
-        app:layout_constraintEnd_toStartOf="@+id/removeEventButton"
+        android:contentDescription="@string/edit_category"
+        app:layout_constraintBottom_toTopOf="@+id/recyclerView"
+        app:layout_constraintEnd_toStartOf="@+id/removeButton"
         app:layout_constraintTop_toTopOf="parent"
         app:srcCompat="@drawable/outline_box_edit_24" />
 
     <com.google.android.material.button.MaterialButton
-        android:id="@+id/eventBackButton"
+        android:id="@+id/backButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
@@ -82,18 +82,19 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.063"
-        app:layout_constraintStart_toStartOf="parent" />
+        app:layout_constraintStart_toStartOf="parent"
+        />
 
     <TextView
-        android:id="@+id/noEventsTextView"
+        android:id="@+id/noTextView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/no_events_created"
+        android:text="@string/unknown"
         android:visibility="invisible"
-        app:layout_constraintBottom_toBottomOf="@+id/recyclerViewEvents"
-        app:layout_constraintEnd_toEndOf="@+id/recyclerViewEvents"
-        app:layout_constraintStart_toStartOf="@+id/recyclerViewEvents"
-        app:layout_constraintTop_toTopOf="@+id/recyclerViewEvents" />
+        app:layout_constraintBottom_toBottomOf="@+id/recyclerView"
+        app:layout_constraintEnd_toEndOf="@+id/recyclerView"
+        app:layout_constraintStart_toStartOf="@+id/recyclerView"
+        app:layout_constraintTop_toTopOf="@+id/recyclerView" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>
