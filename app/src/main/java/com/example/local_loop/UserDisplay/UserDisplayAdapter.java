@@ -4,7 +4,9 @@ import android.content.Context;
 import android.content.res.ColorStateList;
 import android.graphics.Color;
 import android.view.LayoutInflater;
+import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -13,6 +15,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.example.local_loop.CreateAccount.User;
 import com.example.local_loop.R;
 import com.example.local_loop.database.DatabaseHelper;
+
 
 import java.util.List;
 
@@ -23,12 +26,14 @@ public class UserDisplayAdapter extends RecyclerView.Adapter<UserDisplayViewHold
     private final DatabaseHelper db;
     private final boolean isAttendeeMode;
     private final int eventId;  // Only relevant for attendee mode
+    TextView noUsersTextView;
 
-    public UserDisplayAdapter(Context context, List<User> users, boolean isAttendeeMode, int eventId) {
+    public UserDisplayAdapter(Context context, List<User> users, boolean isAttendeeMode, int eventId, TextView noUsersTextView) {
         this.context = context;
         this.users = users;
         this.isAttendeeMode = isAttendeeMode;
         this.eventId = eventId;
+        this.noUsersTextView = noUsersTextView;
         this.db = new DatabaseHelper(context);
     }
 
@@ -82,11 +87,13 @@ public class UserDisplayAdapter extends RecyclerView.Adapter<UserDisplayViewHold
     private void approve(int eventId, String attendeeId) {
         db.updateRequestStatus(eventId, attendeeId, "Approved");
         Toast.makeText(context, "User " + attendeeId + " approved.", Toast.LENGTH_SHORT).show();
+        updateEmptyViewVisibility();
     }
 
     private void refuse(int eventId, String attendeeId) {
         db.updateRequestStatus(eventId, attendeeId, "Refused");
         Toast.makeText(context, "User " + attendeeId + " refused.", Toast.LENGTH_SHORT).show();
+        updateEmptyViewVisibility();
     }
 
     private void toggleUserActiveStatus(UserDisplayViewHolder holder, String username, int pos) {
@@ -102,12 +109,22 @@ public class UserDisplayAdapter extends RecyclerView.Adapter<UserDisplayViewHold
         notifyItemChanged(pos);
     }
 
+    private void updateEmptyViewVisibility() {
+        if (users == null || users.isEmpty()) {
+            noUsersTextView.setVisibility(View.VISIBLE);
+        } else {
+            noUsersTextView.setVisibility(View.GONE);
+        }
+    }
+
+
     private void deleteUser(String email, int pos) {
         String username = db.getUsernameByEmail(email);
         db.deleteUser(email);
         deleteEntry(email);
         Toast.makeText(context, "User " + username + " deleted.", Toast.LENGTH_SHORT).show();
         notifyItemRemoved(pos);
+        updateEmptyViewVisibility();
     }
 
     public void deleteEntry(String email) {
@@ -117,7 +134,9 @@ public class UserDisplayAdapter extends RecyclerView.Adapter<UserDisplayViewHold
                 break;
             }
         }
+        updateEmptyViewVisibility();
     }
+
 
     @Override
     public int getItemCount() {

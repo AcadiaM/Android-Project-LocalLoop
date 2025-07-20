@@ -71,7 +71,7 @@ public class UserDisplayActivity extends AppCompatActivity {
                 noUsersTextView.setVisibility(View.GONE);
             }
 
-            recyclerView.setAdapter(new UserDisplayAdapter(this, users, isAttendeeMode, eventId));
+            recyclerView.setAdapter(new UserDisplayAdapter(this, users, isAttendeeMode, eventId, noUsersTextView));
 
 
         } catch (Exception e) {
