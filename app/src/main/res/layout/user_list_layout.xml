@@ -6,7 +6,7 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:padding="24dp"
-    tools:context=".UserList.UserList">
+    tools:context=".UserDisplay.UserDisplayActivity">
 
     <LinearLayout
         android:layout_width="match_parent"

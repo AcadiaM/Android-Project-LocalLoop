@@ -1,4 +1,4 @@
-package com.example.local_loop.UserList;
+package com.example.local_loop.UserDisplay;
 
 import android.view.View;
 import android.widget.TextView;
@@ -8,12 +8,12 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.local_loop.R;
 
-public class UserListViewer extends RecyclerView.ViewHolder {
+public class UserDisplayViewHolder extends RecyclerView.ViewHolder {
 
     TextView firstView, lastView, userView, emailView, typeView;
     com.google.android.material.button.MaterialButton disable, delete;
 
-    public UserListViewer(@NonNull View itemView) {
+    public UserDisplayViewHolder(@NonNull View itemView) {
         super(itemView);
         firstView = itemView.findViewById(R.id.FirstName);
         lastView = itemView.findViewById(R.id.LastName);

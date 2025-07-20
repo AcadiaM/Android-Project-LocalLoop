@@ -1,4 +1,7 @@
-package com.example.local_loop.UserList;
+package com.example.local_loop.UserDisplay;
+
+import static com.example.local_loop.Event.EventDetailsActivity.EXTRA_SOURCE;
+import static com.example.local_loop.Event.EventDetailsActivity.SOURCE_ORGANIZER;
 
 import android.os.Bundle;
 import android.view.View;
@@ -20,41 +23,62 @@ import com.example.local_loop.database.DatabaseHelper;
 
 import java.util.List;
 
+public class UserDisplayActivity extends AppCompatActivity {
 
-public class UserList extends AppCompatActivity {
-
-    DatabaseHelper db = new DatabaseHelper(this);
-
+    DatabaseHelper db;
     private View decorView;
 
-    @SuppressWarnings({"CallToPrintStackTrace","deprecation"})
+    @SuppressWarnings({"CallToPrintStackTrace", "deprecation"})
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         EdgeToEdge.enable(this);
-        setContentView(R.layout.activity_user_list);
+
+        setContentView(R.layout.activity_user_display);  // Shared layout
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main), (v, insets) -> {
             Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
             return insets;
         });
 
+        db = new DatabaseHelper(this);
+
+        boolean isAttendeeMode = SOURCE_ORGANIZER.equals(getIntent().getStringExtra(EXTRA_SOURCE));
+        int eventId = getIntent().getIntExtra("eventId", -1);
+
         RecyclerView recyclerView = findViewById(R.id.recycler);
         TextView noUsersTextView = findViewById(R.id.noUsersTextView);
+        TextView pageTitleTextView = findViewById(R.id.pageTitleTextView);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
+
         try {
-            List<User> users = db.getUsers();
+            List<User> users;
+            if (isAttendeeMode) {
+                users = db.getPendingRequestsByEvent(eventId);
+                setTitle("Attendees");
+                pageTitleTextView.setText(R.string.attendeeList);
+                noUsersTextView.setText(R.string.no_attendees);
+            } else {
+                users = db.getUsers();
+                setTitle("User List");
+                pageTitleTextView.setText(R.string.userManagement);
+                noUsersTextView.setText(R.string.no_users);
+            }
+
             if (users == null || users.isEmpty()) {
                 noUsersTextView.setVisibility(View.VISIBLE);
             } else {
                 noUsersTextView.setVisibility(View.GONE);
             }
-            recyclerView.setAdapter(new RecycleAdapter(getApplicationContext(), users));
-        }catch (Exception e){
-            Toast.makeText(this, "adapter crash:" + e.getMessage(), Toast.LENGTH_LONG).show();
+
+            recyclerView.setAdapter(new UserDisplayAdapter(this, users, isAttendeeMode, eventId));
+
+
+        } catch (Exception e) {
+            Toast.makeText(this, "Adapter error: " + e.getMessage(), Toast.LENGTH_LONG).show();
             e.printStackTrace();
         }
-        //this is to hide the system bars and make the app immersive
+
         decorView = getWindow().getDecorView();
         decorView.setOnSystemUiVisibilityChangeListener(visibility -> {
             if (visibility == 0) {
@@ -66,18 +90,17 @@ public class UserList extends AppCompatActivity {
         backButton.setOnClickListener(v -> onBackPressed());
     }
 
-    //this method is called when the activity gains or loses focus
     @SuppressWarnings("deprecation")
     @Override
     public void onWindowFocusChanged(boolean hasFocus) {
         super.onWindowFocusChanged(hasFocus);
-        if(hasFocus) {
+        if (hasFocus) {
             decorView.setSystemUiVisibility(hideSystemBars());
         }
     }
 
     @SuppressWarnings("deprecation")
-    private int hideSystemBars(){
+    private int hideSystemBars() {
         return (View.SYSTEM_UI_FLAG_LAYOUT_STABLE
                 | View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY
                 | View.SYSTEM_UI_FLAG_FULLSCREEN
@@ -85,5 +108,4 @@ public class UserList extends AppCompatActivity {
                 | View.SYSTEM_UI_FLAG_FULLSCREEN
                 | View.SYSTEM_UI_FLAG_HIDE_NAVIGATION);
     }
-
 }

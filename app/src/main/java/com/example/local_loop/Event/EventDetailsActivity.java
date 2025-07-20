@@ -10,9 +10,9 @@ import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
 
-import com.example.local_loop.AttendeeList.AttendeeList;
 import com.example.local_loop.Category.Category;
 import com.example.local_loop.R;
+import com.example.local_loop.UserDisplay.UserDisplayActivity;
 import com.example.local_loop.database.DatabaseHelper;
 
 import java.util.Objects;
@@ -75,7 +75,7 @@ public class EventDetailsActivity extends AppCompatActivity {
             contextInfoText.setText("Category: " + categoryName);
             joinButton.setText("Attendee List");
             joinButton.setOnClickListener(v -> {
-                Intent intent = new Intent(getApplicationContext(), AttendeeList.class);
+                Intent intent = new Intent(getApplicationContext(), UserDisplayActivity.class);
                 intent.putExtra(EXTRA_SOURCE, source);
                 intent.putExtra("sourceContext", getIntent().getStringExtra("sourceContext"));
                 intent.putExtra("eventId", eventID);

@@ -23,7 +23,7 @@ import com.example.local_loop.Category.DisplayItemActivity;
 import com.example.local_loop.Event.UserEventActivity;
 import com.example.local_loop.R;
 import com.example.local_loop.Login.LoginActivity;
-import com.example.local_loop.UserList.UserList;
+import com.example.local_loop.UserDisplay.UserDisplayActivity;
 
 public class WelcomePage extends AppCompatActivity {
     private View decorView;
@@ -107,7 +107,8 @@ public class WelcomePage extends AppCompatActivity {
     public void OnUsersButton(View view) {
         username = getIntent().getStringExtra("username");
         userRole = getIntent().getStringExtra("userType");
-        Intent intent = new Intent(WelcomePage.this, UserList.class);
+        Intent intent = new Intent(WelcomePage.this, UserDisplayActivity.class);
+        intent.putExtra(EXTRA_SOURCE, SOURCE_ADMIN);
         intent.putExtra("username", username);// Pass the username to the WelcomePage
         intent.putExtra("userRole", userRole); // Pass the userType to the WelcomePage
         startActivity(intent);

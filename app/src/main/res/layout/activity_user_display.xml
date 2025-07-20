@@ -9,13 +9,13 @@
     android:textSize="20sp">
 
     <TextView
-        android:id="@+id/attendeeListTitle"
+        android:id="@+id/pageTitleTextView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/attendeeList"
         android:background="@color/white"
-        android:textColor="@android:color/holo_blue_dark"
         android:padding="24dp"
+        android:text="@string/unknown"
+        android:textColor="@android:color/holo_blue_dark"
         android:textSize="30sp"
         android:textStyle="bold"
         app:layout_constraintEnd_toEndOf="parent"
@@ -23,16 +23,16 @@
         app:layout_constraintTop_toTopOf="parent" />
 
     <com.google.android.material.button.MaterialButton
-        android:id="@+id/attendeeBackButton"
+        android:id="@+id/userBackButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="8dp"
-        android:layout_marginBottom="8dp"
+        android:layout_marginStart="24dp"
+        android:layout_marginBottom="24dp"
         android:backgroundTint="@color/black"
         android:contentDescription="@string/back_button"
-        android:elevation="8dp"
         android:gravity="center"
         android:text=""
+        android:elevation="8dp"
         app:icon="@drawable/undo_icon"
         app:iconGravity="textStart"
         app:iconSize="25dp"
@@ -43,25 +43,25 @@
         app:layout_constraintStart_toStartOf="parent" />
 
     <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/attendee_recycler"
+        android:id="@+id/recycler"
         android:layout_width="0dp"
         android:layout_height="0dp"
         android:paddingBottom="24dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintBottom_toTopOf="@id/attendeeBackButton"
-        app:layout_constraintTop_toBottomOf="@id/attendeeListTitle" />
+        app:layout_constraintBottom_toTopOf="@id/userBackButton"
+        app:layout_constraintTop_toBottomOf="@id/pageTitleTextView" />
 
     <TextView
-        android:id="@+id/noAttendeesTextView"
+        android:id="@+id/noUsersTextView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/no_attendees"
+        android:text="@string/unknown"
         android:visibility="invisible"
-        app:layout_constraintBottom_toBottomOf="@+id/attendee_recycler"
-        app:layout_constraintEnd_toEndOf="@+id/attendee_recycler"
-        app:layout_constraintStart_toStartOf="@+id/attendee_recycler"
-        app:layout_constraintTop_toBottomOf="@+id/attendeeListTitle" />
+        app:layout_constraintBottom_toBottomOf="@+id/recycler"
+        app:layout_constraintEnd_toEndOf="@+id/recycler"
+        app:layout_constraintStart_toStartOf="@+id/recycler"
+        app:layout_constraintTop_toBottomOf="@+id/pageTitleTextView" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

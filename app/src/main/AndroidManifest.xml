@@ -39,7 +39,7 @@
             android:name=".Category.DisplayItemActivity"
             android:exported="false" />
         <activity
-            android:name=".UserList.UserList"
+            android:name=".UserDisplay.UserDisplayActivity"
             android:exported="false" />
         <activity
             android:name=".AttendeeList.AttendeeList"

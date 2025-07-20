@@ -313,9 +313,13 @@ public class DisplayItemActivity extends AppCompatActivity {
             }
         }
 
-        String dialogTitle = itemToEdit == null
-                ? "Add Category"
-                : isEvent ? "Edit Event" : "Edit Category";
+        String dialogTitle;
+        if (itemToEdit == null) {
+            dialogTitle = isEvent ? "Add Event" : "Add Category";
+        } else {
+            dialogTitle = isEvent ? "Edit Event" : "Edit Category";
+        }
+
 
         AlertDialog dialog = new AlertDialog.Builder(this)
                 .setCustomTitle(createDialogTitle(dialogTitle))
@@ -328,7 +332,11 @@ public class DisplayItemActivity extends AppCompatActivity {
                 .create();
 
         dialog.setOnShowListener(dialogInterface -> {
-                    Button confirmButton = dialog.getButton(AlertDialog.BUTTON_POSITIVE);
+                Button confirmButton = dialog.getButton(AlertDialog.BUTTON_POSITIVE);
+                Button cancelButton = dialog.getButton(AlertDialog.BUTTON_NEGATIVE);
+                // Set button colors
+                confirmButton.setTextColor(ContextCompat.getColor(this, android.R.color.holo_blue_dark));
+                cancelButton.setTextColor(ContextCompat.getColor(this, android.R.color.darker_gray));
                     confirmButton.setOnClickListener(v -> {
                         String name = Objects.requireNonNull(nameInput.getText()).toString().trim();
                         String description = Objects.requireNonNull(descriptionInput.getText()).toString().trim();
@@ -527,7 +535,7 @@ public class DisplayItemActivity extends AppCompatActivity {
         dialogTitle.setTextSize(20);
         dialogTitle.setTypeface(null, Typeface.BOLD);
         dialogTitle.setPadding(40, 30, 40, 10);
-        dialogTitle.setTextColor(ContextCompat.getColor(this, R.color.black));
+        dialogTitle.setTextColor(ContextCompat.getColor(this, R.color.holo_dark_blue));
         dialogTitle.setGravity(Gravity.CENTER);
         return dialogTitle;
     }
