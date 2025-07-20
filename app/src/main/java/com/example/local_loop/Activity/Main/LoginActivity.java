@@ -136,5 +136,4 @@ public class LoginActivity  extends AppCompatActivity{
         imm.hideSoftInputFromWindow(view.getWindowToken(), InputMethodManager.HIDE_IMPLICIT_ONLY);
     }
 
-
 }
