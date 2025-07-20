@@ -25,7 +25,11 @@ import com.example.local_loop.databinding.ActivityLoginBinding;
 import com.example.local_loop.Welcome.WelcomePage;
 import com.example.local_loop.Welcome.AdminWelcomePage;
 import com.example.local_loop.Welcome.OrganizerWelcomePage;
+import com.google.android.material.textfield.TextInputLayout;
+
 import android.content.Intent;
+
+import java.util.Objects;
 
 
 public class LoginActivity extends AppCompatActivity {
@@ -47,6 +51,26 @@ public class LoginActivity extends AppCompatActivity {
 
         final EditText usernameEditText = binding.username;
         final EditText passwordEditText = binding.password;
+        TextInputLayout passwordLayout = findViewById(R.id.passwordLayout);
+
+        // Initially hide the eye icon
+        passwordLayout.setEndIconVisible(false);
+
+        // Watch for password text changes
+        passwordEditText.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                // Show icon only when input length >= 6
+                passwordLayout.setEndIconVisible(s.length() >= 6);
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {}
+        });
+
         final Button loginButton = binding.login;
         final ProgressBar loadingProgressBar = binding.loading;
 
@@ -93,16 +117,16 @@ public class LoginActivity extends AppCompatActivity {
 
             @Override
             public void afterTextChanged(Editable s) {
-                loginViewModel.loginDataChanged(usernameEditText.getText().toString(),
-                        passwordEditText.getText().toString());
+                loginViewModel.loginDataChanged(Objects.requireNonNull(usernameEditText.getText()).toString(),
+                        Objects.requireNonNull(passwordEditText.getText()).toString());
             }
         };
         usernameEditText.addTextChangedListener(afterTextChangedListener);
         passwordEditText.addTextChangedListener(afterTextChangedListener);
         passwordEditText.setOnEditorActionListener((v, actionId, event) -> {
             if (actionId == EditorInfo.IME_ACTION_DONE) {
-                loginViewModel.login(usernameEditText.getText().toString(),
-                        passwordEditText.getText().toString());
+                loginViewModel.login(Objects.requireNonNull(usernameEditText.getText()).toString(),
+                        Objects.requireNonNull(passwordEditText.getText()).toString());
             }
             return false;
         });
@@ -110,9 +134,9 @@ public class LoginActivity extends AppCompatActivity {
 
         loginButton.setOnClickListener(v -> {
             loadingProgressBar.setVisibility(View.VISIBLE);
-            if (db.isActive(usernameEditText.getText().toString()) == 1) {
+            if (db.isActive(Objects.requireNonNull(usernameEditText.getText()).toString()) == 1) {
                 loginViewModel.login(usernameEditText.getText().toString(),
-                        passwordEditText.getText().toString());
+                        Objects.requireNonNull(passwordEditText.getText()).toString());
             } else {
                 Toast.makeText(LoginActivity.this, "Error: account is disabled.", Toast.LENGTH_LONG).show();
                 loadingProgressBar.setVisibility(View.GONE);

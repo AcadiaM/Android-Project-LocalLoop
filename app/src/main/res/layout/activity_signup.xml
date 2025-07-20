@@ -201,22 +201,24 @@
             app:counterEnabled="true"
             app:counterMaxLength="32"
             app:cursorColor="@color/black"
+            app:passwordToggleEnabled="true"
             app:helperText="Required*"
             app:helperTextEnabled="true"
             app:helperTextTextColor="@color/design_default_color_error"
-            app:hintTextColor="@color/black"
-            app:passwordToggleEnabled="true">
+            app:hintTextColor="@color/black"> <!--app:endIconMode="password_toggle"-->
 
             <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/passwordInputEditText"
                 android:layout_width="match_parent"
                 android:layout_height="60dp"
                 android:layout_weight="1"
+                android:inputType="textPassword"
                 android:backgroundTint="@android:color/holo_blue_light"
                 android:textColor="@color/black"
                 android:textColorHighlight="@color/material_dynamic_neutral_variant90"
                 android:textColorHint="@color/black"
-                android:textColorLink="@color/black" />
+                android:textColorLink="@color/black"
+                tools:ignore="Deprecated" />
         </com.google.android.material.textfield.TextInputLayout>
 
         <Space

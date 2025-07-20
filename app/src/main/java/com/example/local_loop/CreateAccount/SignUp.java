@@ -75,7 +75,7 @@ public class SignUp extends AppCompatActivity {
             emailInput.setError("Email exists, please head to login page.");
             valid = false;
         }
-        if(password.isEmpty() || password.length()<6){
+        if(password.isEmpty() || password.length()<5){
             passwordInput.setError("Invalid Password:must be more than 6 characters");
            valid = false;
         }
