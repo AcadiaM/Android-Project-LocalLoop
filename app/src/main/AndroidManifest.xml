@@ -20,7 +20,7 @@
             android:name=".Welcome.OrganizerWelcomePage"
             android:exported="false" />
         <activity
-            android:name=".Welcome.AdminWelcomePage"
+            android:name=".Welcome.WelcomePage"
             android:exported="false" />
         <activity
             android:name=".Welcome.WelcomePage"

@@ -1,10 +1,17 @@
 package com.example.local_loop.Welcome;
 
 import static com.example.local_loop.Event.EventDetailsActivity.EXTRA_SOURCE;
+import static com.example.local_loop.Event.EventDetailsActivity.SOURCE_ADMIN;
+import static com.example.local_loop.Event.EventDetailsActivity.SOURCE_ORGANIZER;
 import static com.example.local_loop.Event.EventDetailsActivity.SOURCE_PARTICIPANT;
 
+import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.View;
+import android.widget.Button;
+import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
@@ -12,20 +19,19 @@ import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
+import com.example.local_loop.Category.CategoryActivity;
+import com.example.local_loop.Event.EventActivity;
 import com.example.local_loop.Event.UserEventActivity;
 import com.example.local_loop.Event.UserMyEvent;
 import com.example.local_loop.R;
 import com.example.local_loop.Login.LoginActivity;
+import com.example.local_loop.UserList.UserList;
 
-import android.view.View;
-import android.widget.TextView;
-import android.widget.Toast;
-
-//The normal user welcome page that displays a welcome message with the username and user type
 public class WelcomePage extends AppCompatActivity {
-
     private View decorView;
+    private String username, userType;
 
+    @SuppressLint("SetTextI18n")
     @SuppressWarnings("deprecation")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -34,15 +40,39 @@ public class WelcomePage extends AppCompatActivity {
         setContentView(R.layout.activity_welcome_page);
 
         TextView welcomeTextView = findViewById(R.id.welcomeTextView);
+        Button button1 = findViewById(R.id.firstButton);
+        Button button2 = findViewById(R.id.secondButton);
+        Button button3 = findViewById(R.id.thirdButton);
 
         // Retrieve the username and userType from the Intent
         String firstname = getIntent().getStringExtra("firstname");
-        String userType = getIntent().getStringExtra("userType");
+        username = getIntent().getStringExtra("username");
+        userType = getIntent().getStringExtra("userType");
 
         String welcomeMessage = "Welcome " + firstname + ".\nYou are logged in as " + userType + ".";
         welcomeTextView.setText(welcomeMessage);
 
-        ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main), (v, insets) -> {
+        if (userType.equals("admin")){
+            button1.setOnClickListener(this::OnUsersButton);
+            button2.setOnClickListener(this::OnListCategoriesButton);
+            button3.setOnClickListener(this::OnEventsButton);
+        } else if (userType.equals("organizer")){
+            button1.setText("Event Management");
+            button1.setOnClickListener(this::OnEventsButton);
+            button2.setVisibility(View.INVISIBLE);
+            button2.setEnabled(false);
+            button3.setVisibility(View.INVISIBLE);
+            button3.setEnabled(false);
+        } else {
+            button1.setText("Browse Events");
+            button1.setOnClickListener(this::OnBrowseEventsButton);
+            button2.setText("My Events");
+            button2.setOnClickListener(this::OnMyEventsButton);
+            button3.setVisibility(View.INVISIBLE);
+            button3.setEnabled(false);
+        }
+
+        ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.welcomeTextView), (v, insets) -> {
             Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
             return insets;
@@ -57,12 +87,13 @@ public class WelcomePage extends AppCompatActivity {
         });
 
     }
-
-    public void OnBrowseEventsButton(View view){
-        Intent intent = new Intent(WelcomePage.this, UserEventActivity.class);
-        intent.putExtra(EXTRA_SOURCE, SOURCE_PARTICIPANT);
-        intent.putExtra("username", getIntent().getStringExtra("username"));// Pass the username to the WelcomePage
-        intent.putExtra("userType", getIntent().getStringExtra("userType")); // Pass the userType to the WelcomePage
+    public void OnListCategoriesButton(View view) {
+        username = getIntent().getStringExtra("username");
+        userType = getIntent().getStringExtra("userType");
+        Intent intent = new Intent(WelcomePage.this, CategoryActivity.class);
+        intent.putExtra(EXTRA_SOURCE, SOURCE_ADMIN);
+        intent.putExtra("username", username);// Pass the username to the WelcomePage
+        intent.putExtra("userType", userType); // Pass the userType to the WelcomePage
         startActivity(intent);
     }
 
@@ -73,6 +104,33 @@ public class WelcomePage extends AppCompatActivity {
         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
         startActivity(intent);
         finish();
+    }
+
+    public void OnUsersButton(View view) {
+        username = getIntent().getStringExtra("username");
+        userType = getIntent().getStringExtra("userType");
+        Intent intent = new Intent(WelcomePage.this, UserList.class);
+        intent.putExtra("username", username);// Pass the username to the WelcomePage
+        intent.putExtra("userType", userType); // Pass the userType to the WelcomePage
+        startActivity(intent);
+    }
+
+    public void OnEventsButton(View view) {
+        username = getIntent().getStringExtra("username");
+        userType = getIntent().getStringExtra("userType");
+        Intent intent = new Intent(WelcomePage.this, EventActivity.class);
+        intent.putExtra(EXTRA_SOURCE, SOURCE_ORGANIZER);
+        intent.putExtra("username", username);// Pass the username to the WelcomePage
+        intent.putExtra("userType", userType); // Pass the userType to the WelcomePage
+        startActivity(intent);
+    }
+
+    public void OnBrowseEventsButton(View view){
+        Intent intent = new Intent(WelcomePage.this, UserEventActivity.class);
+        intent.putExtra(EXTRA_SOURCE, SOURCE_PARTICIPANT);
+        intent.putExtra("username", getIntent().getStringExtra("username"));// Pass the username to the WelcomePage
+        intent.putExtra("userType", getIntent().getStringExtra("userType")); // Pass the userType to the WelcomePage
+        startActivity(intent);
     }
 
     public void OnMyEventsButton(View view){
@@ -102,5 +160,5 @@ public class WelcomePage extends AppCompatActivity {
                 | View.SYSTEM_UI_FLAG_FULLSCREEN
                 | View.SYSTEM_UI_FLAG_HIDE_NAVIGATION);
     }
-
 }
+

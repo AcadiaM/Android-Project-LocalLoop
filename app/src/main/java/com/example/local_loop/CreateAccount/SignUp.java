@@ -2,9 +2,8 @@ package com.example.local_loop.CreateAccount;
 
 import com.example.local_loop.Login.LoginActivity;
 import com.example.local_loop.R;
-import com.example.local_loop.database.DatabaseHelper;
-import com.example.local_loop.Welcome.OrganizerWelcomePage;
 import com.example.local_loop.Welcome.WelcomePage;
+import com.example.local_loop.database.DatabaseHelper;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -114,22 +113,18 @@ public class SignUp extends AppCompatActivity {
         }
         else{
             User newUser;
-            if(role.equalsIgnoreCase("organizer")){
+            if(role.equalsIgnoreCase("Organizer")){
                 newUser = new Organizer(first,last, user, email, password);
+                role = "organizer";
             }
             else {
                 newUser = new Participant(first,last, user, email, password);
+                role = "participant";
             }
 
             boolean successful = dbHelper.insertUser(newUser);
             if(successful){
-                Intent intent;
-                if(role.equalsIgnoreCase("organizer")){
-                    intent = new Intent(getApplicationContext(), OrganizerWelcomePage.class);
-                }
-                else{
-                    intent = new Intent(getApplicationContext(), WelcomePage.class);
-                }
+                Intent intent = new Intent(getApplicationContext(), WelcomePage.class);
                 intent.putExtra("firstname", first);
                 intent.putExtra("username", user);
                 intent.putExtra("userType", role);
