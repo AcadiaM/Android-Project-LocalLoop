@@ -14,7 +14,7 @@ import android.widget.EditText;
 import android.widget.Toast;
 import android.content.Intent;
 
-import com.example.local_loop.Account.*;
+import com.example.local_loop.Account.Account;
 import com.example.local_loop.R;
 import com.example.local_loop.Helpers.*;
 

@@ -10,19 +10,21 @@ import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
 
-import com.example.local_loop.Account.Account;
-import com.example.local_loop.UserContent.Category;
-import com.example.local_loop.R;
-import com.example.local_loop.Displays.UserDisplayActivity;
+import com.example.local_loop.Activity.Displays.*;
 import com.example.local_loop.Helpers.DatabaseHelper;
+import com.example.local_loop.R;
+import com.example.local_loop.UserContent.Category;
 
 import java.util.Objects;
 
 public class EventDetailsActivity extends AppCompatActivity {
 
-    private DatabaseHelper dBHelper;
-    private Account session;
+    DatabaseHelper dBHelper;
 
+    public static final String EXTRA_SOURCE = "source";
+    public static final String SOURCE_ADMIN = "admin_page";
+    public static final String SOURCE_ORGANIZER = "organizer_page";
+    public static final String SOURCE_PARTICIPANT = "participant_page";
 
     @SuppressLint("SetTextI18n")
     @SuppressWarnings("deprecation")
@@ -38,8 +40,8 @@ public class EventDetailsActivity extends AppCompatActivity {
         TextView feeText = findViewById(R.id.eventDetailFee);
         TextView dateTimeText = findViewById(R.id.eventDetailDateTime);
         TextView contextInfoText = findViewById(R.id.eventDetailContextInfo);
-        Button joinButton = findViewById(R.id.joinButton);
 
+        Button joinButton = findViewById(R.id.joinButton);
 
         // Get data passed from intent
         int eventID = getIntent().getIntExtra("eventId", -1);

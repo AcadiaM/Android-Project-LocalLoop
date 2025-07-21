@@ -1,4 +1,4 @@
-package com.example.local_loop.Adapters;
+package com.example.local_loop.Display;
 
 import android.view.View;
 import android.widget.TextView;

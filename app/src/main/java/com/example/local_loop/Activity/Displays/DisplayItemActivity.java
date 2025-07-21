@@ -1,40 +1,40 @@
-package com.example.local_loop.Displays;
+package com.example.local_loop.Activity.Displays;
 
+import static com.example.local_loop.Details.EventDetailsActivity.EXTRA_SOURCE;
+import static com.example.local_loop.Details.EventDetailsActivity.SOURCE_ADMIN;
+import static com.example.local_loop.Details.EventDetailsActivity.SOURCE_ORGANIZER;
+
+import android.app.AlertDialog;
 import android.app.DatePickerDialog;
 import android.app.TimePickerDialog;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.Typeface;
-import android.util.Log;
+import android.os.Bundle;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
-
-import android.content.Intent;
-import android.os.Bundle;
 import android.widget.ArrayAdapter;
-import android.widget.Spinner;
-import android.widget.TextView;
 import android.widget.Button;
 import android.widget.ImageButton;
+import android.widget.Spinner;
+import android.widget.TextView;
 import android.widget.Toast;
 
-import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.example.local_loop.Account.Account;
+import com.example.local_loop.Display.DisplayItemAdapter;
 import com.example.local_loop.Details.CategoryDetailsActivity;
-import com.example.local_loop.UserContent.Category;
-import com.example.local_loop.Adapters.DisplayItemAdapter;
-import com.example.local_loop.UserContent.Event;
 import com.example.local_loop.Details.EventDetailsActivity;
-import com.example.local_loop.Helpers.DisplayItem;
-import com.example.local_loop.Helpers.MODE;
-import com.example.local_loop.R;
 import com.example.local_loop.Helpers.DatabaseHelper;
+import com.example.local_loop.Helpers.DisplayItem;
+import com.example.local_loop.R;
+import com.example.local_loop.UserContent.Category;
+import com.example.local_loop.UserContent.Event;
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.android.material.textfield.TextInputLayout;
 
@@ -46,43 +46,35 @@ import java.util.Locale;
 import java.util.Objects;
 
 public class DisplayItemActivity extends AppCompatActivity {
-    //Session Data Values
-    private Account session; //admin or organizer only! (make organizer default for type safety?
-    private DatabaseHelper dbHelper;
-    private MODE mode;
-    private String role;
 
-    //Views
+    private DatabaseHelper dbHelper;
     private DisplayItemAdapter displayItemAdapter;
+
     private ImageButton addButton, removeButton, editButton;
+
+    private boolean isDeleteMode = false;
+
     private final List<DisplayItem> selectedItems = new ArrayList<>();
 
+    private boolean isEditMode = false;
 
+    private String source;    // "SOURCE_ADMIN" or "SOURCE_ORGANIZER"
+    private String organizerUsername;  // For filtering events
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_display_item);
+
         dbHelper = new DatabaseHelper(this);
 
-        session = getIntent().getParcelableExtra("user", Account.class);
-        mode = (MODE) getIntent().getSerializableExtra("MODE",MODE.class);
-        if (session == null) {
-            Log.d("WelcomePage","Session is null girlie");
-            finish();
-            return;
-        }
-        if(mode == null){
-            mode = MODE.DEFAULT;
-        }
-        role = session.getRole();
+        source = getIntent().getStringExtra(EXTRA_SOURCE);
+        organizerUsername = getIntent().getStringExtra("username");
 
         setupButtons();
         setupRecyclerView();
         loadItems();
     }
-
-    //METHODS
 
     private void setupButtons() {
         addButton = findViewById(R.id.addButton);
@@ -110,32 +102,43 @@ public class DisplayItemActivity extends AppCompatActivity {
                     openEventDetails((Event) item);
                 }
             }
+
             @Override
             public void onLongClick(DisplayItem item) {
                 showItemOptions(item);
             }
+
             @Override
             public void onRenameClick(DisplayItem item) {
                 showItemDialog(item);
                 exitEditMode();
             }
         });
+
         recyclerView.setAdapter(displayItemAdapter);
     }
 
     private void openCategoryDetails(Category category) {
         Intent intent = new Intent(this, CategoryDetailsActivity.class);
-        //intent.putExtra("sourceContext", DisplayItemActivity.class.getSimpleName());
-        intent.putExtra("user", session);
-        intent.putExtras(category.toBundle());
+        intent.putExtra(EXTRA_SOURCE, getIntent().getStringExtra(EXTRA_SOURCE));
+        intent.putExtra("sourceContext", DisplayItemActivity.class.getSimpleName());
+        intent.putExtra("categoryId", category.getID());
+        intent.putExtra("categoryName", category.getName());
+        intent.putExtra("categoryDescription", category.getDescription());
         startActivity(intent);
     }
 
     private void openEventDetails(Event event) {
         Intent intent = new Intent(this, EventDetailsActivity.class);
-        intent.putExtra("user", session);
-        intent.putExtras(event.toBundle());
-        //intent.putExtra("sourceContext", DisplayItemActivity.class.getSimpleName());
+        intent.putExtra(EXTRA_SOURCE, getIntent().getStringExtra(EXTRA_SOURCE));
+        intent.putExtra("sourceContext", DisplayItemActivity.class.getSimpleName());
+        intent.putExtra("eventId", event.getID());
+        intent.putExtra("title", event.getName());
+        intent.putExtra("description", event.getDescription());
+        intent.putExtra("fee", String.valueOf(event.getFee()));
+        intent.putExtra("datetime", event.getDateTime());
+        intent.putExtra("categoryId", event.getCategoryId());
+        intent.putExtra("organizer", event.getOrganizer());
         startActivity(intent);
     }
 
@@ -145,22 +148,24 @@ public class DisplayItemActivity extends AppCompatActivity {
             Toast.makeText(this, "No items to delete", Toast.LENGTH_SHORT).show();
             return;
         }
-        switch(mode){
-            case DELETE:
-                for (DisplayItem item : selectedItems) {
-                    if (item instanceof Category) {
-                        dbHelper.deleteCategory(item.getID());
-                    } else if (item instanceof Event) {
-                        dbHelper.deleteEvent(item.getID());
-                    }
+
+        if (!isDeleteMode) {
+            enterDeleteMode();
+        } else {
+            for (DisplayItem item : selectedItems) {
+                if (item instanceof Category) {
+                    dbHelper.deleteCategory(item.getID());
+                } else if (item instanceof Event) {
+                    dbHelper.deleteEvent(item.getID());
                 }
-                Toast.makeText(this, "Deleted " + selectedItems.size() + " items", Toast.LENGTH_SHORT).show();
-                exitDeleteMode();
-                loadItems();
-            default:
-                enterDeleteMode();
+            }
+
+            Toast.makeText(this, "Deleted " + selectedItems.size() + " items", Toast.LENGTH_SHORT).show();
+            exitDeleteMode();
+            loadItems();
         }
     }
+
 
     private void handleEditButton() {
         if (displayItemAdapter.getItemCount() == 0) {
@@ -171,46 +176,45 @@ public class DisplayItemActivity extends AppCompatActivity {
     }
 
     private void enterDeleteMode() {
-        mode = MODE.DELETE;
+        isDeleteMode = true;
         selectedItems.clear();
         Toast.makeText(this, "Select items to delete", Toast.LENGTH_SHORT).show();
         addButton.setEnabled(false);
         editButton.setEnabled(false);
         removeButton.setImageResource(R.drawable.outline_check_circle_24);
 
-        //TODO put MODE in CategoryAdaptor
         displayItemAdapter.setDeleteMode(true);
         displayItemAdapter.setSelectedItems(selectedItems);
     }
 
     private void exitDeleteMode() {
-        mode = MODE.DEFAULT;
+        isDeleteMode = false;
         selectedItems.clear();
         addButton.setEnabled(true);
         editButton.setEnabled(true);
         removeButton.setImageResource(R.drawable.baseline_delete_forever_24);
 
-        //displayItemAdapter.setDeleteMode(false);
+        displayItemAdapter.setDeleteMode(false);
         displayItemAdapter.setSelectedItems(new ArrayList<>());
     }
 
     private void loadItems() {
         List<DisplayItem> items = new ArrayList<>();
 
-        if (role=="admin") {
+        if (SOURCE_ADMIN.equals(source)) {
             items.addAll(dbHelper.getAllCategories());
-        } else if (role == "organizer") {
-            //TODO
-            //items.addAll(dbHelper.getEventsByOrganizer(organizerUsername));
+        } else if (SOURCE_ORGANIZER.equals(source)) {
+            items.addAll(dbHelper.getEventsByOrganizer(organizerUsername));
         }
+
         displayItemAdapter.updateItems(items);
+
         TextView noCategoriesTextView = findViewById(R.id.noTextView);
 
         if (items.isEmpty()) {
-            if (role == "admin") {
+            if (SOURCE_ADMIN.equals(source)) {
                 noCategoriesTextView.setText(R.string.no_categories_created);
-            }
-            else if(role == "organizer") {
+            } else if (SOURCE_ORGANIZER.equals(source)) {
                 noCategoriesTextView.setText(R.string.no_events_created);
             }
             noCategoriesTextView.setVisibility(View.VISIBLE);
@@ -219,10 +223,16 @@ public class DisplayItemActivity extends AppCompatActivity {
         }
     }
 
-    private void showItemOptions(DisplayItem item) {
-        String itemID = (String) item.getID();
 
-        new AlertDialog.Builder(this).setID(itemName).setItems(options, (dialog, which) -> {
+
+
+    private void showItemOptions(DisplayItem item) {
+        String itemName = (item instanceof Category) ? item.getName() : ((Event) item).getName();
+        String[] options = {"Rename", "Delete"};
+
+        new AlertDialog.Builder(this)
+                .setTitle(itemName)
+                .setItems(options, (dialog, which) -> {
                     if (which == 0) {  // Rename
                         showItemDialog(item);
                     } else if (which == 1) {  // Delete
@@ -235,32 +245,19 @@ public class DisplayItemActivity extends AppCompatActivity {
                     }
                 })
                 .show();
-
-        switch(role){
-            case "organizer":
-
-            case "admin":
-            default:
-                Log.d("DIAct","P not allowed???");
-        }
-
-        String[] options = {"Rename", "Delete"};
-    }
-
-    private void showDeleteDialog(int id) {
-        new AlertDialog.Builder(this)
-                .setTitle("Delete?")
-                .setMessage("Delete item ID: " + id + "?")
-                .setPositiveButton("Delete", (dialog, which) -> {
-                    // TODO dbHelper.deleteItem(id);
-                    loadItems();
-                })
-                .setNegativeButton("Cancel", null)
-                .show();
     }
 
     private void showItemDialog(DisplayItem itemToEdit) {
-        boolean isEvent = SOURCE_ORGANIZER.equals(session);
+        boolean isEvent = SOURCE_ORGANIZER.equals(source);
+
+        if (isEvent) {
+            List<Category> categories = dbHelper.getAllCategories();
+            if (categories == null || categories.isEmpty()) {
+                Toast.makeText(this, "No categories exist. Please create a category first.", Toast.LENGTH_LONG).show();
+                return;  // Stop here, do not open dialog
+            }
+        }
+
 
         LayoutInflater inflater = LayoutInflater.from(this);
         View dialogView = inflater.inflate(
@@ -298,12 +295,8 @@ public class DisplayItemActivity extends AppCompatActivity {
 
             List<Category> categories = dbHelper.getAllCategories();
             List<String> categoryNames = new ArrayList<>();
-            for (Category cat : categories) {
-                categoryNames.add(cat.getName());
-            }
-            ArrayAdapter<String> spinnerAdapter = new ArrayAdapter<>(
-                    this, android.R.layout.simple_spinner_item, categoryNames
-            );
+            for (Category cat : categories) categoryNames.add(cat.getName());
+            ArrayAdapter<String> spinnerAdapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, categoryNames);
             spinnerAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
             categorySpinner.setAdapter(spinnerAdapter);
         } else {
@@ -317,9 +310,9 @@ public class DisplayItemActivity extends AppCompatActivity {
         if (itemToEdit != null) {
             if (isEvent) {
                 Event event = (Event) itemToEdit;
-                nameInput.setText(event.getTitle());
+                nameInput.setText(event.getName());
                 descriptionInput.setText(event.getDescription());
-                if (feeInput != null) feeInput.setText(String.valueOf(event.getFee()));
+                feeInput.setText(String.valueOf(event.getFee()));
                 datetimeInput.setText(event.getDateTime());
             } else {
                 Category category = (Category) itemToEdit;
@@ -328,13 +321,9 @@ public class DisplayItemActivity extends AppCompatActivity {
             }
         }
 
-        String dialogTitle;
-        if (itemToEdit == null) {
-            dialogTitle = isEvent ? "Add Event" : "Add Category";
-        } else {
-            dialogTitle = isEvent ? "Edit Event" : "Edit Category";
-        }
-
+        String dialogTitle = (itemToEdit == null)
+                ? (isEvent ? "Add Event" : "Add Category")
+                : (isEvent ? "Edit Event" : "Edit Category");
 
         AlertDialog dialog = new AlertDialog.Builder(this)
                 .setCustomTitle(createDialogTitle(dialogTitle))
@@ -347,112 +336,104 @@ public class DisplayItemActivity extends AppCompatActivity {
                 .create();
 
         dialog.setOnShowListener(dialogInterface -> {
-                Button confirmButton = dialog.getButton(AlertDialog.BUTTON_POSITIVE);
-                Button cancelButton = dialog.getButton(AlertDialog.BUTTON_NEGATIVE);
-                // Set button colors
-                confirmButton.setTextColor(ContextCompat.getColor(this, android.R.color.holo_blue_dark));
-                cancelButton.setTextColor(ContextCompat.getColor(this, android.R.color.darker_gray));
-                    confirmButton.setOnClickListener(v -> {
-                        String name = Objects.requireNonNull(nameInput.getText()).toString().trim();
-                        String description = Objects.requireNonNull(descriptionInput.getText()).toString().trim();
+            Button confirmButton = dialog.getButton(AlertDialog.BUTTON_POSITIVE);
+            Button cancelButton = dialog.getButton(AlertDialog.BUTTON_NEGATIVE);
+            confirmButton.setTextColor(ContextCompat.getColor(this, android.R.color.holo_blue_dark));
+            cancelButton.setTextColor(ContextCompat.getColor(this, android.R.color.darker_gray));
 
-                        nameLayout.setError(null);
-                        descriptionLayout.setError(null);
+            confirmButton.setOnClickListener(v -> {
+                String name = Objects.requireNonNull(nameInput.getText()).toString().trim();
+                String description = Objects.requireNonNull(descriptionInput.getText()).toString().trim();
+                nameLayout.setError(null);
+                descriptionLayout.setError(null);
 
-                        boolean valid = true;
+                boolean valid = true;
 
-                        // Empty field checks
-                        if (name.isEmpty()) {
-                            nameLayout.setError("This field cannot be blank.");
+                if (name.isEmpty()) {
+                    nameLayout.setError("This field cannot be blank.");
+                    valid = false;
+                }
+                if (description.isEmpty()) {
+                    descriptionLayout.setError("This field cannot be blank.");
+                    valid = false;
+                }
+
+                if (isEvent) {
+                    boolean nameExists = dbHelper.eventTitleExists(name);
+                    if (nameExists && (itemToEdit == null || !name.equals(((Event) itemToEdit).getName()))) {
+                        nameLayout.setError("Event title already exists.");
+                        valid = false;
+                    }
+                } else {
+                    boolean nameExists = dbHelper.categoryNameExists(name);
+                    if (nameExists && (itemToEdit == null || !name.equals(itemToEdit.getName()))) {
+                        nameLayout.setError("Category name already exists.");
+                        valid = false;
+                    }
+                }
+
+                double fee = 0.0;
+                String datetime = "";
+                int categoryId = 1;
+
+                if (isEvent) {
+                    String feeText = Objects.requireNonNull(feeInput.getText()).toString().trim();
+                    String datetimeText = Objects.requireNonNull(datetimeInput.getText()).toString().trim();
+
+                    feeLayout.setError(null);
+                    datetimeLayout.setError(null);
+
+                    if (feeText.isEmpty()) {
+                        feeLayout.setError("Fee is required.");
+                        valid = false;
+                    } else {
+                        try {
+                            fee = Double.parseDouble(feeText);
+                        } catch (NumberFormatException e) {
+                            feeLayout.setError("Invalid fee value.");
                             valid = false;
                         }
-                        if (description.isEmpty()) {
-                            descriptionLayout.setError("This field cannot be blank.");
-                            valid = false;
-                        }
+                    }
 
-                        // Duplicate checks (only when adding new)
-                        if (itemToEdit == null) {
-                            if (isEvent) {
-                                if (dbHelper.eventTitleExists(name)) {
-                                    nameLayout.setError("Event title already exists.");
-                                    valid = false;
-                                }
-                            } else {
-                                if (dbHelper.categoryNameExists(name)) {
-                                    nameLayout.setError("Category name already exists.");
-                                    valid = false;
-                                }
-                            }
-                        }
+                    if (datetimeText.isEmpty()) {
+                        datetimeLayout.setError("Date/Time is required.");
+                        valid = false;
+                    } else {
+                        datetime = datetimeText;
+                    }
 
-                        double fee = 0.0;
-                        String datetime = "";
-                        int categoryId = 1;
+                    int selectedPosition = categorySpinner.getSelectedItemPosition();
+                    if (selectedPosition >= 0) {
+                        categoryId = dbHelper.getAllCategories().get(selectedPosition).getID();
+                    } else {
+                        Toast.makeText(this, "Please select a category.", Toast.LENGTH_SHORT).show();
+                        valid = false;
+                    }
+                }
 
-                        // Event-specific checks
+                if (valid) {
+                    if (itemToEdit == null) {
                         if (isEvent) {
-                            assert feeInput != null;
-                            String feeText = Objects.requireNonNull(feeInput.getText()).toString().trim();
-                            String datetimeText = Objects.requireNonNull(datetimeInput.getText()).toString().trim();
-
-                            if (feeText.isEmpty()) {
-                                feeLayout.setError("Fee is required.");
-                                valid = false;
-                            } else {
-                                try {
-                                    fee = Double.parseDouble(feeText);
-                                } catch (NumberFormatException e) {
-                                    feeLayout.setError("Invalid fee value.");
-                                    valid = false;
-                                }
-                            }
-
-                            if (datetimeText.isEmpty()) {
-                                datetimeLayout.setError("Date/Time is required.");
-                                valid = false;
-                            } else {
-                                datetime = datetimeText;
-                            }
-
-                            int selectedPosition = categorySpinner.getSelectedItemPosition();
-                            if (selectedPosition >= 0) {
-                                categoryId = dbHelper.getAllCategories().get(selectedPosition).getID();
-                            } else {
-                                Toast.makeText(this, "Please select a category.", Toast.LENGTH_SHORT).show();
-                                valid = false;
-                            }
+                            dbHelper.addEvent(name, description, categoryId, datetime, fee, organizerUsername);
+                        } else {
+                            dbHelper.addCategory(name, description);
                         }
-
-                        // Final decision to save or not
-                        if (valid) {
-                            if (itemToEdit == null) {
-                                // Adding new
-                                if (isEvent) {
-                                    dbHelper.addEvent(name, description, categoryId, datetime, fee, organizerUsername);
-                                    Toast.makeText(this, "Event added", Toast.LENGTH_SHORT).show();
-                                } else {
-                                    dbHelper.addCategory(name, description);
-                                    Toast.makeText(this, "Category added", Toast.LENGTH_SHORT).show();
-                                }
-                            } else {
-                                // Updating existing
-                                if (isEvent) {
-                                    dbHelper.updateEvent(itemToEdit.getID(), name, description, fee, datetime, categoryId);
-                                    Toast.makeText(this, "Event updated", Toast.LENGTH_SHORT).show();
-                                } else {
-                                    dbHelper.renameCategory(itemToEdit.getID(), name, description);
-                                    Toast.makeText(this, "Category updated", Toast.LENGTH_SHORT).show();
-                                }
-                                exitEditMode();
-                            }
-                            loadItems();
-                            dialog.dismiss();
+                    } else {
+                        if (isEvent) {
+                            dbHelper.updateEvent(itemToEdit.getID(), name, description, fee, datetime, categoryId);
+                        } else {
+                            dbHelper.renameCategory(itemToEdit.getID(), name, description);
                         }
-                    });
-                });
-            dialog.show();
+                        exitEditMode();
+                    }
+                    loadItems();
+                    dialog.dismiss();
+                }
+            });
+        });
+        dialog.show();
     }
+
 
     private void enterEditMode() {
         isEditMode = true;
@@ -474,14 +455,14 @@ public class DisplayItemActivity extends AppCompatActivity {
     @SuppressWarnings("deprecation")
     @Override
     public void onBackPressed() {
-        switch (mode){
-            case EDIT:
-                exitEditMode();
-            case DELETE:
-                exitDeleteMode();
-                Toast.makeText(this, "Delete mode cancelled", Toast.LENGTH_SHORT).show();
-            default:
-                super.onBackPressed();
+        if (isDeleteMode) {
+            exitDeleteMode();
+            Toast.makeText(this, "Delete mode cancelled", Toast.LENGTH_SHORT).show();
+        } else if (isEditMode) {
+            exitEditMode();
+            Toast.makeText(this, "Edit mode cancelled", Toast.LENGTH_SHORT).show();
+        } else {
+            super.onBackPressed();
         }
     }
 

@@ -1,48 +1,43 @@
-package com.example.local_loop.Event;
+package com.example.local_loop.Activity.Displays;
 
 import static com.example.local_loop.Details.EventDetailsActivity.EXTRA_SOURCE;
 
 import android.content.Intent;
-import android.text.Editable;
-import android.text.TextWatcher;
-import android.util.Log;
-import android.view.View;
 import android.os.Bundle;
-import android.widget.ArrayAdapter;
-import android.widget.Button;
-import android.widget.TextView;
-import android.widget.Toast;
-import android.widget.EditText;
-import android.widget.Spinner;
 import android.os.Handler;
 import android.os.Looper;
+import android.text.Editable;
+import android.text.TextWatcher;
+import android.view.View;
+import android.widget.ArrayAdapter;
+import android.widget.Button;
+import android.widget.EditText;
+import android.widget.Spinner;
+import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-
-import com.example.local_loop.Account.Account;
 import com.example.local_loop.Details.EventDetailsActivity;
+import com.example.local_loop.Display.DisplayItemAdapter;
+import com.example.local_loop.Helpers.DatabaseHelper;
+import com.example.local_loop.Helpers.DisplayItem;
+import com.example.local_loop.R;
 import com.example.local_loop.UserContent.Category;
 import com.example.local_loop.UserContent.Event;
-import com.example.local_loop.Helpers.DisplayItem;
-import com.example.local_loop.Adapters.DisplayItemAdapter;
-import com.example.local_loop.R;
-import com.example.local_loop.Helpers.DatabaseHelper;
 
 import java.util.ArrayList;
 import java.util.List;
-
 
 public class UserEventActivity extends AppCompatActivity {
 
     private DisplayItemAdapter eventAdapter;
     private DatabaseHelper dbHelper;
-    private Account session;
-    private boolean isBrowsing; //True is looking for new, false is checking their own
+    private String username;
+    private boolean isMyEventsMode;
 
-    //UI Instance vars
     private EditText searchBar;
     private Spinner categorySpinner;
     private final Handler handler = new Handler(Looper.getMainLooper());
@@ -56,24 +51,19 @@ public class UserEventActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_event_user_list);  // Use shared layout
 
-        session = getIntent().getParcelableExtra("user", Account.class);
-        if (session == null) {
-            Log.d("WelcomePage","Session is null girlie");
-            finish();
-            return;
-        }
-
         dbHelper = new DatabaseHelper(this);
-        isBrowsing = getIntent().getBooleanExtra("isBrowsing", true);
+        username = getIntent().getStringExtra("username");
+        isMyEventsMode = getIntent().getBooleanExtra("isMyEventsMode", false);
 
         RecyclerView eventRecyclerView = findViewById(R.id.recyclerViewEvents);
         eventRecyclerView.setLayoutManager(new GridLayoutManager(this, 2));
+
         searchBar = findViewById(R.id.searchBar);
         categorySpinner = findViewById(R.id.categorySpinner);
         TextView titleTextView = findViewById(R.id.events);
 
         // Handle UI visibility
-        if (!isBrowsing) {
+        if (isMyEventsMode) {
             searchBar.setVisibility(View.GONE);
             categorySpinner.setVisibility(View.GONE);
             // Set the title or any text view you want:
@@ -88,15 +78,26 @@ public class UserEventActivity extends AppCompatActivity {
                 if (item instanceof Event) {
                     Event event = (Event) item;
                     Intent intent = new Intent(UserEventActivity.this, EventDetailsActivity.class);
-                    intent.putExtras(event.toBundle());
+                    intent.putExtra(EXTRA_SOURCE, getIntent().getStringExtra(EXTRA_SOURCE));
+                    intent.putExtra("sourceContext", UserEventActivity.class.getSimpleName());
+                    intent.putExtra("attendeeId", username);
+                    intent.putExtra("eventId", event.getID());
+                    intent.putExtra("title", event.getName());
+                    intent.putExtra("description", event.getDescription());
+                    intent.putExtra("fee", String.valueOf(event.getFee()));
+                    intent.putExtra("datetime", event.getDateTime());
+                    intent.putExtra("categoryId", event.getCategoryId());
+                    intent.putExtra("organizer", event.getOrganizer());
                     startActivity(intent);
                 }
-                    // Do something with event
+                // Do something with event
             }
+
             @Override
             public void onLongClick(DisplayItem item) {
                 // Optional
             }
+
             @Override
             public void onRenameClick(DisplayItem item) {
                 // Optional
@@ -105,7 +106,7 @@ public class UserEventActivity extends AppCompatActivity {
 
         eventRecyclerView.setAdapter(eventAdapter);
 
-        if (!isBrowsing) {
+        if (isMyEventsMode) {
             findViewById(R.id.searchBar).setVisibility(View.GONE);
             findViewById(R.id.categorySpinner).setVisibility(View.GONE);
         } else {
@@ -126,10 +127,9 @@ public class UserEventActivity extends AppCompatActivity {
         backButton.setOnClickListener(v -> onBackPressed());
     }
 
-    //Methods
     private void loadEvents() {
         List<Event> events;
-        if (!isBrowsing) {
+        if (isMyEventsMode) {
             events = dbHelper.getEventsUserRequested(username);
         } else {
             String query = searchBar.getText().toString().trim();

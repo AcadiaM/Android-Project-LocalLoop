@@ -1,8 +1,9 @@
-package com.example.local_loop.Displays;
+package com.example.local_loop.Activity.Displays;
 
+import static com.example.local_loop.Details.EventDetailsActivity.EXTRA_SOURCE;
+import static com.example.local_loop.Details.EventDetailsActivity.SOURCE_ORGANIZER;
 
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
@@ -16,39 +17,24 @@ import androidx.core.view.WindowInsetsCompat;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.example.local_loop.Account.Account;
 import com.example.local_loop.Account.User;
-import com.example.local_loop.Adapters.UserDisplayAdapter;
-import com.example.local_loop.Helpers.MODE;
-import com.example.local_loop.R;
 import com.example.local_loop.Helpers.DatabaseHelper;
+import com.example.local_loop.R;
+import com.example.local_loop.Details.*;
+import com.example.local_loop.Display.*;
+
 
 import java.util.List;
-
 public class UserDisplayActivity extends AppCompatActivity {
 
     DatabaseHelper db;
     private View decorView;
-    private Account session;
-    private MODE mode;
 
     @SuppressWarnings({"CallToPrintStackTrace", "deprecation"})
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         EdgeToEdge.enable(this);
-
-        db = new DatabaseHelper(this);
-        session = getIntent().getParcelableExtra("user",Account .class);
-        if (session == null) {
-            Log.d("WelcomePage","Session is null girlie");
-            finish();
-            return;
-        }
-
-        if(session.getRole()=="participant"){
-            //mode = setMode in adapter
-        }
 
         setContentView(R.layout.activity_user_display);  // Shared layout
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main), (v, insets) -> {
@@ -57,6 +43,9 @@ public class UserDisplayActivity extends AppCompatActivity {
             return insets;
         });
 
+        db = new DatabaseHelper(this);
+
+        boolean isAttendeeMode = SOURCE_ORGANIZER.equals(getIntent().getStringExtra(EXTRA_SOURCE));
         int eventId = getIntent().getIntExtra("eventId", -1);
 
         RecyclerView recyclerView = findViewById(R.id.recycler);
@@ -64,11 +53,9 @@ public class UserDisplayActivity extends AppCompatActivity {
         TextView pageTitleTextView = findViewById(R.id.pageTitleTextView);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
 
-
-
         try {
             List<User> users;
-            if (listAttendeeMode) {
+            if (isAttendeeMode) {
                 users = db.getPendingRequestsByEvent(eventId);
                 setTitle("Attendees");
                 pageTitleTextView.setText(R.string.attendeeList);
@@ -86,7 +73,7 @@ public class UserDisplayActivity extends AppCompatActivity {
                 noUsersTextView.setVisibility(View.GONE);
             }
 
-            recyclerView.setAdapter(new UserDisplayAdapter(this, users, listAttendeeMode, eventId));
+            recyclerView.setAdapter(new UserDisplayAdapter(this, users, isAttendeeMode, eventId, noUsersTextView));
 
 
         } catch (Exception e) {

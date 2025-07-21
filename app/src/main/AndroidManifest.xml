@@ -31,12 +31,12 @@
         <activity
             android:name=".Event.EventActivity"
             android:exported="false" />
-        <activity android:name=".Event.UserEventActivity"
+        <activity android:name=".Displays.UserEventActivity"
             android:exported="false" />
         <activity android:name=".Event.UserMyEvent"
             android:exported="false" />
         <activity
-            android:name=".Displays.DisplayItemActivity"
+            android:name=".Activity.Displays.DisplayItemActivity"
             android:exported="false" />
         <activity
             android:name=".Displays.UserDisplayActivity"

@@ -1,8 +1,4 @@
-package com.example.local_loop.Adapters;
-
-import com.example.local_loop.Helpers.DisplayItem;
-import com.example.local_loop.Helpers.MODE;
-import com.example.local_loop.R;
+package com.example.local_loop.Display;
 
 import android.annotation.SuppressLint;
 import android.graphics.Color;
@@ -14,6 +10,9 @@ import android.widget.Button;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.local_loop.Helpers.DisplayItem;
+import com.example.local_loop.R;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -23,18 +22,19 @@ public class DisplayItemAdapter extends RecyclerView.Adapter<DisplayItemAdapter.
         void onClick(DisplayItem item);
         void onLongClick(DisplayItem item);
         void onRenameClick(DisplayItem item);
-        void onModeChanged(MODE mode);
     }
-
 
     private List<DisplayItem> items;
     private final OnItemClickListener listener;
-    private MODE mode = MODE.DEFAULT;
 
     public DisplayItemAdapter(List<DisplayItem> items, OnItemClickListener listener) {
         this.items = items;
         this.listener = listener;
     }
+
+    private boolean deleteMode = false;
+    private boolean editMode = false;
+
     private List<DisplayItem> selectedItems = new ArrayList<>();
 
     @SuppressLint("NotifyDataSetChanged")
@@ -43,9 +43,16 @@ public class DisplayItemAdapter extends RecyclerView.Adapter<DisplayItemAdapter.
         notifyDataSetChanged();
     }
 
+
     @SuppressLint("NotifyDataSetChanged")
-    public void setMode(MODE mode) {
-        this.mode = mode;
+    public void setDeleteMode(boolean enabled) {
+        this.deleteMode = enabled;
+        notifyDataSetChanged();
+    }
+
+    @SuppressLint("NotifyDataSetChanged")
+    public void setEditMode(boolean enabled) {
+        this.editMode = enabled;
         notifyDataSetChanged();
     }
 
@@ -66,51 +73,44 @@ public class DisplayItemAdapter extends RecyclerView.Adapter<DisplayItemAdapter.
     @Override
     public void onBindViewHolder(@NonNull ItemViewHolder holder, int position) {
         DisplayItem item = items.get(position);
+
         holder.button.setText(item.getName());
 
-        switch (mode) {
-            case DELETE:
-                onDeleteMode(holder,item);
-                break;
-            case EDIT:
-                onEditMode(holder,item);
-                break;
-            default:
-                onNormalMode(holder,item);
-                break;
+        if (deleteMode) {
+            holder.button.setOnClickListener(v -> {
+                if (selectedItems.contains(item)) {
+                    selectedItems.remove(item);
+                    holder.button.setBackgroundColor(Color.LTGRAY);
+                } else {
+                    selectedItems.add(item);
+                    holder.button.setBackgroundColor(Color.TRANSPARENT);
+                }
+            });
+
+            holder.button.setBackgroundColor(selectedItems.contains(item)
+                    ? Color.TRANSPARENT : Color.LTGRAY);
+
+        } else if (editMode) {
+            holder.button.setOnClickListener(v -> {
+                if (listener != null) listener.onRenameClick(item);
+            });
+
+            holder.button.setBackgroundColor(Color.LTGRAY);
+
+        } else {  // Normal Mode: open details on click
+            holder.button.setOnClickListener(v -> {
+                if (listener != null) listener.onClick(item);
+            });
+
+            holder.button.setBackgroundColor(Color.TRANSPARENT);
         }
-    }
 
-    private void onDeleteMode(@NonNull ItemViewHolder holder,DisplayItem item) {
-        holder.button.setOnClickListener(v -> {
-            if (selectedItems.contains(item)) {
-                selectedItems.remove(item);
-                holder.button.setBackgroundColor(Color.LTGRAY);
-            } else {
-                selectedItems.add(item);
-                holder.button.setBackgroundColor(Color.TRANSPARENT);
-            }
+        holder.button.setOnLongClickListener(v -> {
+            if (listener != null) listener.onLongClick(item);
+            return true;
         });
-        holder.button.setBackgroundColor(selectedItems.contains(item) ? Color.TRANSPARENT : Color.LTGRAY);
     }
 
-    private void onEditMode(@NonNull ItemViewHolder holder,DisplayItem item){
-        holder.button.setOnClickListener(v -> {
-            if (listener != null) listener.onRenameClick(item);
-        });
-
-        holder.button.setBackgroundColor(Color.LTGRAY);
-
-    }
-
-    private void onNormalMode(@NonNull ItemViewHolder holder,DisplayItem item){
-        // Normal Mode: open details on click
-        holder.button.setOnClickListener(v -> {
-            if (listener != null) listener.onClick(item);
-        });
-
-        holder.button.setBackgroundColor(Color.TRANSPARENT);
-    }
 
 
     @Override
