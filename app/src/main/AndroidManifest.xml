@@ -11,10 +11,10 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.Local_Loop">
         <activity
-            android:name=".Event.EventDetailsActivity"
+            android:name=".Details.EventDetailsActivity"
             android:exported="false" />
         <activity
-            android:name=".Category.CategoryDetailsActivity"
+            android:name=".Details.CategoryDetailsActivity"
             android:exported="false" />
         <activity
             android:name=".Welcome.OrganizerWelcomePage"
@@ -36,10 +36,10 @@
         <activity android:name=".Event.UserMyEvent"
             android:exported="false" />
         <activity
-            android:name=".Category.DisplayItemActivity"
+            android:name=".Displays.DisplayItemActivity"
             android:exported="false" />
         <activity
-            android:name=".UserDisplay.UserDisplayActivity"
+            android:name=".Displays.UserDisplayActivity"
             android:exported="false" />
         <activity
             android:name=".AttendeeList.AttendeeList"

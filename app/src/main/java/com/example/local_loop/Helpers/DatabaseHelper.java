@@ -8,10 +8,10 @@ import android.database.Cursor;
 import android.util.Log;
 
 import com.example.local_loop.Account.Account;
-import com.example.local_loop.Category.Category;
+import com.example.local_loop.UserContent.Category;
 import com.example.local_loop.Account.User;
-import com.example.local_loop.Event.Event;
-import com.example.local_loop.Event.Request;
+import com.example.local_loop.UserContent.Event;
+import com.example.local_loop.UserContent.Request;
 
 import java.util.ArrayList;
 import java.util.List;

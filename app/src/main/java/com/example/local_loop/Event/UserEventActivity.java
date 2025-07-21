@@ -1,10 +1,11 @@
 package com.example.local_loop.Event;
 
-import static com.example.local_loop.Event.EventDetailsActivity.EXTRA_SOURCE;
+import static com.example.local_loop.Details.EventDetailsActivity.EXTRA_SOURCE;
 
 import android.content.Intent;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.util.Log;
 import android.view.View;
 import android.os.Bundle;
 import android.widget.ArrayAdapter;
@@ -21,9 +22,12 @@ import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 
-import com.example.local_loop.Category.Category;
-import com.example.local_loop.Category.DisplayItem;
-import com.example.local_loop.Category.DisplayItemAdapter;
+import com.example.local_loop.Account.Account;
+import com.example.local_loop.Details.EventDetailsActivity;
+import com.example.local_loop.UserContent.Category;
+import com.example.local_loop.UserContent.Event;
+import com.example.local_loop.Helpers.DisplayItem;
+import com.example.local_loop.Adapters.DisplayItemAdapter;
 import com.example.local_loop.R;
 import com.example.local_loop.Helpers.DatabaseHelper;
 
@@ -35,9 +39,10 @@ public class UserEventActivity extends AppCompatActivity {
 
     private DisplayItemAdapter eventAdapter;
     private DatabaseHelper dbHelper;
-    private String username;
-    private boolean isMyEventsMode;
+    private Account session;
+    private boolean isBrowsing; //True is looking for new, false is checking their own
 
+    //UI Instance vars
     private EditText searchBar;
     private Spinner categorySpinner;
     private final Handler handler = new Handler(Looper.getMainLooper());
@@ -51,19 +56,24 @@ public class UserEventActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_event_user_list);  // Use shared layout
 
+        session = getIntent().getParcelableExtra("user", Account.class);
+        if (session == null) {
+            Log.d("WelcomePage","Session is null girlie");
+            finish();
+            return;
+        }
+
         dbHelper = new DatabaseHelper(this);
-        username = getIntent().getStringExtra("username");
-        isMyEventsMode = getIntent().getBooleanExtra("isMyEventsMode", false);
+        isBrowsing = getIntent().getBooleanExtra("isBrowsing", true);
 
         RecyclerView eventRecyclerView = findViewById(R.id.recyclerViewEvents);
         eventRecyclerView.setLayoutManager(new GridLayoutManager(this, 2));
-
         searchBar = findViewById(R.id.searchBar);
         categorySpinner = findViewById(R.id.categorySpinner);
         TextView titleTextView = findViewById(R.id.events);
 
         // Handle UI visibility
-        if (isMyEventsMode) {
+        if (!isBrowsing) {
             searchBar.setVisibility(View.GONE);
             categorySpinner.setVisibility(View.GONE);
             // Set the title or any text view you want:
@@ -78,26 +88,15 @@ public class UserEventActivity extends AppCompatActivity {
                 if (item instanceof Event) {
                     Event event = (Event) item;
                     Intent intent = new Intent(UserEventActivity.this, EventDetailsActivity.class);
-                    intent.putExtra(EXTRA_SOURCE, getIntent().getStringExtra(EXTRA_SOURCE));
-                    intent.putExtra("sourceContext", UserEventActivity.class.getSimpleName());
-                    intent.putExtra("attendeeId", username);
-                    intent.putExtra("eventId", event.getID());
-                    intent.putExtra("title", event.getTitle());
-                    intent.putExtra("description", event.getDescription());
-                    intent.putExtra("fee", String.valueOf(event.getFee()));
-                    intent.putExtra("datetime", event.getDateTime());
-                    intent.putExtra("categoryId", event.getCategoryId());
-                    intent.putExtra("organizer", event.getOrganizer());
+                    intent.putExtras(event.toBundle());
                     startActivity(intent);
                 }
                     // Do something with event
             }
-
             @Override
             public void onLongClick(DisplayItem item) {
                 // Optional
             }
-
             @Override
             public void onRenameClick(DisplayItem item) {
                 // Optional
@@ -106,7 +105,7 @@ public class UserEventActivity extends AppCompatActivity {
 
         eventRecyclerView.setAdapter(eventAdapter);
 
-        if (isMyEventsMode) {
+        if (!isBrowsing) {
             findViewById(R.id.searchBar).setVisibility(View.GONE);
             findViewById(R.id.categorySpinner).setVisibility(View.GONE);
         } else {
@@ -127,9 +126,10 @@ public class UserEventActivity extends AppCompatActivity {
         backButton.setOnClickListener(v -> onBackPressed());
     }
 
+    //Methods
     private void loadEvents() {
         List<Event> events;
-        if (isMyEventsMode) {
+        if (!isBrowsing) {
             events = dbHelper.getEventsUserRequested(username);
         } else {
             String query = searchBar.getText().toString().trim();

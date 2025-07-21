@@ -1,9 +1,10 @@
-package com.example.local_loop.Category;
+package com.example.local_loop.Details;
 
-import static com.example.local_loop.Event.EventDetailsActivity.EXTRA_SOURCE;
+import static com.example.local_loop.Details.EventDetailsActivity.EXTRA_SOURCE;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
@@ -14,8 +15,11 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.example.local_loop.Event.Event;
-import com.example.local_loop.Event.EventDetailsActivity;
+import com.example.local_loop.Account.Account;
+import com.example.local_loop.UserContent.Category;
+import com.example.local_loop.Adapters.DisplayItemAdapter;
+import com.example.local_loop.UserContent.Event;
+import com.example.local_loop.Helpers.DisplayItem;
 import com.example.local_loop.R;
 import com.example.local_loop.Helpers.DatabaseHelper;
 
@@ -25,6 +29,7 @@ import java.util.List;
 public class CategoryDetailsActivity extends AppCompatActivity {
     DatabaseHelper dbHelper;
     private View decorView;
+    private Account session;
 
     @SuppressWarnings("deprecation")
     @Override
@@ -32,10 +37,16 @@ public class CategoryDetailsActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_category_details);
 
+        session = getIntent().getParcelableExtra("user", Account.class);
+        if (session == null) {
+            Log.d("WelcomePage","Session is null girlie");
+            finish();
+            return;
+        }
+
         TextView categoryTitleText = findViewById(R.id.categoryTitleText);
         TextView categoryDescriptionText = findViewById(R.id.categoryDescriptionText);
         RecyclerView eventRecyclerView = findViewById(R.id.eventRecyclerView);
-
         dbHelper = new DatabaseHelper(this);
 
         // Get category ID passed via intent
@@ -91,6 +102,7 @@ public class CategoryDetailsActivity extends AppCompatActivity {
                 if (item instanceof Event) {
                     Event event = (Event) item;
                     Intent intent = new Intent(CategoryDetailsActivity.this, EventDetailsActivity.class);
+
                     intent.putExtra(EXTRA_SOURCE, getIntent().getStringExtra(EXTRA_SOURCE));
                     intent.putExtra("sourceContext", getIntent().getStringExtra("sourceContext"));
                     intent.putExtra("eventId", event.getID());

@@ -1,11 +1,9 @@
 package com.example.local_loop.Activity;
 
-import static com.example.local_loop.Event.EventDetailsActivity.EXTRA_SOURCE;
-import static com.example.local_loop.Event.EventDetailsActivity.SOURCE_PARTICIPANT;
-
 import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
@@ -18,10 +16,11 @@ import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
 import com.example.local_loop.Account.Account;
-import com.example.local_loop.Category.DisplayItemActivity;
+import com.example.local_loop.Displays.DisplayItemActivity;
 import com.example.local_loop.Event.UserEventActivity;
+import com.example.local_loop.Helpers.MODE;
 import com.example.local_loop.R;
-import com.example.local_loop.UserDisplay.UserDisplayActivity;
+import com.example.local_loop.Displays.UserDisplayActivity;
 
 public class WelcomePage extends AppCompatActivity {
     private View decorView;
@@ -37,6 +36,11 @@ public class WelcomePage extends AppCompatActivity {
         setContentView(R.layout.activity_welcome_page);
 
         session = getIntent().getParcelableExtra("user", Account.class);
+        if (session == null) {
+            Log.d("WelcomePage","Session is null girlie");
+            finish();
+            return;
+        }
 
         TextView welcomeTextView = findViewById(R.id.welcomeTextView);
         Button button1 = findViewById(R.id.firstButton);
@@ -47,24 +51,32 @@ public class WelcomePage extends AppCompatActivity {
         String welcomeMessage = "Welcome " + session.getFirstName() + ".\nYou are logged in as " + role + ".";
         welcomeTextView.setText(welcomeMessage);
 
-        if (role == "admin"){
-            button1.setOnClickListener(this::OnUsersButton);
-            button2.setOnClickListener(this::OnListCategoriesButton);
-            button3.setOnClickListener(this::OnEventsButton);
-        } else if (role == "organizer"){
-            button1.setText("Event Management");
-            button1.setOnClickListener(this::OnEventsButton);
-            button2.setVisibility(View.INVISIBLE);
-            button2.setEnabled(false);
-            button3.setVisibility(View.INVISIBLE);
-            button3.setEnabled(false);
-        } else {
-            button1.setText("Browse Events");
-            button1.setOnClickListener(this::OnBrowseEventsButton);
-            button2.setText("My Events");
-            button2.setOnClickListener(this::OnMyEventsButton);
-            button3.setVisibility(View.INVISIBLE);
-            button3.setEnabled(false);
+        switch(role){
+            case "participant":
+                button1.setText("Browse Events");
+                button1.setOnClickListener(this::OnBrowseEventsButton);
+                button2.setText("My Events");
+                button2.setOnClickListener(this::OnMyEventsButton);
+                button3.setVisibility(View.INVISIBLE);
+                button3.setEnabled(false);
+                break;
+            case "organizer":
+                button1.setText("Event Management");
+                button1.setOnClickListener(this::OnEventsButton);
+                button2.setVisibility(View.INVISIBLE);
+                button2.setEnabled(false);
+                button3.setVisibility(View.INVISIBLE);
+                button3.setEnabled(false);
+                break;
+            case "admin":
+                button1.setOnClickListener(this::OnUsersButton);
+                button2.setOnClickListener(this::OnListCategoriesButton);
+                button3.setOnClickListener(this::OnEventsButton);
+                break;
+            default:
+                Log.d("WelcomePage","Session.getRole is not working");
+                finish();
+                return;
         }
 
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.welcomeTextView), (v, insets) -> {
@@ -111,21 +123,17 @@ public class WelcomePage extends AppCompatActivity {
         startActivity(intent);
     }
 
+    //Participant
     public void OnBrowseEventsButton(View view){
         Intent intent = new Intent(WelcomePage.this, UserEventActivity.class);
-        intent.putExtra(EXTRA_SOURCE, SOURCE_PARTICIPANT);
-        intent.putExtra("isMyEventsMode",false);
-        intent.putExtra("username", getIntent().getStringExtra("username"));// Pass the username to the WelcomePage
-        intent.putExtra("userType", getIntent().getStringExtra("userType")); // Pass the userType to the WelcomePage
+        intent.putExtra("user", session);
+        intent.putExtra("isBrowsing",MODE.BROWSING);
         startActivity(intent);
     }
-
     public void OnMyEventsButton(View view){
         Intent intent = new Intent(WelcomePage.this, UserEventActivity.class);
-        intent.putExtra(EXTRA_SOURCE, SOURCE_PARTICIPANT);
-        intent.putExtra("isMyEventsMode",true);
-        intent.putExtra("username", getIntent().getStringExtra("username"));// Pass the username to the WelcomePage
-        intent.putExtra("userType", getIntent().getStringExtra("userType")); // Pass the userType to the WelcomePage
+        intent.putExtra("user", session);
+        intent.putExtra("myEvents",MODE.MYEVENTS);
         startActivity(intent);
     }
 

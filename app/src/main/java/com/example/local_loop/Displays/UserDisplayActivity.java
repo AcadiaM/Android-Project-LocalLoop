@@ -1,9 +1,8 @@
-package com.example.local_loop.UserDisplay;
+package com.example.local_loop.Displays;
 
-import static com.example.local_loop.Event.EventDetailsActivity.EXTRA_SOURCE;
-import static com.example.local_loop.Event.EventDetailsActivity.SOURCE_ORGANIZER;
 
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
@@ -19,6 +18,8 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.local_loop.Account.Account;
 import com.example.local_loop.Account.User;
+import com.example.local_loop.Adapters.UserDisplayAdapter;
+import com.example.local_loop.Helpers.MODE;
 import com.example.local_loop.R;
 import com.example.local_loop.Helpers.DatabaseHelper;
 
@@ -28,13 +29,26 @@ public class UserDisplayActivity extends AppCompatActivity {
 
     DatabaseHelper db;
     private View decorView;
-    Account session;
+    private Account session;
+    private MODE mode;
 
     @SuppressWarnings({"CallToPrintStackTrace", "deprecation"})
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         EdgeToEdge.enable(this);
+
+        db = new DatabaseHelper(this);
+        session = getIntent().getParcelableExtra("user",Account .class);
+        if (session == null) {
+            Log.d("WelcomePage","Session is null girlie");
+            finish();
+            return;
+        }
+
+        if(session.getRole()=="participant"){
+            //mode = setMode in adapter
+        }
 
         setContentView(R.layout.activity_user_display);  // Shared layout
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main), (v, insets) -> {
@@ -43,10 +57,6 @@ public class UserDisplayActivity extends AppCompatActivity {
             return insets;
         });
 
-        db = new DatabaseHelper(this);
-        session = getIntent().getParcelableExtra("user", Account.class);
-
-        boolean listAttendeeMode =session.getRole() == "organizer";
         int eventId = getIntent().getIntExtra("eventId", -1);
 
         RecyclerView recyclerView = findViewById(R.id.recycler);
