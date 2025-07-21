@@ -11,7 +11,6 @@ import com.example.local_loop.Category.Category;
 import com.example.local_loop.CreateAccount.Admin;
 import com.example.local_loop.CreateAccount.User;
 import com.example.local_loop.Event.Event;
-import com.example.local_loop.Event.Request;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -427,15 +426,14 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     /**
      * This function updates an existing event using the row id of the event.
      *
-     * @param eventId the row id of the event.
-     * @param title the new title of the event.
+     * @param eventId     the row id of the event.
+     * @param title       the new title of the event.
      * @param description the new description of the event.
-     * @param fee the new fee of the event.
-     * @param datetime the new date and time of the event.
-     * @param categoryId the new row id of the category.
-     * @return true if any of the values were changed, false otherwise.
+     * @param fee         the new fee of the event.
+     * @param datetime    the new date and time of the event.
+     * @param categoryId  the new row id of the category.
      */
-    public boolean updateEvent(int eventId, String title, String description, double fee, String datetime, int categoryId) {
+    public void updateEvent(int eventId, String title, String description, double fee, String datetime, int categoryId) {
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues values = new ContentValues();
         values.put("title", title);
@@ -444,39 +442,8 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         values.put("datetime", datetime);
         values.put("category_id", categoryId);
 
-        int rowsAffected = db.update("events", values, "id = ?", new String[]{String.valueOf(eventId)});
+        db.update("events", values, "id = ?", new String[]{String.valueOf(eventId)});
         db.close();
-        return rowsAffected > 0;
-    }
-
-    /**
-     * This function verifies if an event exists in a given category, using the event title and the row id of the category.
-     *
-     * @param title the title of the desired event.
-     * @param categoryId the row id of the category.
-     * @return true if the event exists in the category, false otherwise.
-     */
-    public boolean eventTitleExistsInCategory(String title, int categoryId) {
-        SQLiteDatabase db = this.getReadableDatabase();
-
-        Cursor cursor = db.query(
-                "events",
-                new String[]{"COUNT(*)"},
-                "title = ? AND category_id = ?",
-                new String[]{title, String.valueOf(categoryId)},
-                null,
-                null,
-                null
-        );
-
-        boolean exists = false;
-        if (cursor.moveToFirst()) {
-            int count = cursor.getInt(0);
-            exists = count > 0;
-        }
-        cursor.close();
-        db.close();
-        return exists;
     }
 
     /**
@@ -666,35 +633,6 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
         db.insert("Requests", null, values);
         db.close();
-    }
-
-    /**
-     * This function gets all join requests sent to any event of an organizer.
-     *
-     * @param organizerUsername the username of the desired organizer.
-     * @return a list of request objects, all of which are to an event made by the given organizer.
-     */
-    public List<Request> getPendingRequests(String organizerUsername) {
-        SQLiteDatabase db = this.getReadableDatabase();
-        List<Request> requests = new ArrayList<>();
-
-        String query = "SELECT r.request_id, r.event_id, r.attendee_id, r.status " +
-                "FROM requests r INNER JOIN events e ON r.event_id = e.id " +
-                "WHERE e.organizer = ? AND r.status = 'pending'";
-
-        Cursor cursor = db.rawQuery(query, new String[]{organizerUsername});
-
-        while (cursor.moveToNext()) {
-            Request req = new Request(
-                    cursor.getInt(0),  // request_id
-                    cursor.getInt(1),  // event_id
-                    cursor.getString(2),  // attendee_id
-                    cursor.getString(3)); // status
-            requests.add(req);
-        }
-        cursor.close();
-        db.close();
-        return requests;
     }
 
     public boolean hasJoinRequest(int eventId, String attendeeId) {

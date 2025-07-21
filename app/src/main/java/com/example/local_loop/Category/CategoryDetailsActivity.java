@@ -94,7 +94,7 @@ public class CategoryDetailsActivity extends AppCompatActivity {
                     intent.putExtra(EXTRA_SOURCE, getIntent().getStringExtra(EXTRA_SOURCE));
                     intent.putExtra("sourceContext", getIntent().getStringExtra("sourceContext"));
                     intent.putExtra("eventId", event.getID());
-                    intent.putExtra("title", event.getTitle());
+                    intent.putExtra("title", event.getName());
                     intent.putExtra("description", event.getDescription());
                     intent.putExtra("fee", String.valueOf(event.getFee()));
                     intent.putExtra("datetime", event.getDateTime());

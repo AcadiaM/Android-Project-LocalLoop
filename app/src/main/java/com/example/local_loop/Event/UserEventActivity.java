@@ -82,7 +82,7 @@ public class UserEventActivity extends AppCompatActivity {
                     intent.putExtra("sourceContext", UserEventActivity.class.getSimpleName());
                     intent.putExtra("attendeeId", username);
                     intent.putExtra("eventId", event.getID());
-                    intent.putExtra("title", event.getTitle());
+                    intent.putExtra("title", event.getName());
                     intent.putExtra("description", event.getDescription());
                     intent.putExtra("fee", String.valueOf(event.getFee()));
                     intent.putExtra("datetime", event.getDateTime());

@@ -130,7 +130,7 @@ public class DisplayItemActivity extends AppCompatActivity {
         intent.putExtra(EXTRA_SOURCE, getIntent().getStringExtra(EXTRA_SOURCE));
         intent.putExtra("sourceContext", DisplayItemActivity.class.getSimpleName());
         intent.putExtra("eventId", event.getID());
-        intent.putExtra("title", event.getTitle());
+        intent.putExtra("title", event.getName());
         intent.putExtra("description", event.getDescription());
         intent.putExtra("fee", String.valueOf(event.getFee()));
         intent.putExtra("datetime", event.getDateTime());
@@ -224,7 +224,7 @@ public class DisplayItemActivity extends AppCompatActivity {
 
 
     private void showItemOptions(DisplayItem item) {
-        String itemName = (item instanceof Category) ? item.getName() : ((Event) item).getTitle();
+        String itemName = (item instanceof Category) ? item.getName() : ((Event) item).getName();
         String[] options = {"Rename", "Delete"};
 
         new AlertDialog.Builder(this)
@@ -307,7 +307,7 @@ public class DisplayItemActivity extends AppCompatActivity {
         if (itemToEdit != null) {
             if (isEvent) {
                 Event event = (Event) itemToEdit;
-                nameInput.setText(event.getTitle());
+                nameInput.setText(event.getName());
                 descriptionInput.setText(event.getDescription());
                 feeInput.setText(String.valueOf(event.getFee()));
                 datetimeInput.setText(event.getDateTime());
@@ -357,7 +357,7 @@ public class DisplayItemActivity extends AppCompatActivity {
 
                 if (isEvent) {
                     boolean nameExists = dbHelper.eventTitleExists(name);
-                    if (nameExists && (itemToEdit == null || !name.equals(((Event) itemToEdit).getTitle()))) {
+                    if (nameExists && (itemToEdit == null || !name.equals(((Event) itemToEdit).getName()))) {
                         nameLayout.setError("Event title already exists.");
                         valid = false;
                     }
