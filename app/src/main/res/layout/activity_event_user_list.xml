@@ -7,7 +7,7 @@
     android:layout_height="match_parent"
     android:background="@color/white"
     android:padding="24dp"
-    tools:context=".Event.UserEventActivity">
+    tools:context=".Displays.UserEventActivity">
 
     <TextView
         android:id="@+id/events"

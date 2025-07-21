@@ -7,7 +7,7 @@
     android:layout_height="match_parent"
     android:background="@color/white"
     android:padding="24dp"
-    tools:context=".Category.CategoryDetailsActivity">
+    tools:context=".Details.CategoryDetailsActivity">
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/eventRecyclerView"
