@@ -1,4 +1,4 @@
-package com.example.local_loop.Activity.Displays;
+package com.example.local_loop.AFIX;
 
 import static com.example.local_loop.Details.EventDetailsActivity.EXTRA_SOURCE;
 import static com.example.local_loop.Details.EventDetailsActivity.SOURCE_ORGANIZER;
@@ -20,14 +20,12 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.example.local_loop.Account.User;
 import com.example.local_loop.Helpers.DatabaseHelper;
 import com.example.local_loop.R;
-import com.example.local_loop.Details.*;
-import com.example.local_loop.Display.*;
-
 
 import java.util.List;
+
 public class UserDisplayActivity extends AppCompatActivity {
 
-    DatabaseHelper db;
+    private DatabaseHelper db;
     private View decorView;
 
     @SuppressWarnings({"CallToPrintStackTrace", "deprecation"})

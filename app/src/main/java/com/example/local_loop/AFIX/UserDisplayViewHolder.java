@@ -1,4 +1,4 @@
-package com.example.local_loop.Display;
+package com.example.local_loop.AFIX;
 
 import android.view.View;
 import android.widget.TextView;

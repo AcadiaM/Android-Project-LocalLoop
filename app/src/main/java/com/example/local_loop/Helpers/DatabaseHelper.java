@@ -234,43 +234,75 @@ public class DatabaseHelper extends SQLiteOpenHelper {
      */
 
     /**
+     * This function finds the username of a user from their email.
+     *
+     * @param email the email of the desired user.
+     * @return the username of the user if found, null otherwise.
+     */
+    public String getUsernameByEmail(String email) {
+        SQLiteDatabase db = this.getReadableDatabase();
+        Cursor cursor = db.query(TABLE_USERS, new String[]{"username"}, "email = ?", new String[]{email}, null, null, null);
+        if (cursor.moveToFirst()) {
+            String username = cursor.getString(0);
+            cursor.close();
+            return username;
+        }
+        cursor.close();
+        return null;
+    }
+
+
+    /**
      * This function searches for a user in the database. If found and the user is an organizer, its created events are deleted. Then, the user is deleted.
      *
-     * @param userID the email of the desired user.
+     * @param username the email of the desired user.
+     *
      */
-    public void deleteUser(int userID) {
+
+
+    public void deleteUser(String username) {
         SQLiteDatabase db = getWritableDatabase();
-        db.delete(TABLE_USERS, USERS_ID+" = ?", new String[]{String.valueOf(userID)});
+        db.delete(TABLE_USERS, USERS_USERNAME+" = ?", new String[]{String.valueOf(username)});
         db.close();
     }
 
     /**
      * This function searches for a user in the database with a username, setting its active value to 0 (inactive).
      *
-     * @param  userID username of the desired user.
+     * @param username the username of the desired user.
      */
-    public void setUserActivity(int userID, boolean isActive) {
-        //Takes a bool and changes the value of isActive. No need to worry about if its a valid call, no errors!
+    public void deactivateUser(String username) {
+        //The user is active (active=1) and is set to inactive=0
         SQLiteDatabase db = getWritableDatabase();
         ContentValues values = new ContentValues();
-        //Updating
-        values.put(USERS_ISACTIVE, isActive ? 1: 0);
-        db.update(TABLE_USERS, values, USERS_ID+" = ?", new String[]{String.valueOf(userID)});
-        db.close();
+        values.put("active", 0);
+        db.update(TABLE_USERS, values, "username = ?", new String[]{username});
     }
+
+    /**
+     * This function searches for a user in the database with a username, setting its active value to 1 (active).
+     *
+     * @param username the username of the desired user.
+     */
+    public void reactivateUser(String username) {
+        //The user is inactive (active=0) and is set to active=1.
+        SQLiteDatabase db = getWritableDatabase();
+        ContentValues values = new ContentValues();
+        values.put("active", 1);
+        db.update(TABLE_USERS, values, "username = ?", new String[]{username});
+    }
+
 
     /**
      * This function searches for a user with its username and verifies if the user is set to active or inactive.
      *
-     * @param userID the username of the desired user.
+     * @param username the username of the desired user.
      * @return the active value of the user, 1 if the user is active, 0 otherwise.
      */
-    public int isActive(int userID) {
+    public int isActive(String username) {
         int active = 1; // Default to active.
         SQLiteDatabase db = getReadableDatabase();
-        Cursor cursor = db.query(TABLE_USERS, new String[]{USERS_ISACTIVE}, USERS_ID+" = ?",
-                new String[]{String.valueOf(userID)}, null, null, null);
-
+        Cursor cursor = db.query(TABLE_USERS, new String[]{"active"}, "username = ?", new String[]{username}, null, null, null);
         if (cursor.moveToFirst()) {
             active = cursor.getInt(0);
         }
@@ -283,21 +315,21 @@ public class DatabaseHelper extends SQLiteOpenHelper {
      *
      * @return a list of user objects comprising all users other than the admin user.
      */
-    public List<Account> getUsers() {
-        List<Account> users = new ArrayList<>();
+    public List<User> getUsers() {
+        List<User> users = new ArrayList<>();
         SQLiteDatabase db = this.getReadableDatabase();
 
-        Cursor cursor = db.query(TABLE_USERS,new String[]{USERS_ID,USERS_ROLE,USERS_USERNAME,USERS_EMAIL,USERS_FIRSTNAME,USERS_LASTNAME}
-                , USERS_ROLE+"!= ?", new String[]{"admin"}, USERS_ROLE, null, USERS_ID);
+        Cursor cursor = db.query(TABLE_USERS, null, "role != ?", new String[]{"admin"}, null, null, null);
+
         if (cursor.moveToFirst()) {
             do {
-                Account user = new Account(
-                        cursor.getInt(0),     // userID
-                        cursor.getString(1),  // role
-                        cursor.getString(2),  // username
-                        cursor.getString(3),  // email
-                        cursor.getString(4),  // firstName
-                        cursor.getString(5)   // lastName
+                User user = new User(
+                        cursor.getString(1), // firstName
+                        cursor.getString(2), // lastName
+                        cursor.getString(3), // username
+                        cursor.getString(4), // email
+                        cursor.getString(5), // password
+                        cursor.getString(6)  // role
                 );
                 users.add(user);
             } while (cursor.moveToNext());

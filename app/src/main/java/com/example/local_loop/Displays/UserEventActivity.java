@@ -1,4 +1,4 @@
-package com.example.local_loop.Activity.Displays;
+package com.example.local_loop.Displays;
 
 import static com.example.local_loop.Details.EventDetailsActivity.EXTRA_SOURCE;
 
@@ -21,7 +21,7 @@ import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.local_loop.Details.EventDetailsActivity;
-import com.example.local_loop.Display.DisplayItemAdapter;
+import com.example.local_loop.AFIX.DisplayItemAdapter;
 import com.example.local_loop.Helpers.DatabaseHelper;
 import com.example.local_loop.Helpers.DisplayItem;
 import com.example.local_loop.R;

@@ -10,7 +10,7 @@ import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
 
-import com.example.local_loop.Activity.Displays.*;
+import com.example.local_loop.Displays.UserDisplayActivity;
 import com.example.local_loop.Helpers.DatabaseHelper;
 import com.example.local_loop.R;
 import com.example.local_loop.UserContent.Category;

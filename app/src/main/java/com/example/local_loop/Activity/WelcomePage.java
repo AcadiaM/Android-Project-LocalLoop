@@ -16,7 +16,9 @@ import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
 import com.example.local_loop.Account.Account;
-import com.example.local_loop.Activity.Displays.*;
+import com.example.local_loop.Displays.DisplayItemActivity;
+import com.example.local_loop.Displays.UserDisplayActivity;
+import com.example.local_loop.Displays.UserEventActivity;
 import com.example.local_loop.Helpers.MODE;
 import com.example.local_loop.R;
 
