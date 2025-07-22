@@ -27,7 +27,7 @@ import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.example.local_loop.AFIX.DisplayItemAdapter;
+import com.example.local_loop.Adapter.DisplayContentAdapter;
 import com.example.local_loop.Details.CategoryDetailsActivity;
 import com.example.local_loop.Details.EventDetailsActivity;
 import com.example.local_loop.Helpers.DatabaseHelper;
@@ -48,7 +48,7 @@ import java.util.Objects;
 public class DisplayItemActivity extends AppCompatActivity {
 
     private DatabaseHelper dbHelper;
-    private DisplayItemAdapter displayItemAdapter;
+    private DisplayContentAdapter displayContentAdapter;
 
     private ImageButton addButton, removeButton, editButton;
 
@@ -93,7 +93,7 @@ public class DisplayItemActivity extends AppCompatActivity {
         RecyclerView recyclerView = findViewById(R.id.recyclerView);
         recyclerView.setLayoutManager(new GridLayoutManager(this, 2));
 
-        displayItemAdapter = new DisplayItemAdapter(new ArrayList<>(), new DisplayItemAdapter.OnItemClickListener() {
+        displayContentAdapter = new DisplayContentAdapter(new ArrayList<>(), new DisplayContentAdapter.OnItemClickListener() {
             @Override
             public void onClick(DisplayItem item) {
                 if (item instanceof Category) {
@@ -115,7 +115,7 @@ public class DisplayItemActivity extends AppCompatActivity {
             }
         });
 
-        recyclerView.setAdapter(displayItemAdapter);
+        recyclerView.setAdapter(displayContentAdapter);
     }
 
     private void openCategoryDetails(Category category) {
@@ -144,7 +144,7 @@ public class DisplayItemActivity extends AppCompatActivity {
 
 
     private void handleRemoveButton() {
-        if (displayItemAdapter.getItemCount() == 0) {
+        if (displayContentAdapter.getItemCount() == 0) {
             Toast.makeText(this, "No items to delete", Toast.LENGTH_SHORT).show();
             return;
         }
@@ -168,7 +168,7 @@ public class DisplayItemActivity extends AppCompatActivity {
 
 
     private void handleEditButton() {
-        if (displayItemAdapter.getItemCount() == 0) {
+        if (displayContentAdapter.getItemCount() == 0) {
             Toast.makeText(this, "No items to edit", Toast.LENGTH_SHORT).show();
             return;
         }
@@ -183,8 +183,8 @@ public class DisplayItemActivity extends AppCompatActivity {
         editButton.setEnabled(false);
         removeButton.setImageResource(R.drawable.outline_check_circle_24);
 
-        displayItemAdapter.setDeleteMode(true);
-        displayItemAdapter.setSelectedItems(selectedItems);
+        displayContentAdapter.setDeleteMode(true);
+        displayContentAdapter.setSelectedItems(selectedItems);
     }
 
     private void exitDeleteMode() {
@@ -194,8 +194,8 @@ public class DisplayItemActivity extends AppCompatActivity {
         editButton.setEnabled(true);
         removeButton.setImageResource(R.drawable.baseline_delete_forever_24);
 
-        displayItemAdapter.setDeleteMode(false);
-        displayItemAdapter.setSelectedItems(new ArrayList<>());
+        displayContentAdapter.setDeleteMode(false);
+        displayContentAdapter.setSelectedItems(new ArrayList<>());
     }
 
     private void loadItems() {
@@ -207,7 +207,7 @@ public class DisplayItemActivity extends AppCompatActivity {
             items.addAll(dbHelper.getEventsByOrganizer(organizerUsername));
         }
 
-        displayItemAdapter.updateItems(items);
+        displayContentAdapter.updateItems(items);
 
         TextView noCategoriesTextView = findViewById(R.id.noTextView);
 
@@ -365,7 +365,7 @@ public class DisplayItemActivity extends AppCompatActivity {
                         valid = false;
                     }
                 } else {
-                    boolean nameExists = dbHelper.categoryNameExists(name);
+                    boolean nameExists = dbHelper.checkCategoryName(name);
                     if (nameExists && (itemToEdit == null || !name.equals(itemToEdit.getName()))) {
                         nameLayout.setError("Category name already exists.");
                         valid = false;
@@ -441,7 +441,7 @@ public class DisplayItemActivity extends AppCompatActivity {
         addButton.setEnabled(false);
         removeButton.setEnabled(false);
         editButton.setEnabled(false);
-        displayItemAdapter.setEditMode(isEditMode);
+        displayContentAdapter.setEditMode(isEditMode);
     }
 
     private void exitEditMode() {
@@ -449,7 +449,7 @@ public class DisplayItemActivity extends AppCompatActivity {
         addButton.setEnabled(true);
         removeButton.setEnabled(true);
         editButton.setEnabled(true);
-        displayItemAdapter.setEditMode(isEditMode);
+        displayContentAdapter.setEditMode(isEditMode);
     }
 
     @SuppressWarnings("deprecation")

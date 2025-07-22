@@ -1,8 +1,5 @@
 package com.example.local_loop.Activity;
 
-import com.example.local_loop.R;
-import com.example.local_loop.Helpers.DatabaseHelper;
-
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
@@ -10,10 +7,11 @@ import android.view.View;
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
 
-public class MainActivity extends AppCompatActivity {
+import com.example.local_loop.Helpers.DatabaseHelper;
+import com.example.local_loop.R;
 
-    private static final String TAG = "MainActivity";
-    private DatabaseHelper dbHelper;
+public class MainActivity extends AppCompatActivity {
+    private DatabaseHelper db;
     private View decorView;
 
 
@@ -21,8 +19,8 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        dbHelper = new DatabaseHelper(this);
-        dbHelper.insertAdmin();
+        db = new DatabaseHelper(this);
+        db.insertAdmin();
 
         EdgeToEdge.enable(this);
         setContentView(R.layout.activity_main);

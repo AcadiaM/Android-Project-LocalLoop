@@ -1,4 +1,4 @@
-package com.example.local_loop.AFIX;
+package com.example.local_loop.Adapter;
 
 import android.annotation.SuppressLint;
 import android.graphics.Color;
@@ -16,7 +16,7 @@ import com.example.local_loop.R;
 import java.util.ArrayList;
 import java.util.List;
 
-public class DisplayItemAdapter extends RecyclerView.Adapter<DisplayItemAdapter.ItemViewHolder> {
+public class DisplayContentAdapter extends RecyclerView.Adapter<DisplayContentAdapter.ItemViewHolder> {
 
     public interface OnItemClickListener {
         void onClick(DisplayItem item);
@@ -27,10 +27,12 @@ public class DisplayItemAdapter extends RecyclerView.Adapter<DisplayItemAdapter.
     private List<DisplayItem> items;
     private final OnItemClickListener listener;
 
-    public DisplayItemAdapter(List<DisplayItem> items, OnItemClickListener listener) {
+    public DisplayContentAdapter(List<DisplayItem> items, OnItemClickListener listener) {
         this.items = items;
         this.listener = listener;
     }
+
+    private
 
     private boolean deleteMode = false;
     private boolean editMode = false;

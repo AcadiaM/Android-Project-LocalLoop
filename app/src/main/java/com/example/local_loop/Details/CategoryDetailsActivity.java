@@ -15,7 +15,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.example.local_loop.AFIX.DisplayItemAdapter;
+import com.example.local_loop.Adapter.DisplayContentAdapter;
 import com.example.local_loop.Helpers.DatabaseHelper;
 import com.example.local_loop.Helpers.DisplayItem;
 import com.example.local_loop.R;
@@ -52,14 +52,14 @@ public class CategoryDetailsActivity extends AppCompatActivity {
         }
 
         // Load and display category details
-        Category category = dbHelper.getCategoryById(categoryId);
+        Category category = dbHelper.getCategory(categoryId);
         if (category != null) {
             categoryTitleText.setText(category.getName());
             categoryDescriptionText.setText(category.getDescription());
         }
 
         // Load and display events in that category
-        List<Event> events = dbHelper.getEventsByCategoryId(categoryId);
+        List<Event> events = dbHelper.getEventByCategory(categoryId);
         TextView noEventsTextView = findViewById(R.id.noEventsDetailsTextView);
 
         if (events == null || events.isEmpty()) {
@@ -68,7 +68,7 @@ public class CategoryDetailsActivity extends AppCompatActivity {
             noEventsTextView.setVisibility(View.GONE);
         }
         eventRecyclerView.setLayoutManager(new GridLayoutManager(this,2));
-        DisplayItemAdapter eventAdapter = getDisplayItemAdapter(events);
+        DisplayContentAdapter eventAdapter = getDisplayItemAdapter(events);
 
         eventRecyclerView.setAdapter(eventAdapter);
 
@@ -85,12 +85,12 @@ public class CategoryDetailsActivity extends AppCompatActivity {
     }
 
     @NonNull
-    private DisplayItemAdapter getDisplayItemAdapter(List<Event> events) {
+    private DisplayContentAdapter getDisplayItemAdapter(List<Event> events) {
         assert events != null;
         List<DisplayItem> displayItems = new ArrayList<>(events);  // Events implement DisplayItem
         // Optional: Handle long press if needed
         // Not needed in CategoryDetailsActivity
-        return new DisplayItemAdapter(displayItems, new DisplayItemAdapter.OnItemClickListener() {
+        return new DisplayContentAdapter(displayItems, new DisplayContentAdapter.OnItemClickListener() {
             @Override
             public void onClick(DisplayItem item) {
                 if (item instanceof Event) {

@@ -20,8 +20,8 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.local_loop.Adapter.DisplayContentAdapter;
 import com.example.local_loop.Details.EventDetailsActivity;
-import com.example.local_loop.AFIX.DisplayItemAdapter;
 import com.example.local_loop.Helpers.DatabaseHelper;
 import com.example.local_loop.Helpers.DisplayItem;
 import com.example.local_loop.R;
@@ -33,7 +33,7 @@ import java.util.List;
 
 public class UserEventActivity extends AppCompatActivity {
 
-    private DisplayItemAdapter eventAdapter;
+    private DisplayContentAdapter eventAdapter;
     private DatabaseHelper dbHelper;
     private String username;
     private boolean isMyEventsMode;
@@ -72,7 +72,7 @@ public class UserEventActivity extends AppCompatActivity {
             setupCategorySpinner();
             setupSearchBar();
         }
-        eventAdapter = new DisplayItemAdapter(new ArrayList<>(), new DisplayItemAdapter.OnItemClickListener() {
+        eventAdapter = new DisplayContentAdapter(new ArrayList<>(), new DisplayContentAdapter.OnItemClickListener() {
             @Override
             public void onClick(DisplayItem item) {
                 if (item instanceof Event) {
@@ -130,7 +130,7 @@ public class UserEventActivity extends AppCompatActivity {
     private void loadEvents() {
         List<Event> events;
         if (isMyEventsMode) {
-            events = dbHelper.getEventsUserRequested(username);
+            events = dbHelper.getParticipantEventRequests(username);
         } else {
             String query = searchBar.getText().toString().trim();
             String selectedCategory = categorySpinner.getSelectedItem().toString();

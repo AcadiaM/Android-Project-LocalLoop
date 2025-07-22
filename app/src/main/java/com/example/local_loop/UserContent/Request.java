@@ -5,13 +5,13 @@ import android.os.Bundle;
 public class Request {
     final protected int requestID;
     final protected int eventID;
-    final protected String attendeeID;
+    final protected String participantID;
     protected String status;
 
-    public Request(int requestID, int eventID, String attendeeID, String status){
+    public Request(int requestID, int eventID, String participantID, String status){
         this.requestID = requestID;
         this.eventID = eventID;
-        this.attendeeID = attendeeID;
+        this.participantID = participantID;
         this.status = status;
     }
 
@@ -19,7 +19,7 @@ public class Request {
         Bundle bundle = new Bundle();
         bundle.putInt("requestID", requestID);
         bundle.putInt("eventID", eventID);
-        bundle.putString("attendeeID", attendeeID);
+        bundle.putString("participantID", participantID);
         bundle.putString("status", status);
         return bundle;
     }
@@ -28,7 +28,7 @@ public class Request {
         return new Request(
                 bundle.getInt("requestID"),
                 bundle.getInt("eventID"),
-                bundle.getString("attendeeID"),
+                bundle.getString("participantID"),
                 bundle.getString("status")
         );
 

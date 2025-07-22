@@ -54,7 +54,7 @@ public class EventDetailsActivity extends AppCompatActivity {
 
         String organizer = getIntent().getStringExtra("organizer");
         int categoryID = getIntent().getIntExtra("categoryId", -1);
-        Category category = dBHelper.getCategoryById(categoryID);
+        Category category = dBHelper.getCategory(categoryID);
         String categoryName = category.getName();
 
         // Optional: context-dependent values
@@ -90,7 +90,7 @@ public class EventDetailsActivity extends AppCompatActivity {
 
         } else {
             contextInfoText.setText("Category: " + categoryName + "\n" + "\n" + "Organizer: " + organizer);  // Or "Unknown Source"
-            if (dBHelper.hasJoinRequest(eventID, attendeeID)) {
+            if (dBHelper.hasRequest(eventID, attendeeID)) {
                 joinButton.setEnabled(false);
                 joinButton.setText(dBHelper.getStatus(eventID, attendeeID));
                 if (Objects.equals(dBHelper.getStatus(eventID, attendeeID), "Approved")) {
@@ -105,7 +105,7 @@ public class EventDetailsActivity extends AppCompatActivity {
             } else {
                 joinButton.setText("Join");
                 joinButton.setOnClickListener(v -> {
-                    dBHelper.submitJoinRequest(eventID, attendeeID);
+                    dBHelper.submitRequest(eventID, attendeeID);
                     joinButton.setEnabled(false);
                     joinButton.setBackgroundColor(Color.LTGRAY);
                     joinButton.setText(dBHelper.getStatus(eventID, attendeeID));

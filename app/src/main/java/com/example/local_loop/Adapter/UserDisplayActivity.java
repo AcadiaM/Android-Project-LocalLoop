@@ -1,4 +1,4 @@
-package com.example.local_loop.AFIX;
+package com.example.local_loop.Adapter;
 
 import static com.example.local_loop.Details.EventDetailsActivity.EXTRA_SOURCE;
 import static com.example.local_loop.Details.EventDetailsActivity.SOURCE_ORGANIZER;

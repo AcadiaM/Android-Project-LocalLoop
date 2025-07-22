@@ -1,4 +1,4 @@
-package com.example.local_loop.AFIX;
+package com.example.local_loop.Adapter;
 
 import android.content.Context;
 import android.content.res.ColorStateList;
@@ -15,7 +15,6 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.example.local_loop.Account.User;
 import com.example.local_loop.Helpers.DatabaseHelper;
 import com.example.local_loop.R;
-
 
 import java.util.List;
 
@@ -74,7 +73,7 @@ public class UserDisplayAdapter extends RecyclerView.Adapter<UserDisplayViewHold
 
             holder.disable.setOnClickListener(v -> toggleUserActiveStatus(holder, user.getUsername(), holder.getAdapterPosition()));
 
-            if (db.isActive(user.getUsername()) == 0) {
+            if (db.getUserState(user.getUsername()) == 0) {
                 holder.disable.setIconTint(ColorStateList.valueOf(Color.RED));
                 holder.disable.setHint("User is disabled.");
             } else {
@@ -97,7 +96,7 @@ public class UserDisplayAdapter extends RecyclerView.Adapter<UserDisplayViewHold
     }
 
     private void toggleUserActiveStatus(UserDisplayViewHolder holder, String username, int pos) {
-        if (db.isActive(username) == 1) {
+        if (db.getUserState(username) == 1) {
             db.deactivateUser(username);
             holder.disable.setIconTint(ColorStateList.valueOf(Color.RED));
             Toast.makeText(context, "User " + username + " disabled.", Toast.LENGTH_SHORT).show();
