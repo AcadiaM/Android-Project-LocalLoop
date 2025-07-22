@@ -1,4 +1,4 @@
-package com.example.local_loop.Account;
+package com.example.local_loop.Models;
 
 import android.os.Parcelable;
 
@@ -87,5 +87,23 @@ public class Account implements Parcelable {
                 ", firstName='" + firstName + '\'' +
                 ", lastName='" + lastName + '\'' +
                 '}';
+    }
+
+    //To make arrayList sorting more efficient, use unique primary key integer instance var.
+    @Override
+    public boolean equals(Object obj){
+        if (this == obj){
+            return true;
+        }
+        if(!(obj instanceof Account)){
+            return false;
+        }
+        Account other = (Account) obj;
+        return this.userID == other.getUserID();
+    }
+
+    @Override
+    public int hashCode(){
+        return userID;
     }
 }

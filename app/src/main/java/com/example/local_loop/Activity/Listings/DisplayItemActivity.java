@@ -1,8 +1,8 @@
-package com.example.local_loop.Displays;
+package com.example.local_loop.Activity.Listings;
 
-import static com.example.local_loop.Details.EventDetailsActivity.EXTRA_SOURCE;
-import static com.example.local_loop.Details.EventDetailsActivity.SOURCE_ADMIN;
-import static com.example.local_loop.Details.EventDetailsActivity.SOURCE_ORGANIZER;
+import static com.example.local_loop.Activity.Details.EventDetailsActivity.EXTRA_SOURCE;
+import static com.example.local_loop.Activity.Details.EventDetailsActivity.SOURCE_ADMIN;
+import static com.example.local_loop.Activity.Details.EventDetailsActivity.SOURCE_ORGANIZER;
 
 import android.app.AlertDialog;
 import android.app.DatePickerDialog;
@@ -12,6 +12,7 @@ import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.Typeface;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -27,14 +28,17 @@ import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.example.local_loop.Adapter.DisplayContentAdapter;
-import com.example.local_loop.Details.CategoryDetailsActivity;
-import com.example.local_loop.Details.EventDetailsActivity;
+import com.example.local_loop.Activity.Details.CategoryDetailsActivity;
+import com.example.local_loop.Activity.Details.EventDetailsActivity;
+import com.example.local_loop.Adapters.DisplayItemAdapter;
 import com.example.local_loop.Helpers.DatabaseHelper;
-import com.example.local_loop.Helpers.DisplayItem;
+import com.example.local_loop.Adapters.DisplayItem;
+import com.example.local_loop.Helpers.InputValidation;
+import com.example.local_loop.Helpers.ViewMode;
+import com.example.local_loop.Models.Account;
 import com.example.local_loop.R;
-import com.example.local_loop.UserContent.Category;
-import com.example.local_loop.UserContent.Event;
+import com.example.local_loop.Models.Category;
+import com.example.local_loop.Models.Event;
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.android.material.textfield.TextInputLayout;
 
@@ -46,20 +50,17 @@ import java.util.Locale;
 import java.util.Objects;
 
 public class DisplayItemActivity extends AppCompatActivity {
-
+    private Account user;
+    private InputValidation validation;
     private DatabaseHelper dbHelper;
-    private DisplayContentAdapter displayContentAdapter;
+    private DisplayItemAdapter displayItemAdapter;
 
     private ImageButton addButton, removeButton, editButton;
 
-    private boolean isDeleteMode = false;
+    private ViewMode mode; //delete or edit
 
     private final List<DisplayItem> selectedItems = new ArrayList<>();
 
-    private boolean isEditMode = false;
-
-    private String source;    // "SOURCE_ADMIN" or "SOURCE_ORGANIZER"
-    private String organizerUsername;  // For filtering events
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -67,9 +68,14 @@ public class DisplayItemActivity extends AppCompatActivity {
         setContentView(R.layout.activity_display_item);
 
         dbHelper = new DatabaseHelper(this);
+        validation = new InputValidation(this,dbHelper);
 
-        source = getIntent().getStringExtra(EXTRA_SOURCE);
-        organizerUsername = getIntent().getStringExtra("username");
+        user = getIntent().getParcelableExtra("user", Account.class);
+        if (user == null) {
+            Log.d("USER_EVENT_A","Session is null girlie");
+            finish();
+            return;
+        }
 
         setupButtons();
         setupRecyclerView();
@@ -93,7 +99,7 @@ public class DisplayItemActivity extends AppCompatActivity {
         RecyclerView recyclerView = findViewById(R.id.recyclerView);
         recyclerView.setLayoutManager(new GridLayoutManager(this, 2));
 
-        displayContentAdapter = new DisplayContentAdapter(new ArrayList<>(), new DisplayContentAdapter.OnItemClickListener() {
+        displayItemAdapter = new DisplayItemAdapter(new ArrayList<>(), new DisplayItemAdapter.OnItemClickListener() {
             @Override
             public void onClick(DisplayItem item) {
                 if (item instanceof Category) {
@@ -115,43 +121,33 @@ public class DisplayItemActivity extends AppCompatActivity {
             }
         });
 
-        recyclerView.setAdapter(displayContentAdapter);
+        recyclerView.setAdapter(displayItemAdapter);
+        mode = displayItemAdapter.getMode();
     }
 
     private void openCategoryDetails(Category category) {
         Intent intent = new Intent(this, CategoryDetailsActivity.class);
-        intent.putExtra(EXTRA_SOURCE, getIntent().getStringExtra(EXTRA_SOURCE));
-        intent.putExtra("sourceContext", DisplayItemActivity.class.getSimpleName());
-        intent.putExtra("categoryId", category.getID());
-        intent.putExtra("categoryName", category.getName());
-        intent.putExtra("categoryDescription", category.getDescription());
+        intent.putExtra("user",user);
+        intent.putExtra("ViewMode",mode.name());
+        intent.putExtra("category", category.toBundle());
         startActivity(intent);
     }
 
     private void openEventDetails(Event event) {
         Intent intent = new Intent(this, EventDetailsActivity.class);
-        intent.putExtra(EXTRA_SOURCE, getIntent().getStringExtra(EXTRA_SOURCE));
-        intent.putExtra("sourceContext", DisplayItemActivity.class.getSimpleName());
-        intent.putExtra("eventId", event.getID());
-        intent.putExtra("title", event.getName());
-        intent.putExtra("description", event.getDescription());
-        intent.putExtra("fee", String.valueOf(event.getFee()));
-        intent.putExtra("datetime", event.getDateTime());
-        intent.putExtra("categoryId", event.getCategoryId());
-        intent.putExtra("organizer", event.getOrganizer());
+        intent.putExtra("user",user);
+        intent.putExtra("ViewMode",mode.name());
+        intent.putExtra("event", event.toBundle());
         startActivity(intent);
     }
 
 
     private void handleRemoveButton() {
-        if (displayContentAdapter.getItemCount() == 0) {
+        if (displayItemAdapter.getItemCount() == 0) {
             Toast.makeText(this, "No items to delete", Toast.LENGTH_SHORT).show();
             return;
         }
-
-        if (!isDeleteMode) {
-            enterDeleteMode();
-        } else {
+        if(mode == ViewMode.DELETE){
             for (DisplayItem item : selectedItems) {
                 if (item instanceof Category) {
                     dbHelper.deleteCategory(item.getID());
@@ -159,16 +155,18 @@ public class DisplayItemActivity extends AppCompatActivity {
                     dbHelper.deleteEvent(item.getID());
                 }
             }
-
             Toast.makeText(this, "Deleted " + selectedItems.size() + " items", Toast.LENGTH_SHORT).show();
-            exitDeleteMode();
+            exitDeleteMode(); //TODO
             loadItems();
+        }
+        else{
+            enterDeleteMode(); //TODO --> connect MODE to Adapter
         }
     }
 
 
     private void handleEditButton() {
-        if (displayContentAdapter.getItemCount() == 0) {
+        if (displayItemAdapter.getItemCount() == 0) {
             Toast.makeText(this, "No items to edit", Toast.LENGTH_SHORT).show();
             return;
         }
@@ -176,49 +174,50 @@ public class DisplayItemActivity extends AppCompatActivity {
     }
 
     private void enterDeleteMode() {
-        isDeleteMode = true;
         selectedItems.clear();
         Toast.makeText(this, "Select items to delete", Toast.LENGTH_SHORT).show();
         addButton.setEnabled(false);
         editButton.setEnabled(false);
         removeButton.setImageResource(R.drawable.outline_check_circle_24);
 
-        displayContentAdapter.setDeleteMode(true);
-        displayContentAdapter.setSelectedItems(selectedItems);
+        displayItemAdapter.setViewMode(ViewMode.DELETE);
+        displayItemAdapter.setSelectedItems(selectedItems);
     }
 
     private void exitDeleteMode() {
-        isDeleteMode = false;
         selectedItems.clear();
         addButton.setEnabled(true);
         editButton.setEnabled(true);
         removeButton.setImageResource(R.drawable.baseline_delete_forever_24);
 
-        displayContentAdapter.setDeleteMode(false);
-        displayContentAdapter.setSelectedItems(new ArrayList<>());
+        displayItemAdapter.setViewMode(ViewMode.EDIT);
+        displayItemAdapter.setSelectedItems(new ArrayList<>());
     }
 
     private void loadItems() {
         List<DisplayItem> items = new ArrayList<>();
+        String role = user.getRole();
 
-        if (SOURCE_ADMIN.equals(source)) {
+        if (role.equals("admin")) {
             items.addAll(dbHelper.getAllCategories());
-        } else if (SOURCE_ORGANIZER.equals(source)) {
-            items.addAll(dbHelper.getEventsByOrganizer(organizerUsername));
+        }
+        if(role.equals("organizer")) {
+            items.addAll(dbHelper.getEventsByOrganizer(user.getUserID()));
         }
 
-        displayContentAdapter.updateItems(items);
-
+        displayItemAdapter.updateItems(items);
         TextView noCategoriesTextView = findViewById(R.id.noTextView);
 
         if (items.isEmpty()) {
-            if (SOURCE_ADMIN.equals(source)) {
+            if(role.equals("admin")){
                 noCategoriesTextView.setText(R.string.no_categories_created);
-            } else if (SOURCE_ORGANIZER.equals(source)) {
-                noCategoriesTextView.setText(R.string.no_events_created);
             }
-            noCategoriesTextView.setVisibility(View.VISIBLE);
-        } else {
+            else if (role.equals("organizer")){
+                noCategoriesTextView.setText(R.string.no_events_created);
+            }else{
+                noCategoriesTextView.setVisibility(View.VISIBLE);
+            }
+        }else{
             noCategoriesTextView.setVisibility(View.GONE);
         }
     }
@@ -227,7 +226,7 @@ public class DisplayItemActivity extends AppCompatActivity {
 
 
     private void showItemOptions(DisplayItem item) {
-        String itemName = (item instanceof Category) ? item.getName() : ((Event) item).getName();
+        String itemName = (item instanceof Category) ? item.getTitle() : ((Event) item).getTitle();
         String[] options = {"Rename", "Delete"};
 
         new AlertDialog.Builder(this)
@@ -248,7 +247,7 @@ public class DisplayItemActivity extends AppCompatActivity {
     }
 
     private void showItemDialog(DisplayItem itemToEdit) {
-        boolean isEvent = SOURCE_ORGANIZER.equals(source);
+        boolean isEvent = user.getRole().equals("organizer");
 
         if (isEvent) {
             List<Category> categories = dbHelper.getAllCategories();
@@ -257,7 +256,6 @@ public class DisplayItemActivity extends AppCompatActivity {
                 return;  // Stop here, do not open dialog
             }
         }
-
 
         LayoutInflater inflater = LayoutInflater.from(this);
         View dialogView = inflater.inflate(
@@ -295,7 +293,7 @@ public class DisplayItemActivity extends AppCompatActivity {
 
             List<Category> categories = dbHelper.getAllCategories();
             List<String> categoryNames = new ArrayList<>();
-            for (Category cat : categories) categoryNames.add(cat.getName());
+            for (Category cat : categories) categoryNames.add(cat.getTitle());
             ArrayAdapter<String> spinnerAdapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, categoryNames);
             spinnerAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
             categorySpinner.setAdapter(spinnerAdapter);
@@ -310,13 +308,13 @@ public class DisplayItemActivity extends AppCompatActivity {
         if (itemToEdit != null) {
             if (isEvent) {
                 Event event = (Event) itemToEdit;
-                nameInput.setText(event.getName());
+                nameInput.setText(event.getTitle());
                 descriptionInput.setText(event.getDescription());
                 feeInput.setText(String.valueOf(event.getFee()));
                 datetimeInput.setText(event.getDateTime());
             } else {
                 Category category = (Category) itemToEdit;
-                nameInput.setText(category.getName());
+                nameInput.setText(category.getTitle());
                 descriptionInput.setText(category.getDescription());
             }
         }
@@ -360,13 +358,13 @@ public class DisplayItemActivity extends AppCompatActivity {
 
                 if (isEvent) {
                     boolean nameExists = dbHelper.eventTitleExists(name);
-                    if (nameExists && (itemToEdit == null || !name.equals(((Event) itemToEdit).getName()))) {
+                    if (nameExists && (itemToEdit == null || !name.equals(((Event) itemToEdit).getTitle()))) {
                         nameLayout.setError("Event title already exists.");
                         valid = false;
                     }
                 } else {
                     boolean nameExists = dbHelper.checkCategoryName(name);
-                    if (nameExists && (itemToEdit == null || !name.equals(itemToEdit.getName()))) {
+                    if (nameExists && (itemToEdit == null || !name.equals(itemToEdit.getTitle()))) {
                         nameLayout.setError("Category name already exists.");
                         valid = false;
                     }
@@ -414,7 +412,8 @@ public class DisplayItemActivity extends AppCompatActivity {
                 if (valid) {
                     if (itemToEdit == null) {
                         if (isEvent) {
-                            dbHelper.addEvent(name, description, categoryId, datetime, fee, organizerUsername);
+                            Event event = new Event(-1,name, description, categoryId, user.getUserID(),fee , datetime);
+                            dbHelper.addEvent(event);
                         } else {
                             dbHelper.addCategory(name, description);
                         }
@@ -436,33 +435,32 @@ public class DisplayItemActivity extends AppCompatActivity {
 
 
     private void enterEditMode() {
-        isEditMode = true;
         Toast.makeText(this, "Tap a category to rename", Toast.LENGTH_SHORT).show();
         addButton.setEnabled(false);
         removeButton.setEnabled(false);
         editButton.setEnabled(false);
-        displayContentAdapter.setEditMode(isEditMode);
+        displayItemAdapter.setViewMode(ViewMode.DEFAULT);
     }
 
     private void exitEditMode() {
-        isEditMode = false;
         addButton.setEnabled(true);
         removeButton.setEnabled(true);
         editButton.setEnabled(true);
-        displayContentAdapter.setEditMode(isEditMode);
+        displayItemAdapter.setViewMode(ViewMode.DEFAULT);
     }
 
     @SuppressWarnings("deprecation")
     @Override
     public void onBackPressed() {
-        if (isDeleteMode) {
-            exitDeleteMode();
-            Toast.makeText(this, "Delete mode cancelled", Toast.LENGTH_SHORT).show();
-        } else if (isEditMode) {
-            exitEditMode();
-            Toast.makeText(this, "Edit mode cancelled", Toast.LENGTH_SHORT).show();
-        } else {
-            super.onBackPressed();
+        switch (mode){
+            case EDIT:
+                exitDeleteMode();
+                Toast.makeText(this, "Delete mode cancelled", Toast.LENGTH_SHORT).show();
+            case DELETE:
+                exitEditMode();
+                Toast.makeText(this, "Edit mode cancelled", Toast.LENGTH_SHORT).show();
+            default:
+                super.onBackPressed();
         }
     }
 

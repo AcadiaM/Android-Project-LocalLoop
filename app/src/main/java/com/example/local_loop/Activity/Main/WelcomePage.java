@@ -1,4 +1,4 @@
-package com.example.local_loop.Activity;
+package com.example.local_loop.Activity.Main;
 
 import android.annotation.SuppressLint;
 import android.content.Intent;
@@ -15,11 +15,12 @@ import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
-import com.example.local_loop.Account.Account;
-import com.example.local_loop.Displays.DisplayItemActivity;
-import com.example.local_loop.Displays.UserDisplayActivity;
-import com.example.local_loop.Displays.UserEventActivity;
-import com.example.local_loop.Helpers.State;
+
+import com.example.local_loop.Activity.Listings.DisplayItemActivity;
+import com.example.local_loop.Activity.Listings.UserDisplayActivity;
+import com.example.local_loop.Activity.Listings.UserEventActivity;
+import com.example.local_loop.Helpers.ViewMode;
+import com.example.local_loop.Models.Account;
 import com.example.local_loop.R;
 
 public class WelcomePage extends AppCompatActivity {
@@ -127,13 +128,13 @@ public class WelcomePage extends AppCompatActivity {
     public void OnBrowseEventsButton(View view){
         Intent intent = new Intent(WelcomePage.this, UserEventActivity.class);
         intent.putExtra("user", session);
-        intent.putExtra("isBrowsing", State.BROWSING);
+        intent.putExtra("isBrowsing", ViewMode.BROWSING_EVENTS);
         startActivity(intent);
     }
     public void OnMyEventsButton(View view){
         Intent intent = new Intent(WelcomePage.this, UserEventActivity.class);
         intent.putExtra("user", session);
-        intent.putExtra("myEvents", State.MYEVENTS);
+        intent.putExtra("myEvents", ViewMode.MYEVENTS);
         startActivity(intent);
     }
 

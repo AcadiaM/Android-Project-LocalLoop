@@ -1,4 +1,4 @@
-package com.example.local_loop.Details;
+package com.example.local_loop.Activity.Details;
 
 import android.annotation.SuppressLint;
 import android.content.Intent;
@@ -10,10 +10,11 @@ import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
 
-import com.example.local_loop.Displays.UserDisplayActivity;
+
+import com.example.local_loop.Activity.Listings.UserDisplayActivity;
 import com.example.local_loop.Helpers.DatabaseHelper;
 import com.example.local_loop.R;
-import com.example.local_loop.UserContent.Category;
+import com.example.local_loop.Models.Category;
 
 import java.util.Objects;
 
@@ -55,7 +56,7 @@ public class EventDetailsActivity extends AppCompatActivity {
         String organizer = getIntent().getStringExtra("organizer");
         int categoryID = getIntent().getIntExtra("categoryId", -1);
         Category category = dBHelper.getCategory(categoryID);
-        String categoryName = category.getName();
+        String categoryName = category.getTitle();
 
         // Optional: context-dependent values
         String source = getIntent().getStringExtra(EXTRA_SOURCE);

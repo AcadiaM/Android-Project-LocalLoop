@@ -1,4 +1,4 @@
-package com.example.local_loop.Activity;
+package com.example.local_loop.Activity.Main;
 
 import android.content.Intent;
 import android.os.Bundle;

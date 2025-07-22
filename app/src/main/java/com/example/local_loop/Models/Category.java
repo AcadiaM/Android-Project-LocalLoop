@@ -1,8 +1,8 @@
-package com.example.local_loop.UserContent;
+package com.example.local_loop.Models;
 
 import android.os.Bundle;
 
-import com.example.local_loop.Helpers.DisplayItem;
+import com.example.local_loop.Adapters.DisplayItem;
 
 public class Category implements DisplayItem {
     private final int ID;
@@ -19,7 +19,7 @@ public class Category implements DisplayItem {
     public int getID() { return ID; }
 
     @Override
-    public String getName() { return NAME; }
+    public String getTitle() { return NAME; }
     public String getDescription() { return DESCRIPTION; }
 
     public Bundle toBundle(){
@@ -37,6 +37,24 @@ public class Category implements DisplayItem {
                 bundle.getString("description")
         );
 
+    }
+
+    //To make arrayList sorting more efficient, use unique primary key integer instance var.
+    @Override
+    public boolean equals(Object obj){
+        if (this == obj){
+            return true;
+        }
+        if(!(obj instanceof Category)){
+            return false;
+        }
+        Category other = (Category) obj;
+        return this.ID == other.getID();
+    }
+
+    @Override
+    public int hashCode(){
+        return ID;
     }
 
 

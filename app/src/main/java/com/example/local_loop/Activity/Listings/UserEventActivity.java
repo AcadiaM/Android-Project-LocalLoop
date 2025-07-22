@@ -1,6 +1,4 @@
-package com.example.local_loop.Displays;
-
-import static com.example.local_loop.Details.EventDetailsActivity.EXTRA_SOURCE;
+package com.example.local_loop.Activity.Listings;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -8,6 +6,7 @@ import android.os.Handler;
 import android.os.Looper;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.util.Log;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
@@ -20,23 +19,25 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.example.local_loop.Adapter.DisplayContentAdapter;
-import com.example.local_loop.Details.EventDetailsActivity;
+import com.example.local_loop.Activity.Details.EventDetailsActivity;
+import com.example.local_loop.Adapters.DisplayItemAdapter;
 import com.example.local_loop.Helpers.DatabaseHelper;
-import com.example.local_loop.Helpers.DisplayItem;
+import com.example.local_loop.Adapters.DisplayItem;
+import com.example.local_loop.Helpers.ViewMode;
+import com.example.local_loop.Models.Account;
 import com.example.local_loop.R;
-import com.example.local_loop.UserContent.Category;
-import com.example.local_loop.UserContent.Event;
+import com.example.local_loop.Models.Category;
+import com.example.local_loop.Models.Event;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public class UserEventActivity extends AppCompatActivity {
 
-    private DisplayContentAdapter eventAdapter;
+    private DisplayItemAdapter eventAdapter;
     private DatabaseHelper dbHelper;
-    private String username;
-    private boolean isMyEventsMode;
+    private ViewMode mode;
+    private Account user;
 
     private EditText searchBar;
     private Spinner categorySpinner;
@@ -52,18 +53,22 @@ public class UserEventActivity extends AppCompatActivity {
         setContentView(R.layout.activity_event_user_list);  // Use shared layout
 
         dbHelper = new DatabaseHelper(this);
-        username = getIntent().getStringExtra("username");
-        isMyEventsMode = getIntent().getBooleanExtra("isMyEventsMode", false);
+        user = getIntent().getParcelableExtra("user", Account.class);
+        if (user == null) {
+            Log.d("USER_EVENT_A","Session is null girlie");
+            finish();
+            return;
+        }
+        mode = ViewMode.valueOf(getIntent().getStringExtra("VIEW_MODE"));
 
         RecyclerView eventRecyclerView = findViewById(R.id.recyclerViewEvents);
         eventRecyclerView.setLayoutManager(new GridLayoutManager(this, 2));
-
         searchBar = findViewById(R.id.searchBar);
         categorySpinner = findViewById(R.id.categorySpinner);
         TextView titleTextView = findViewById(R.id.events);
 
         // Handle UI visibility
-        if (isMyEventsMode) {
+        if (mode == ViewMode.PARTICIPANT_EVENTS) {
             searchBar.setVisibility(View.GONE);
             categorySpinner.setVisibility(View.GONE);
             // Set the title or any text view you want:
@@ -72,22 +77,14 @@ public class UserEventActivity extends AppCompatActivity {
             setupCategorySpinner();
             setupSearchBar();
         }
-        eventAdapter = new DisplayContentAdapter(new ArrayList<>(), new DisplayContentAdapter.OnItemClickListener() {
+        eventAdapter = new DisplayItemAdapter(new ArrayList<>(), new DisplayItemAdapter.OnItemClickListener() {
             @Override
             public void onClick(DisplayItem item) {
                 if (item instanceof Event) {
                     Event event = (Event) item;
                     Intent intent = new Intent(UserEventActivity.this, EventDetailsActivity.class);
-                    intent.putExtra(EXTRA_SOURCE, getIntent().getStringExtra(EXTRA_SOURCE));
-                    intent.putExtra("sourceContext", UserEventActivity.class.getSimpleName());
-                    intent.putExtra("attendeeId", username);
-                    intent.putExtra("eventId", event.getID());
-                    intent.putExtra("title", event.getName());
-                    intent.putExtra("description", event.getDescription());
-                    intent.putExtra("fee", String.valueOf(event.getFee()));
-                    intent.putExtra("datetime", event.getDateTime());
-                    intent.putExtra("categoryId", event.getCategoryId());
-                    intent.putExtra("organizer", event.getOrganizer());
+                    intent.putExtra("user", user);
+                    intent.putExtra("event", event.toBundle());
                     startActivity(intent);
                 }
                 // Do something with event
@@ -106,15 +103,9 @@ public class UserEventActivity extends AppCompatActivity {
 
         eventRecyclerView.setAdapter(eventAdapter);
 
-        if (isMyEventsMode) {
-            findViewById(R.id.searchBar).setVisibility(View.GONE);
-            findViewById(R.id.categorySpinner).setVisibility(View.GONE);
-        } else {
-            setupCategorySpinner();
-            setupSearchBar();
-        }
-
         loadEvents();
+        Button backButton = findViewById(R.id.browseEventBackButton);
+        backButton.setOnClickListener(v -> onBackPressed());
 
         decorView = getWindow().getDecorView();
         decorView.setOnSystemUiVisibilityChangeListener(visibility -> {
@@ -122,16 +113,15 @@ public class UserEventActivity extends AppCompatActivity {
                 decorView.setSystemUiVisibility(hideSystemBars());
             }
         });
-
-        Button backButton = findViewById(R.id.browseEventBackButton);
-        backButton.setOnClickListener(v -> onBackPressed());
     }
+
 
     private void loadEvents() {
         List<Event> events;
-        if (isMyEventsMode) {
-            events = dbHelper.getParticipantEventRequests(username);
-        } else {
+        if(mode == ViewMode.PARTICIPANT_EVENTS){
+            events = dbHelper.getParticipantEventRequests(user.getUserID());
+        }
+        else{
             String query = searchBar.getText().toString().trim();
             String selectedCategory = categorySpinner.getSelectedItem().toString();
             if (selectedCategory.equals("All")) selectedCategory = "";
@@ -140,31 +130,9 @@ public class UserEventActivity extends AppCompatActivity {
 
         TextView emptyView = findViewById(R.id.noEventsUserTextView);
         emptyView.setVisibility(events == null || events.isEmpty() ? View.VISIBLE : View.GONE);
-
         assert events != null;
         eventAdapter.updateItems(new ArrayList<>(events));
     }
-
-
-    //this method is called when the activity gains or loses focus
-    @SuppressWarnings("deprecation")
-    @Override
-    public void onWindowFocusChanged(boolean hasFocus) {
-        super.onWindowFocusChanged(hasFocus);
-        if(hasFocus) {
-            decorView.setSystemUiVisibility(hideSystemBars());
-        }
-    }
-    @SuppressWarnings("deprecation")
-    private int hideSystemBars(){
-        return (View.SYSTEM_UI_FLAG_LAYOUT_STABLE
-                | View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY
-                | View.SYSTEM_UI_FLAG_FULLSCREEN
-                | View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
-                | View.SYSTEM_UI_FLAG_FULLSCREEN
-                | View.SYSTEM_UI_FLAG_HIDE_NAVIGATION);
-    }
-
 
     //Method to load the events for the user from the database
     private void loadEventsForUser() {
@@ -183,7 +151,7 @@ public class UserEventActivity extends AppCompatActivity {
             noEventsUserTextView.setVisibility(View.GONE);
         }
         assert events != null;
-        Toast.makeText(this, "Loading " + events.size() + " events for: " + username, Toast.LENGTH_SHORT).show();
+        Toast.makeText(this, "Loading " + events.size() + " events for: " + user.getUsername(), Toast.LENGTH_SHORT).show();
         List<DisplayItem> displayItems = new ArrayList<>(events);
         eventAdapter.updateItems(displayItems);
 
@@ -194,7 +162,7 @@ public class UserEventActivity extends AppCompatActivity {
         categoryNames.add("All");
 
         for (Category c : dbHelper.getAllCategories()) {
-            categoryNames.add(c.getName());
+            categoryNames.add(c.getTitle());
         }
 
         ArrayAdapter<String> spinnerAdapter = new ArrayAdapter<>(
@@ -227,5 +195,24 @@ public class UserEventActivity extends AppCompatActivity {
                 handler.postDelayed(searchRunnable, SEARCH_DELAY);
             }
         });
+    }
+
+    //this method is called when the activity gains or loses focus
+    @SuppressWarnings("deprecation")
+    @Override
+    public void onWindowFocusChanged(boolean hasFocus) {
+        super.onWindowFocusChanged(hasFocus);
+        if(hasFocus) {
+            decorView.setSystemUiVisibility(hideSystemBars());
+        }
+    }
+    @SuppressWarnings("deprecation")
+    private int hideSystemBars(){
+        return (View.SYSTEM_UI_FLAG_LAYOUT_STABLE
+                | View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY
+                | View.SYSTEM_UI_FLAG_FULLSCREEN
+                | View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
+                | View.SYSTEM_UI_FLAG_FULLSCREEN
+                | View.SYSTEM_UI_FLAG_HIDE_NAVIGATION);
     }
 }

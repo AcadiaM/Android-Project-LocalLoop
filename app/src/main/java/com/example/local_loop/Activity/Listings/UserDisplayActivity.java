@@ -1,7 +1,4 @@
-package com.example.local_loop.Adapter;
-
-import static com.example.local_loop.Details.EventDetailsActivity.EXTRA_SOURCE;
-import static com.example.local_loop.Details.EventDetailsActivity.SOURCE_ORGANIZER;
+package com.example.local_loop.Activity.Listings;
 
 import android.os.Bundle;
 import android.view.View;
@@ -17,7 +14,8 @@ import androidx.core.view.WindowInsetsCompat;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.example.local_loop.Account.User;
+import com.example.local_loop.Models.User;
+import com.example.local_loop.Adapters.UserDisplayAdapter;
 import com.example.local_loop.Helpers.DatabaseHelper;
 import com.example.local_loop.R;
 
@@ -43,7 +41,6 @@ public class UserDisplayActivity extends AppCompatActivity {
 
         db = new DatabaseHelper(this);
 
-        boolean isAttendeeMode = SOURCE_ORGANIZER.equals(getIntent().getStringExtra(EXTRA_SOURCE));
         int eventId = getIntent().getIntExtra("eventId", -1);
 
         RecyclerView recyclerView = findViewById(R.id.recycler);
@@ -109,3 +106,5 @@ public class UserDisplayActivity extends AppCompatActivity {
                 | View.SYSTEM_UI_FLAG_HIDE_NAVIGATION);
     }
 }
+
+/*DisplayItemAdapter UserDisplayAdapter

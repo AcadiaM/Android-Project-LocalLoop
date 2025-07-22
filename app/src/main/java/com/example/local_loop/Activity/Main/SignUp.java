@@ -1,4 +1,4 @@
-package com.example.local_loop.Activity;
+package com.example.local_loop.Activity.Main;
 
 import android.app.Activity;
 import android.content.Intent;
@@ -16,8 +16,8 @@ import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
-import com.example.local_loop.Account.Account;
-import com.example.local_loop.Account.User;
+import com.example.local_loop.Models.Account;
+import com.example.local_loop.Models.User;
 import com.example.local_loop.Helpers.DatabaseHelper;
 import com.example.local_loop.Helpers.InputValidation;
 import com.example.local_loop.R;

@@ -1,7 +1,9 @@
 package com.example.local_loop.Helpers;
 
 public enum RequestStatus {
-    PENDING("pending");
+    PENDING("pending"),
+    APPROVED("approved"),
+    REFUSED("refused");
 
     private final String status;
 

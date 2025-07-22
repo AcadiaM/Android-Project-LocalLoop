@@ -1,4 +1,4 @@
-package com.example.local_loop.UserContent;
+package com.example.local_loop.Models;
 
 import android.os.Bundle;
 

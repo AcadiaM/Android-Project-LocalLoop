@@ -7,10 +7,10 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.util.Log;
 
-import com.example.local_loop.Account.Account;
-import com.example.local_loop.Account.User;
-import com.example.local_loop.UserContent.Category;
-import com.example.local_loop.UserContent.Event;
+import com.example.local_loop.Models.Account;
+import com.example.local_loop.Models.User;
+import com.example.local_loop.Models.Category;
+import com.example.local_loop.Models.Event;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -215,7 +215,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
      */
     public void insertAdmin() {
         SQLiteDatabase db = this.getWritableDatabase();
-        Cursor cursor = db.query("users", null, "username = ?", new String[]{"admin"}, null, null, null);
+        Cursor cursor = db.query(TABLE_USERS, null, USERS_USERNAME+" = ?", new String[]{"admin"}, null, null, null);
         if (cursor.getCount() == 0) {
             User admin = new User("admin","admin","-","XPI76SZUqyCjVxgnUjm0","ADMIN","-");
             admin.setUserID(insertUser(admin));
@@ -226,22 +226,11 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     /**
      * This function searches for a user in the database. If found and the user is an organizer, its created events are deleted. Then, the user is deleted.
      *
-     * @param email the email of the desired user.
+     * @param userID the email of the desired user.
      */
-    public void deleteUser(String email) {
+    public void deleteUser(int userID) {
         SQLiteDatabase db = getWritableDatabase();
-
-        // Get the user ID
-        Cursor cursor = db.query("users", new String[]{"id"}, "email = ?", new String[]{email}, null, null, null);
-        if (cursor.moveToFirst()) {
-            int userId = cursor.getInt(0);
-            // Delete events created by this user
-            db.delete(TABLE_EVENTS, "organizer = ?", new String[]{String.valueOf(userId)});
-        }
-        cursor.close();
-
-        // Then delete user
-        db.delete("users", "email = ?", new String[]{email});
+        db.delete(TABLE_USERS, USERS_ID+" = ?", new String[]{String.valueOf(userID)});
     }
 
     /**
@@ -251,11 +240,11 @@ public class DatabaseHelper extends SQLiteOpenHelper {
      */
 
 
-    public void setUserState(int userID) {
+    public void setUserState(int userID, int status) {
         //The user is active (active=1) and is set to inactive=0
         SQLiteDatabase db = getWritableDatabase();
         ContentValues values = new ContentValues();
-        values.put("active", 0);
+        values.put("active", status);
         db.update(TABLE_USERS, values, USERS_ID+" = ?", new String[]{String.valueOf(userID)});
     }
 
@@ -394,7 +383,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues values = new ContentValues();
 
-        values.put(EVENTS_TITLE, event.getName());
+        values.put(EVENTS_TITLE, event.getTitle());
         values.put(EVENTS_DESCRIPTION, event.getDescription());
         values.put(EVENTS_FEE, event.getFee());
         values.put(EVENTS_DATETIME, event.getDateTime());
@@ -411,16 +400,16 @@ public class DatabaseHelper extends SQLiteOpenHelper {
      */
     
     //update the event item and send that to the DB
-    public void updateEvent(Event event) {
+    public void updateEvent(int eventId, String title, String description, double fee, String datetime, int categoryId) {
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues values = new ContentValues();
-        values.put(EVENTS_TITLE, event.getName());
-        values.put(EVENTS_DESCRIPTION, event.getDescription());
-        values.put(EVENTS_FEE, event.getDescription());
-        values.put(EVENTS_DATETIME, event.getDateTime());
-        values.put(EVENTS_CATEGORY_ID, event.getCategoryId());
+        values.put(EVENTS_TITLE, title);
+        values.put(EVENTS_DESCRIPTION, description);
+        values.put(EVENTS_FEE, fee);
+        values.put(EVENTS_DATETIME, datetime);
+        values.put(EVENTS_CATEGORY_ID, categoryId);
 
-        db.update(TABLE_EVENTS, values, EVENTS_ID+"=?", new String[]{String.valueOf(event.getID())});
+        db.update(TABLE_EVENTS, values, EVENTS_ID+"=?", new String[]{String.valueOf(eventId)});
         db.close();
     }
 
@@ -463,7 +452,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                 String title = cursor.getString(cursor.getColumnIndexOrThrow(EVENTS_TITLE));
                 String description = cursor.getString(cursor.getColumnIndexOrThrow(EVENTS_DESCRIPTION));
                 int categoryId = cursor.getInt(cursor.getColumnIndexOrThrow(EVENTS_CATEGORY_ID));
-                String org = cursor.getString(cursor.getColumnIndexOrThrow(EVENTS_ORGANIZER));
+                Integer org = cursor.getInt(cursor.getColumnIndexOrThrow(EVENTS_ORGANIZER));
                 double fee = cursor.getDouble(cursor.getColumnIndexOrThrow(EVENTS_FEE));
                 String dateTime = cursor.getString(cursor.getColumnIndexOrThrow(EVENTS_DATETIME));
 
@@ -517,7 +506,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                     cursor.getString(cursor.getColumnIndexOrThrow(EVENTS_TITLE)),
                     cursor.getString(cursor.getColumnIndexOrThrow(EVENTS_DESCRIPTION)),
                     cursor.getInt(cursor.getColumnIndexOrThrow(EVENTS_CATEGORY_ID)),
-                    cursor.getString(cursor.getColumnIndexOrThrow(EVENTS_ORGANIZER)),
+                    cursor.getInt(cursor.getColumnIndexOrThrow(EVENTS_ORGANIZER)),
                     cursor.getDouble(cursor.getColumnIndexOrThrow(EVENTS_FEE)),
                     cursor.getString(cursor.getColumnIndexOrThrow(EVENTS_DATETIME))
             );
@@ -590,7 +579,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                     cursor.getString(cursor.getColumnIndexOrThrow(EVENTS_TITLE)),
                     cursor.getString(cursor.getColumnIndexOrThrow(EVENTS_DESCRIPTION)),
                     cursor.getInt(cursor.getColumnIndexOrThrow(EVENTS_CATEGORY_ID)),
-                    cursor.getString(cursor.getColumnIndexOrThrow(EVENTS_ORGANIZER)),
+                    cursor.getInt(cursor.getColumnIndexOrThrow(EVENTS_ORGANIZER)),
                     cursor.getDouble(cursor.getColumnIndexOrThrow(EVENTS_FEE)),
                     cursor.getString(cursor.getColumnIndexOrThrow(EVENTS_DATETIME))
             );
@@ -663,7 +652,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                     cursor.getString(cursor.getColumnIndexOrThrow(EVENTS_TITLE)),
                     cursor.getString(cursor.getColumnIndexOrThrow(EVENTS_DESCRIPTION)),
                     cursor.getInt(cursor.getColumnIndexOrThrow(EVENTS_CATEGORY_ID)),
-                    cursor.getString(cursor.getColumnIndexOrThrow(EVENTS_ORGANIZER)),
+                    cursor.getInt(cursor.getColumnIndexOrThrow(EVENTS_ORGANIZER)),
                     cursor.getDouble(cursor.getColumnIndexOrThrow(EVENTS_FEE)),
                     cursor.getString(cursor.getColumnIndexOrThrow(EVENTS_DATETIME))
             );

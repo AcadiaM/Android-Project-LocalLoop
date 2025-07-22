@@ -1,4 +1,4 @@
-package com.example.local_loop.Adapter;
+package com.example.local_loop.Adapters;
 
 import android.annotation.SuppressLint;
 import android.graphics.Color;
@@ -10,13 +10,13 @@ import android.widget.Button;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.example.local_loop.Helpers.DisplayItem;
+import com.example.local_loop.Helpers.ViewMode;
 import com.example.local_loop.R;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class DisplayContentAdapter extends RecyclerView.Adapter<DisplayContentAdapter.ItemViewHolder> {
+public class DisplayItemAdapter extends RecyclerView.Adapter<DisplayItemAdapter.ItemViewHolder> {
 
     public interface OnItemClickListener {
         void onClick(DisplayItem item);
@@ -24,20 +24,16 @@ public class DisplayContentAdapter extends RecyclerView.Adapter<DisplayContentAd
         void onRenameClick(DisplayItem item);
     }
 
+    private ViewMode mode = ViewMode.DEFAULT; //   replacing deleteMode and editMode
     private List<DisplayItem> items;
     private final OnItemClickListener listener;
+    private List<DisplayItem> selectedItems = new ArrayList<>();
 
-    public DisplayContentAdapter(List<DisplayItem> items, OnItemClickListener listener) {
+    public DisplayItemAdapter(List<DisplayItem> items, OnItemClickListener listener) {
         this.items = items;
         this.listener = listener;
     }
 
-    private
-
-    private boolean deleteMode = false;
-    private boolean editMode = false;
-
-    private List<DisplayItem> selectedItems = new ArrayList<>();
 
     @SuppressLint("NotifyDataSetChanged")
     public void setSelectedItems(List<DisplayItem> selectedItems) {
@@ -45,17 +41,13 @@ public class DisplayContentAdapter extends RecyclerView.Adapter<DisplayContentAd
         notifyDataSetChanged();
     }
 
-
     @SuppressLint("NotifyDataSetChanged")
-    public void setDeleteMode(boolean enabled) {
-        this.deleteMode = enabled;
+    public void setMode(ViewMode newMode){ //replace setEditMode and setDeleteMode
+        this.mode = newMode;
         notifyDataSetChanged();
     }
-
-    @SuppressLint("NotifyDataSetChanged")
-    public void setEditMode(boolean enabled) {
-        this.editMode = enabled;
-        notifyDataSetChanged();
+    public ViewMode getMode(){
+        return mode;
     }
 
     @SuppressLint("NotifyDataSetChanged")
@@ -76,35 +68,35 @@ public class DisplayContentAdapter extends RecyclerView.Adapter<DisplayContentAd
     public void onBindViewHolder(@NonNull ItemViewHolder holder, int position) {
         DisplayItem item = items.get(position);
 
-        holder.button.setText(item.getName());
+        holder.button.setText(item.getTitle());
 
-        if (deleteMode) {
-            holder.button.setOnClickListener(v -> {
-                if (selectedItems.contains(item)) {
-                    selectedItems.remove(item);
-                    holder.button.setBackgroundColor(Color.LTGRAY);
-                } else {
-                    selectedItems.add(item);
-                    holder.button.setBackgroundColor(Color.TRANSPARENT);
-                }
-            });
+        switch(mode){
+            case DELETE:
+                holder.button.setOnClickListener(v -> {
+                    if (selectedItems.contains(item)) {
+                        selectedItems.remove(item);
+                        holder.button.setBackgroundColor(Color.LTGRAY);
+                    } else {
+                        selectedItems.add(item);
+                        holder.button.setBackgroundColor(Color.TRANSPARENT);
+                    }
+                });
 
-            holder.button.setBackgroundColor(selectedItems.contains(item)
-                    ? Color.TRANSPARENT : Color.LTGRAY);
+                holder.button.setBackgroundColor(selectedItems.contains(item)
+                        ? Color.TRANSPARENT : Color.LTGRAY);
 
-        } else if (editMode) {
-            holder.button.setOnClickListener(v -> {
-                if (listener != null) listener.onRenameClick(item);
-            });
+            case EDIT:
+                holder.button.setOnClickListener(v -> {
+                    if (listener != null) listener.onRenameClick(item);
+                });
 
-            holder.button.setBackgroundColor(Color.LTGRAY);
+                holder.button.setBackgroundColor(Color.LTGRAY);
+            default:
+                holder.button.setOnClickListener(v -> {
+                    if (listener != null) listener.onClick(item);
+                });
 
-        } else {  // Normal Mode: open details on click
-            holder.button.setOnClickListener(v -> {
-                if (listener != null) listener.onClick(item);
-            });
-
-            holder.button.setBackgroundColor(Color.TRANSPARENT);
+                holder.button.setBackgroundColor(Color.TRANSPARENT);
         }
 
         holder.button.setOnLongClickListener(v -> {
@@ -113,12 +105,19 @@ public class DisplayContentAdapter extends RecyclerView.Adapter<DisplayContentAd
         });
     }
 
+    public ViewMode getViewMode(){
+        return mode;
+    }
 
+    public void setViewMode(ViewMode mode){
+        this.mode = mode;
+    }
 
     @Override
     public int getItemCount() {
         return items.size();
     }
+
 
     public static class ItemViewHolder extends RecyclerView.ViewHolder {
         Button button;

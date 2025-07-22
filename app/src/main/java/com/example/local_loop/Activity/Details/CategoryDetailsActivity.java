@@ -1,7 +1,7 @@
-package com.example.local_loop.Details;
+package com.example.local_loop.Activity.Details;
 
 
-import static com.example.local_loop.Details.EventDetailsActivity.EXTRA_SOURCE;
+import static com.example.local_loop.Activity.Details.EventDetailsActivity.EXTRA_SOURCE;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -15,12 +15,12 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.example.local_loop.Adapter.DisplayContentAdapter;
+import com.example.local_loop.Adapters.DisplayItemAdapter;
 import com.example.local_loop.Helpers.DatabaseHelper;
-import com.example.local_loop.Helpers.DisplayItem;
+import com.example.local_loop.Adapters.DisplayItem;
 import com.example.local_loop.R;
-import com.example.local_loop.UserContent.Category;
-import com.example.local_loop.UserContent.Event;
+import com.example.local_loop.Models.Category;
+import com.example.local_loop.Models.Event;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -54,7 +54,7 @@ public class CategoryDetailsActivity extends AppCompatActivity {
         // Load and display category details
         Category category = dbHelper.getCategory(categoryId);
         if (category != null) {
-            categoryTitleText.setText(category.getName());
+            categoryTitleText.setText(category.getTitle());
             categoryDescriptionText.setText(category.getDescription());
         }
 
@@ -68,7 +68,7 @@ public class CategoryDetailsActivity extends AppCompatActivity {
             noEventsTextView.setVisibility(View.GONE);
         }
         eventRecyclerView.setLayoutManager(new GridLayoutManager(this,2));
-        DisplayContentAdapter eventAdapter = getDisplayItemAdapter(events);
+        DisplayItemAdapter eventAdapter = getDisplayItemAdapter(events);
 
         eventRecyclerView.setAdapter(eventAdapter);
 
@@ -85,12 +85,12 @@ public class CategoryDetailsActivity extends AppCompatActivity {
     }
 
     @NonNull
-    private DisplayContentAdapter getDisplayItemAdapter(List<Event> events) {
+    private DisplayItemAdapter getDisplayItemAdapter(List<Event> events) {
         assert events != null;
         List<DisplayItem> displayItems = new ArrayList<>(events);  // Events implement DisplayItem
         // Optional: Handle long press if needed
         // Not needed in CategoryDetailsActivity
-        return new DisplayContentAdapter(displayItems, new DisplayContentAdapter.OnItemClickListener() {
+        return new DisplayItemAdapter(displayItems, new DisplayItemAdapter.OnItemClickListener() {
             @Override
             public void onClick(DisplayItem item) {
                 if (item instanceof Event) {
@@ -99,7 +99,7 @@ public class CategoryDetailsActivity extends AppCompatActivity {
                     intent.putExtra(EXTRA_SOURCE, getIntent().getStringExtra(EXTRA_SOURCE));
                     intent.putExtra("sourceContext", getIntent().getStringExtra("sourceContext"));
                     intent.putExtra("eventId", event.getID());
-                    intent.putExtra("title", event.getName());
+                    intent.putExtra("title", event.getTitle());
                     intent.putExtra("description", event.getDescription());
                     intent.putExtra("fee", String.valueOf(event.getFee()));
                     intent.putExtra("datetime", event.getDateTime());
