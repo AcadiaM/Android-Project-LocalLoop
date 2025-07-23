@@ -14,6 +14,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.local_loop.Activity.Listings.UserDisplayActivity;
 import com.example.local_loop.Helper.DatabaseHelper;
+import com.example.local_loop.Helper.RequestStatus;
 import com.example.local_loop.Helper.ViewMode;
 import com.example.local_loop.Models.Account;
 import com.example.local_loop.Models.Event;
@@ -47,6 +48,7 @@ public class EventDetailsActivity extends AppCompatActivity {
         }
 
         event = Event.fromBundle(itemBundle);
+        Log.d("EventDetails", event.getID()+" ID from beggining and name --> "+ event.getTitle() + "organizerID --> " + event.getOrganizer());
 
         TextView titleText = findViewById(R.id.eventDetailTitle);
         TextView descriptionText = findViewById(R.id.eventDetailDescription);
@@ -87,13 +89,19 @@ public class EventDetailsActivity extends AppCompatActivity {
                 break;
             default:
                 contextInfoText.setText("Category: " + categoryName + "\n" + "\n" + "Organizer: " + organizer);
-                if (dBHelper.hasRequest(event.getID(), session.getUserID())) {
+                RequestStatus status = RequestStatus.valueOf(dBHelper.getRequestStatus());
+
+                if(requested){
+
+                    switch ()
+                }
+                if () {
                     joinButton.setEnabled(false);
-                    joinButton.setText(dBHelper.getStatus(event.getID(), session.getUserID()));
-                    if (Objects.equals(dBHelper.getStatus(event.getID(), session.getUserID()), "Approved")) {
+                    joinButton.setText(dBHelper.getRequestStatus(event.getID(), session.getUserID()));
+                    if (Objects.equals(dBHelper.getRequestStatus(event.getID(), session.getUserID()), "Approved")) {
                         joinButton.setBackgroundColor(getColor(R.color.dark_green));
                         joinButton.setTextColor(Color.WHITE);
-                    } else if (Objects.equals(dBHelper.getStatus(event.getID(), session.getUserID()), "Refused")) {
+                    } else if (Objects.equals(dBHelper.getRequestStatus(event.getID(), session.getUserID()), "Refused")) {
                         joinButton.setBackgroundColor(getColor(R.color.red));
                         joinButton.setTextColor(Color.WHITE);
                     } else {
@@ -105,7 +113,7 @@ public class EventDetailsActivity extends AppCompatActivity {
                         dBHelper.submitRequest(event.getID(), session.getUserID());
                         joinButton.setEnabled(false);
                         joinButton.setBackgroundColor(Color.LTGRAY);
-                        joinButton.setText(dBHelper.getStatus(event.getID(), session.getUserID()));
+                        joinButton.setText(dBHelper.getRequestStatus(event.getID(), session.getUserID()));
                     });
                 }
                 break;

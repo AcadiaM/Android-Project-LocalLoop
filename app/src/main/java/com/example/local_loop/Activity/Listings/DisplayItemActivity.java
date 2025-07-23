@@ -152,11 +152,11 @@ public class DisplayItemActivity extends AppCompatActivity {
                 }
             }
             Toast.makeText(this, "Deleted " + selectedItems.size() + " items", Toast.LENGTH_SHORT).show();
-            exitDeleteMode(); //TODO
+            exitDeleteMode();
             loadItems();
         }
         else{
-            enterDeleteMode(); //TODO --> connect MODE to Adapter
+            enterDeleteMode();
         }
     }
 

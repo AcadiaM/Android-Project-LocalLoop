@@ -5,7 +5,7 @@ import android.os.Bundle;
 import com.example.local_loop.Adapters.DisplayItem;
 
 public class Event implements DisplayItem {
-    private int id;
+    private final int id;
     private final String title;
     private final String description;
     private final int categoryId;
@@ -26,7 +26,6 @@ public class Event implements DisplayItem {
 
     @Override
     public int getID() { return id; }
-    public void setId(int id) { this.id = id; }
     @Override
     public String getTitle() { return title; }
     public String getDescription() { return description; }
@@ -37,7 +36,7 @@ public class Event implements DisplayItem {
 
     public Bundle toBundle(){
         Bundle bundle = new Bundle();
-        bundle.putInt("event_id", id);
+        bundle.putInt("id", id);
         bundle.putString("title", title);
         bundle.putString("description", description);
         bundle.putInt("categoryId", categoryId);

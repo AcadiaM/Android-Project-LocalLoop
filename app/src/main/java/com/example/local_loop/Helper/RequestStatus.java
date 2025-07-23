@@ -3,7 +3,8 @@ package com.example.local_loop.Helper;
 public enum RequestStatus {
     PENDING("pending"),
     APPROVED("approved"),
-    REFUSED("refused");
+    REFUSED("refused"),
+    INACTIVE("inactive");
 
     private final String status;
 
@@ -11,7 +12,7 @@ public enum RequestStatus {
         this.status = status;
     }
 
-    public String getRequestStatus(){
+    public String getREQSTATUS(){
         return status;
     }
 }

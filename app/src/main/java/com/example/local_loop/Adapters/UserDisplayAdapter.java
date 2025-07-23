@@ -100,15 +100,16 @@ public class UserDisplayAdapter extends RecyclerView.Adapter<UserDisplayViewHold
 
     private void toggleUserActiveStatus(UserDisplayViewHolder holder, Account user, int pos) {
         //Get user state, and toggle the value
-        int status = db.getUserState(user.getUserID()) ==1 ? 0:1;
+        int status = db.getUserState(user.getUserID());
 
         if ( status == 1) {
             holder.disable.setIconTint(ColorStateList.valueOf(Color.RED));
             Toast.makeText(context, "User " + user.getUsername() + " disabled.", Toast.LENGTH_SHORT).show();
+            status = 0;
         } else {
-
             holder.disable.setIconTint(ColorStateList.valueOf(Color.BLACK));
             Toast.makeText(context, "User " + user.getUsername() + " enabled.", Toast.LENGTH_SHORT).show();
+            status = 1;
         }
         db.setUserState(user.getUserID(),status);
         notifyItemChanged(pos);

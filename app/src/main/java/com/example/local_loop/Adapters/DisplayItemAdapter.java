@@ -89,7 +89,6 @@ public class DisplayItemAdapter extends RecyclerView.Adapter<DisplayItemAdapter.
                 holder.button.setOnClickListener(v -> {
                     if (listener != null) listener.onRenameClick(item);
                 });
-
                 holder.button.setBackgroundColor(Color.LTGRAY);
                 break;
             default:
