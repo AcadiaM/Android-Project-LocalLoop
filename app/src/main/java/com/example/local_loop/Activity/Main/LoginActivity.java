@@ -16,8 +16,8 @@ import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
 import com.example.local_loop.Models.Account;
-import com.example.local_loop.Helpers.DatabaseHelper;
-import com.example.local_loop.Helpers.InputValidation;
+import com.example.local_loop.Helper.DatabaseHelper;
+import com.example.local_loop.Helper.InputValidation;
 import com.example.local_loop.R;
 
 
@@ -31,11 +31,11 @@ public class LoginActivity  extends AppCompatActivity{
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
-
-        //Initialzing the Activity Pages/values
         super.onCreate(savedInstanceState);
         EdgeToEdge.enable(this);
         setContentView(R.layout.activity_login);
+        db = new DatabaseHelper(LoginActivity.this);
+
         validation = new InputValidation(this,db);
 
         decorView = getWindow().getDecorView();
@@ -45,7 +45,6 @@ public class LoginActivity  extends AppCompatActivity{
             return insets;
         });
 
-        db = new DatabaseHelper(LoginActivity.this);
         usernameInput = findViewById(R.id.username);
         passwordInput = findViewById(R.id.password);
         account = null;
@@ -53,7 +52,7 @@ public class LoginActivity  extends AppCompatActivity{
 
     //onStart!!
 
-    public void backButtonPressed(View view) {
+    public void onBackButton(View view) {
         // Handle back button press
         Intent intent = new Intent(LoginActivity.this, MainActivity.class);
         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);

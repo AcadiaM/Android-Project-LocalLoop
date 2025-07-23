@@ -10,7 +10,7 @@ import android.widget.Button;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.example.local_loop.Helpers.ViewMode;
+import com.example.local_loop.Helper.ViewMode;
 import com.example.local_loop.R;
 
 import java.util.ArrayList;

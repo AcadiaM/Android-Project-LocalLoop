@@ -1,6 +1,7 @@
 package com.example.local_loop.Activity.Listings;
 
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
@@ -14,9 +15,10 @@ import androidx.core.view.WindowInsetsCompat;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.example.local_loop.Models.User;
+import com.example.local_loop.Helper.ViewMode;
+import com.example.local_loop.Models.Account;
 import com.example.local_loop.Adapters.UserDisplayAdapter;
-import com.example.local_loop.Helpers.DatabaseHelper;
+import com.example.local_loop.Helper.DatabaseHelper;
 import com.example.local_loop.R;
 
 import java.util.List;
@@ -25,19 +27,23 @@ public class UserDisplayActivity extends AppCompatActivity {
 
     private DatabaseHelper db;
     private View decorView;
+    private ViewMode mode;
+    private Account session;
 
     @SuppressWarnings({"CallToPrintStackTrace", "deprecation"})
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_user_display);  // Shared layout
         EdgeToEdge.enable(this);
 
-        setContentView(R.layout.activity_user_display);  // Shared layout
-        ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main), (v, insets) -> {
-            Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
-            v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
-            return insets;
-        });
+        session = getIntent().getParcelableExtra("user", Account.class);
+        mode = ViewMode.valueOf(getIntent().getStringExtra(ViewMode.VIEW.name()));
+        if (session == null || mode == null) {
+            Log.d("WelcomePage","Session or view mode is null ");
+            finish();
+            return;
+        }
 
         db = new DatabaseHelper(this);
 
@@ -49,17 +55,17 @@ public class UserDisplayActivity extends AppCompatActivity {
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
 
         try {
-            List<User> users;
-            if (isAttendeeMode) {
-                users = db.getPendingRequestsByEvent(eventId);
-                setTitle("Attendees");
-                pageTitleTextView.setText(R.string.attendeeList);
-                noUsersTextView.setText(R.string.no_attendees);
-            } else {
+            List<Account> users;
+            if(mode == ViewMode.ADMIN_USERS){
                 users = db.getUsers();
                 setTitle("User List");
                 pageTitleTextView.setText(R.string.userManagement);
                 noUsersTextView.setText(R.string.no_users);
+            }else{
+                users = db.getPendingRequestsByEvent(eventId);
+                setTitle("Attendees");
+                pageTitleTextView.setText(R.string.attendeeList);
+                noUsersTextView.setText(R.string.no_attendees);
             }
 
             if (users == null || users.isEmpty()) {
@@ -67,14 +73,18 @@ public class UserDisplayActivity extends AppCompatActivity {
             } else {
                 noUsersTextView.setVisibility(View.GONE);
             }
-
-            recyclerView.setAdapter(new UserDisplayAdapter(this, users, isAttendeeMode, eventId, noUsersTextView));
-
+            recyclerView.setAdapter(new UserDisplayAdapter(this, users, mode, eventId, noUsersTextView));
 
         } catch (Exception e) {
             Toast.makeText(this, "Adapter error: " + e.getMessage(), Toast.LENGTH_LONG).show();
             e.printStackTrace();
         }
+
+        ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main), (v, insets) -> {
+            Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
+            v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
+            return insets;
+        });
 
         decorView = getWindow().getDecorView();
         decorView.setOnSystemUiVisibilityChangeListener(visibility -> {
@@ -106,5 +116,3 @@ public class UserDisplayActivity extends AppCompatActivity {
                 | View.SYSTEM_UI_FLAG_HIDE_NAVIGATION);
     }
 }
-
-/*DisplayItemAdapter UserDisplayAdapter

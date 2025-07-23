@@ -18,8 +18,8 @@ import androidx.core.view.WindowInsetsCompat;
 
 import com.example.local_loop.Models.Account;
 import com.example.local_loop.Models.User;
-import com.example.local_loop.Helpers.DatabaseHelper;
-import com.example.local_loop.Helpers.InputValidation;
+import com.example.local_loop.Helper.DatabaseHelper;
+import com.example.local_loop.Helper.InputValidation;
 import com.example.local_loop.R;
 
 public class SignUp extends AppCompatActivity {
@@ -36,6 +36,7 @@ public class SignUp extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         EdgeToEdge.enable(this);
         setContentView(R.layout.activity_signup);
+        dbHelper = new DatabaseHelper(this);
         validation = new InputValidation(this, dbHelper);
 
 
@@ -52,7 +53,7 @@ public class SignUp extends AppCompatActivity {
         emailInput = findViewById(R.id.emailInputEditText);
         passwordInput = findViewById(R.id.passwordInputEditText);
         roleInput = findViewById(R.id.roles);
-        dbHelper = new DatabaseHelper(this);
+
 
         //this is to hide the system bars and make the app immersive
         decorView = getWindow().getDecorView();

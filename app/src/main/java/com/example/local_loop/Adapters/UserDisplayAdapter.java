@@ -12,11 +12,10 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.example.local_loop.Helpers.RequestStatus;
-import com.example.local_loop.Helpers.ViewMode;
+import com.example.local_loop.Helper.RequestStatus;
+import com.example.local_loop.Helper.ViewMode;
 import com.example.local_loop.Models.Account;
-import com.example.local_loop.Helpers.DatabaseHelper;
-import com.example.local_loop.Models.User;
+import com.example.local_loop.Helper.DatabaseHelper;
 import com.example.local_loop.R;
 
 import java.util.List;
@@ -44,7 +43,7 @@ public class UserDisplayAdapter extends RecyclerView.Adapter<UserDisplayViewHold
     @Override
     public UserDisplayViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         int layoutId = R.layout.user_list_layout;
-        if (mode == ViewMode.PARTICIPANT_MGMT) {
+        if (mode == ViewMode.ORG_PARTICPANTSLIST) {
             layoutId = R.layout.attendee_list_layout;
         }
         return new UserDisplayViewHolder(LayoutInflater.from(parent.getContext()).inflate(layoutId, parent, false));
@@ -59,7 +58,7 @@ public class UserDisplayAdapter extends RecyclerView.Adapter<UserDisplayViewHold
         holder.emailView.setText(user.getEmail());
         holder.typeView.setText(user.getRole());
 
-        if (mode == ViewMode.PARTICIPANT_MGMT) {
+        if (mode == ViewMode.ORG_PARTICPANTSLIST) {
             holder.disable.setOnClickListener(v -> {
                 approve(eventId, user);
                 deleteEntry(user);

@@ -1,4 +1,4 @@
-package com.example.local_loop.Helpers;
+package com.example.local_loop.Helper;
 
 public enum RequestStatus {
     PENDING("pending"),

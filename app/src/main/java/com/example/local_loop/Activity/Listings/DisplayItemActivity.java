@@ -1,9 +1,5 @@
 package com.example.local_loop.Activity.Listings;
 
-import static com.example.local_loop.Activity.Details.EventDetailsActivity.EXTRA_SOURCE;
-import static com.example.local_loop.Activity.Details.EventDetailsActivity.SOURCE_ADMIN;
-import static com.example.local_loop.Activity.Details.EventDetailsActivity.SOURCE_ORGANIZER;
-
 import android.app.AlertDialog;
 import android.app.DatePickerDialog;
 import android.app.TimePickerDialog;
@@ -31,10 +27,9 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.example.local_loop.Activity.Details.CategoryDetailsActivity;
 import com.example.local_loop.Activity.Details.EventDetailsActivity;
 import com.example.local_loop.Adapters.DisplayItemAdapter;
-import com.example.local_loop.Helpers.DatabaseHelper;
+import com.example.local_loop.Helper.DatabaseHelper;
 import com.example.local_loop.Adapters.DisplayItem;
-import com.example.local_loop.Helpers.InputValidation;
-import com.example.local_loop.Helpers.ViewMode;
+import com.example.local_loop.Helper.ViewMode;
 import com.example.local_loop.Models.Account;
 import com.example.local_loop.R;
 import com.example.local_loop.Models.Category;
@@ -51,13 +46,13 @@ import java.util.Objects;
 
 public class DisplayItemActivity extends AppCompatActivity {
     private Account user;
-    private InputValidation validation;
     private DatabaseHelper dbHelper;
     private DisplayItemAdapter displayItemAdapter;
 
     private ImageButton addButton, removeButton, editButton;
 
-    private ViewMode mode; //delete or edit
+    private ViewMode AdapterMode;//delete or edit
+    private ViewMode mode;
 
     private final List<DisplayItem> selectedItems = new ArrayList<>();
 
@@ -68,9 +63,14 @@ public class DisplayItemActivity extends AppCompatActivity {
         setContentView(R.layout.activity_display_item);
 
         dbHelper = new DatabaseHelper(this);
-        validation = new InputValidation(this,dbHelper);
 
         user = getIntent().getParcelableExtra("user", Account.class);
+        String newMode = getIntent().getStringExtra(ViewMode.VIEW.name());
+        if(newMode == null){
+            Log.d("USER_EVENT_A","mode is null girlie");
+        }
+
+        mode = ViewMode.valueOf(getIntent().getStringExtra(ViewMode.VIEW.name()));
         if (user == null) {
             Log.d("USER_EVENT_A","Session is null girlie");
             finish();
@@ -122,22 +122,22 @@ public class DisplayItemActivity extends AppCompatActivity {
         });
 
         recyclerView.setAdapter(displayItemAdapter);
-        mode = displayItemAdapter.getMode();
+        AdapterMode = displayItemAdapter.getMode();
     }
 
     private void openCategoryDetails(Category category) {
         Intent intent = new Intent(this, CategoryDetailsActivity.class);
         intent.putExtra("user",user);
-        intent.putExtra("ViewMode",mode.name());
         intent.putExtra("category", category.toBundle());
+        intent.putExtra(ViewMode.VIEW.name(), mode.name());
         startActivity(intent);
     }
 
     private void openEventDetails(Event event) {
         Intent intent = new Intent(this, EventDetailsActivity.class);
         intent.putExtra("user",user);
-        intent.putExtra("ViewMode",mode.name());
         intent.putExtra("event", event.toBundle());
+        intent.putExtra(ViewMode.VIEW.name(), mode.name());
         startActivity(intent);
     }
 
@@ -147,7 +147,7 @@ public class DisplayItemActivity extends AppCompatActivity {
             Toast.makeText(this, "No items to delete", Toast.LENGTH_SHORT).show();
             return;
         }
-        if(mode == ViewMode.DELETE){
+        if(AdapterMode == ViewMode.DELETE){
             for (DisplayItem item : selectedItems) {
                 if (item instanceof Category) {
                     dbHelper.deleteCategory(item.getID());
@@ -196,26 +196,24 @@ public class DisplayItemActivity extends AppCompatActivity {
 
     private void loadItems() {
         List<DisplayItem> items = new ArrayList<>();
-        String role = user.getRole();
 
-        if (role.equals("admin")) {
+        if (mode == ViewMode.ADMIN_CATEGORIES) {
             items.addAll(dbHelper.getAllCategories());
         }
-        if(role.equals("organizer")) {
+        if(mode == ViewMode.ORG_EVENTS) {
             items.addAll(dbHelper.getEventsByOrganizer(user.getUserID()));
         }
-
         displayItemAdapter.updateItems(items);
         TextView noCategoriesTextView = findViewById(R.id.noTextView);
 
         if (items.isEmpty()) {
-            if(role.equals("admin")){
-                noCategoriesTextView.setText(R.string.no_categories_created);
-            }
-            else if (role.equals("organizer")){
-                noCategoriesTextView.setText(R.string.no_events_created);
-            }else{
-                noCategoriesTextView.setVisibility(View.VISIBLE);
+            switch (mode){
+                case ORG_EVENTS:
+                    noCategoriesTextView.setText(R.string.no_events_created);
+                case ADMIN_CATEGORIES:
+                    noCategoriesTextView.setText(R.string.no_categories_created);
+                default:
+                    noCategoriesTextView.setVisibility(View.VISIBLE);
             }
         }else{
             noCategoriesTextView.setVisibility(View.GONE);
@@ -247,7 +245,7 @@ public class DisplayItemActivity extends AppCompatActivity {
     }
 
     private void showItemDialog(DisplayItem itemToEdit) {
-        boolean isEvent = user.getRole().equals("organizer");
+        boolean isEvent = mode == ViewMode.ADMIN_EVENTS;
 
         if (isEvent) {
             List<Category> categories = dbHelper.getAllCategories();
@@ -452,7 +450,7 @@ public class DisplayItemActivity extends AppCompatActivity {
     @SuppressWarnings("deprecation")
     @Override
     public void onBackPressed() {
-        switch (mode){
+        switch (AdapterMode){
             case EDIT:
                 exitDeleteMode();
                 Toast.makeText(this, "Delete mode cancelled", Toast.LENGTH_SHORT).show();

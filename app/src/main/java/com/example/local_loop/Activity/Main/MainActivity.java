@@ -7,7 +7,7 @@ import android.view.View;
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
 
-import com.example.local_loop.Helpers.DatabaseHelper;
+import com.example.local_loop.Helper.DatabaseHelper;
 import com.example.local_loop.R;
 
 public class MainActivity extends AppCompatActivity {

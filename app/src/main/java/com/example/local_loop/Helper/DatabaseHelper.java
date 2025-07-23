@@ -1,4 +1,4 @@
-package com.example.local_loop.Helpers;
+package com.example.local_loop.Helper;
 
 import android.content.ContentValues;
 import android.content.Context;
@@ -737,5 +737,19 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         cursor.close();
         return session;
     }
+
+    public String getUsername(int userID) {
+        SQLiteDatabase db = this.getReadableDatabase();
+        Cursor cursor = db.query(TABLE_USERS, new String[]{USERS_USERNAME}, USERS_ID+" = ?", new String[]{String.valueOf(userID)}, null, null, null);
+        if (cursor.moveToFirst()) {
+            String status = cursor.getString(0);
+            cursor.close();
+            return status;
+        }
+        cursor.close();
+        return null;
+    }
+
+
 
 }

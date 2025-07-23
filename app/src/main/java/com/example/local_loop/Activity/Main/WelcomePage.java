@@ -19,7 +19,7 @@ import androidx.core.view.WindowInsetsCompat;
 import com.example.local_loop.Activity.Listings.DisplayItemActivity;
 import com.example.local_loop.Activity.Listings.UserDisplayActivity;
 import com.example.local_loop.Activity.Listings.UserEventActivity;
-import com.example.local_loop.Helpers.ViewMode;
+import com.example.local_loop.Helper.ViewMode;
 import com.example.local_loop.Models.Account;
 import com.example.local_loop.R;
 
@@ -38,7 +38,7 @@ public class WelcomePage extends AppCompatActivity {
 
         session = getIntent().getParcelableExtra("user", Account.class);
         if (session == null) {
-            Log.d("WelcomePage","Session is null girlie");
+            Log.d("WelcomePage","Session is null");
             finish();
             return;
         }
@@ -108,19 +108,26 @@ public class WelcomePage extends AppCompatActivity {
     //TODO --> Fix DisplayItemActivity and UserDisplayActivity to take parcelable
 
     //ADMIN BUTTONS
-    public void OnListCategoriesButton(View view) {
-        Intent intent = new Intent(WelcomePage.this, DisplayItemActivity.class);
-        intent.putExtra("user", session);
-        startActivity(intent);
-    }
     public void OnUsersButton(View view) {
         Intent intent = new Intent(WelcomePage.this, UserDisplayActivity.class);
         intent.putExtra("user", session);
+        intent.putExtra(ViewMode.VIEW.name(), ViewMode.ADMIN_USERS.name());
         startActivity(intent);
     }
+    public void OnListCategoriesButton(View view) {
+        Intent intent = new Intent(WelcomePage.this, DisplayItemActivity.class);
+        intent.putExtra("user", session);
+        intent.putExtra(ViewMode.VIEW.name(), ViewMode.ADMIN_CATEGORIES.name());
+        startActivity(intent);
+    }
+
+    //Displ
+
     public void OnEventsButton(View view) {
         Intent intent = new Intent(WelcomePage.this, DisplayItemActivity.class);
         intent.putExtra("user", session);
+        intent.putExtra(ViewMode.VIEW.name(), session.getRole().equals("admin") ?
+                ViewMode.ADMIN_EVENTS.name(): ViewMode.ORG_EVENTS.name());
         startActivity(intent);
     }
 
@@ -128,13 +135,13 @@ public class WelcomePage extends AppCompatActivity {
     public void OnBrowseEventsButton(View view){
         Intent intent = new Intent(WelcomePage.this, UserEventActivity.class);
         intent.putExtra("user", session);
-        intent.putExtra("isBrowsing", ViewMode.BROWSING_EVENTS);
+        intent.putExtra(ViewMode.VIEW.name(), ViewMode.PARTICIPANT_BROWSING.name());
         startActivity(intent);
     }
     public void OnMyEventsButton(View view){
         Intent intent = new Intent(WelcomePage.this, UserEventActivity.class);
         intent.putExtra("user", session);
-        intent.putExtra("myEvents", ViewMode.MYEVENTS);
+        intent.putExtra(ViewMode.VIEW.name(), ViewMode.PARTICIPANT_EVENTS.name());
         startActivity(intent);
     }
 

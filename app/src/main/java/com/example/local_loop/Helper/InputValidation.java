@@ -1,4 +1,4 @@
-package com.example.local_loop.Helpers;
+package com.example.local_loop.Helper;
 
 import android.content.Context;
 import android.util.Patterns;
@@ -9,7 +9,7 @@ import com.google.android.material.textfield.TextInputLayout;
 
 public class InputValidation{
     private final Context context;
-    DatabaseHelper db;
+    private DatabaseHelper db;
 
     public InputValidation(Context context, DatabaseHelper db) {
         this.context = context;

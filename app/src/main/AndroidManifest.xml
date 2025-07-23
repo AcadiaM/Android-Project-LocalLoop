@@ -11,43 +11,31 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.Local_Loop">
         <activity
-            android:name=".Activity.Details.EventDetailsActivity"
-            android:exported="false" />
-        <activity
             android:name=".Activity.Details.CategoryDetailsActivity"
             android:exported="false" />
         <activity
-            android:name=".Welcome.OrganizerWelcomePage"
+            android:name=".Activity.Details.EventDetailsActivity"
             android:exported="false" />
-        <activity
-            android:name=".Activity.Main.WelcomePage"
-            android:exported="false" />
-        <activity
-            android:name=".Activity.Main.WelcomePage"
-            android:exported="false" />
-        <activity
-            android:name=".Activity.Main.SignUp"
-            android:exported="false" />
-        <activity
-            android:name=".Event.EventActivity"
-            android:exported="false" />
-        <activity android:name=".Activity.Listings.UserEventActivity"
-            android:exported="false" />
-        <activity android:name=".Event.UserMyEvent"
-            android:exported="false" />
+
         <activity
             android:name=".Activity.Listings.DisplayItemActivity"
             android:exported="false" />
         <activity
-            android:name=".Displays.UserDisplayActivity"
+            android:name=".Activity.Listings.UserDisplayActivity"
             android:exported="false" />
-        <activity
-            android:name=".AttendeeList.AttendeeList"
+        <activity android:name=".Activity.Listings.UserEventActivity"
             android:exported="false" />
+
         <activity
             android:name=".Activity.Main.LoginActivity"
             android:exported="false"
             android:label="@string/title_activity_login" />
+        <activity
+            android:name=".Activity.Main.SignUp"
+            android:exported="false" />
+        <activity
+            android:name=".Activity.Main.WelcomePage"
+            android:exported="false" />
         <activity
             android:name=".Activity.Main.MainActivity"
             android:exported="true">

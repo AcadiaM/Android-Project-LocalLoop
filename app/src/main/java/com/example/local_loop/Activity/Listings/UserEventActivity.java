@@ -21,9 +21,9 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.local_loop.Activity.Details.EventDetailsActivity;
 import com.example.local_loop.Adapters.DisplayItemAdapter;
-import com.example.local_loop.Helpers.DatabaseHelper;
+import com.example.local_loop.Helper.DatabaseHelper;
 import com.example.local_loop.Adapters.DisplayItem;
-import com.example.local_loop.Helpers.ViewMode;
+import com.example.local_loop.Helper.ViewMode;
 import com.example.local_loop.Models.Account;
 import com.example.local_loop.R;
 import com.example.local_loop.Models.Category;
@@ -59,7 +59,7 @@ public class UserEventActivity extends AppCompatActivity {
             finish();
             return;
         }
-        mode = ViewMode.valueOf(getIntent().getStringExtra("VIEW_MODE"));
+        mode = ViewMode.valueOf(getIntent().getStringExtra(ViewMode.VIEW.name()));
 
         RecyclerView eventRecyclerView = findViewById(R.id.recyclerViewEvents);
         eventRecyclerView.setLayoutManager(new GridLayoutManager(this, 2));
@@ -85,6 +85,7 @@ public class UserEventActivity extends AppCompatActivity {
                     Intent intent = new Intent(UserEventActivity.this, EventDetailsActivity.class);
                     intent.putExtra("user", user);
                     intent.putExtra("event", event.toBundle());
+                    intent.putExtra(ViewMode.VIEW.name(), mode.name());
                     startActivity(intent);
                 }
                 // Do something with event

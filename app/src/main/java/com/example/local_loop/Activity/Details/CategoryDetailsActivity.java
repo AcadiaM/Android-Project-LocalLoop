@@ -1,14 +1,12 @@
 package com.example.local_loop.Activity.Details;
 
 
-import static com.example.local_loop.Activity.Details.EventDetailsActivity.EXTRA_SOURCE;
-
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
@@ -16,8 +14,10 @@ import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.local_loop.Adapters.DisplayItemAdapter;
-import com.example.local_loop.Helpers.DatabaseHelper;
+import com.example.local_loop.Helper.DatabaseHelper;
 import com.example.local_loop.Adapters.DisplayItem;
+import com.example.local_loop.Helper.ViewMode;
+import com.example.local_loop.Models.Account;
 import com.example.local_loop.R;
 import com.example.local_loop.Models.Category;
 import com.example.local_loop.Models.Event;
@@ -28,8 +28,11 @@ import java.util.List;
 
 
 public class CategoryDetailsActivity extends AppCompatActivity {
-    DatabaseHelper dbHelper;
+    private DatabaseHelper dbHelper;
     private View decorView;
+    private ViewMode mode;
+    private Account session;
+    Category category;
 
     @SuppressWarnings("deprecation")
     @Override
@@ -42,24 +45,23 @@ public class CategoryDetailsActivity extends AppCompatActivity {
         RecyclerView eventRecyclerView = findViewById(R.id.eventRecyclerView);
 
         dbHelper = new DatabaseHelper(this);
+        session = getIntent().getParcelableExtra("user", Account.class);
+        mode = ViewMode.valueOf(getIntent().getStringExtra(ViewMode.VIEW.name()));
+        Bundle itemBundle = getIntent().getBundleExtra("category");
 
-        // Get category ID passed via intent
-        int categoryId = getIntent().getIntExtra("categoryId", -1);
-        if (categoryId == -1) {
-            Toast.makeText(this, "Invalid category", Toast.LENGTH_SHORT).show();
+        if (session == null || itemBundle==null) {
+            Log.d("USER_EVENT_A","Session or bundle is null");
             finish();
             return;
         }
-
         // Load and display category details
-        Category category = dbHelper.getCategory(categoryId);
-        if (category != null) {
-            categoryTitleText.setText(category.getTitle());
-            categoryDescriptionText.setText(category.getDescription());
-        }
+        category = Category.fromBundle(itemBundle);
+        categoryTitleText.setText(category.getTitle());
+        categoryDescriptionText.setText(category.getDescription());
+
 
         // Load and display events in that category
-        List<Event> events = dbHelper.getEventByCategory(categoryId);
+        List<Event> events = dbHelper.getEventByCategory(category.getID());
         TextView noEventsTextView = findViewById(R.id.noEventsDetailsTextView);
 
         if (events == null || events.isEmpty()) {
@@ -69,7 +71,6 @@ public class CategoryDetailsActivity extends AppCompatActivity {
         }
         eventRecyclerView.setLayoutManager(new GridLayoutManager(this,2));
         DisplayItemAdapter eventAdapter = getDisplayItemAdapter(events);
-
         eventRecyclerView.setAdapter(eventAdapter);
 
         //this is to hide the system bars and make the app immersive
@@ -96,15 +97,9 @@ public class CategoryDetailsActivity extends AppCompatActivity {
                 if (item instanceof Event) {
                     Event event = (Event) item;
                     Intent intent = new Intent(CategoryDetailsActivity.this, EventDetailsActivity.class);
-                    intent.putExtra(EXTRA_SOURCE, getIntent().getStringExtra(EXTRA_SOURCE));
-                    intent.putExtra("sourceContext", getIntent().getStringExtra("sourceContext"));
-                    intent.putExtra("eventId", event.getID());
-                    intent.putExtra("title", event.getTitle());
-                    intent.putExtra("description", event.getDescription());
-                    intent.putExtra("fee", String.valueOf(event.getFee()));
-                    intent.putExtra("datetime", event.getDateTime());
-                    intent.putExtra("categoryId", event.getCategoryId());
-                    intent.putExtra("organizer", event.getOrganizer());
+                    intent.putExtra("user",session);
+                    intent.putExtra("event", event.toBundle());
+                    intent.putExtra(ViewMode.VIEW.name(), mode.name());
                     startActivity(intent);
                 }
             }
