@@ -42,7 +42,7 @@ public class UserDisplayActivity extends AppCompatActivity {
         session = getIntent().getParcelableExtra("user", Account.class);
         mode = ViewMode.valueOf(getIntent().getStringExtra(ViewMode.VIEW.name()));
         if (session == null || mode == null) {
-            Log.d("WelcomePage","Session or view mode is null ");
+            Log.d("UDA","Session or view mode is null ");
             finish();
             return;
         }

@@ -132,8 +132,10 @@ public class EventDetailsActivity extends AppCompatActivity {
                         startActivity(intent);
                     });
                     break;
-
-                default:
+                default: //When Admin is looking at event details, not including list
+                    joinButton.setEnabled(false);
+                    joinButton.setVisibility(View.INVISIBLE);
+                    break;
             }
         }
 

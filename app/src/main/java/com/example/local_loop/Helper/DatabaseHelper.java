@@ -217,7 +217,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         SQLiteDatabase db = this.getWritableDatabase();
         Cursor cursor = db.query(TABLE_USERS, null, USERS_USERNAME+" = ?", new String[]{"admin"}, null, null, null);
         if (cursor.getCount() == 0) {
-            User admin = new User("admin","admin","-","XPI76SZUqyCjVxgnUjm0","ADMIN","-");
+            User admin = new User("admin","admin","-","12345","ADMIN","-");
             admin.setUserID(insertUser(admin));
         }
         cursor.close();

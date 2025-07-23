@@ -180,6 +180,7 @@ public class DisplayItemActivity extends AppCompatActivity {
 
         displayItemAdapter.setViewMode(ViewMode.DEFAULT);
         displayItemAdapter.setSelectedItems(new ArrayList<>());
+        loadItems();
     }
 
     private void loadItems() {
@@ -198,8 +199,14 @@ public class DisplayItemActivity extends AppCompatActivity {
         displayItemAdapter.updateItems(items);
         TextView noCategoriesTextView = findViewById(R.id.noTextView);
 
+        noCategoriesTextView.setVisibility(View.VISIBLE);
+        Log.d("DIA", "Expirementing");
+
         if (items.isEmpty()) {
             switch (mode){
+                case ADMIN_EVENTS:
+                    noCategoriesTextView.setText(R.string.no_events_created);
+                    break;
                 case ORG_EVENTS:
                     noCategoriesTextView.setText(R.string.no_events_created);
                     break;
@@ -207,12 +214,13 @@ public class DisplayItemActivity extends AppCompatActivity {
                     noCategoriesTextView.setText(R.string.no_categories_created);
                     break;
                 default:
-                    noCategoriesTextView.setVisibility(View.VISIBLE);
+                    //noCategoriesTextView.setVisibility(View.VISIBLE);
                     break;
             }
         }else{
             noCategoriesTextView.setVisibility(View.GONE);
         }
+
     }
 
 
@@ -241,13 +249,12 @@ public class DisplayItemActivity extends AppCompatActivity {
 
     private void showItemDialog(DisplayItem itemToEdit) {
         boolean isEvent = mode != ViewMode.ADMIN_CATEGORIES;
+        List<Category> categories = dbHelper.getAllCategories();
 
-        if (isEvent) {
-            List<Category> categories = dbHelper.getAllCategories();
-            if (categories == null || categories.isEmpty()) {
-                Toast.makeText(this, "No categories exist. Please create a category first.", Toast.LENGTH_LONG).show();
-                return;  // Stop here, do not open dialog
-            }
+        if (isEvent && (categories == null || categories.isEmpty()) ) {
+            Toast.makeText(this, "No categories exist. Please create a category first.", Toast.LENGTH_LONG).show();
+            return;  // Stop here, do not open dialog
+
         }
 
         LayoutInflater inflater = LayoutInflater.from(this);
@@ -284,7 +291,6 @@ public class DisplayItemActivity extends AppCompatActivity {
 
             datetimeInput.setOnClickListener(v -> showDateTimePicker(datetimeInput));
 
-            List<Category> categories = dbHelper.getAllCategories();
             List<String> categoryNames = new ArrayList<>();
             for (Category cat : categories) categoryNames.add(cat.getTitle());
             ArrayAdapter<String> spinnerAdapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, categoryNames);
