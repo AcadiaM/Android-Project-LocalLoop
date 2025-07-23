@@ -1,4 +1,4 @@
-package com.example.local_loop.Helper;
+package com.example.local_loop.Helpers;
 
 import android.content.ContentValues;
 import android.content.Context;
@@ -670,7 +670,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         List<Account> pendingUsers = new ArrayList<>();
 
         Cursor cursor = db.query(TABLE_REQUESTS, new String[]{REQUESTS_PARTICPANT_ID},
-                REQUESTS_EVENT_ID+" = ? AND "+REQUESTS_STATUS +" =?", new String[]{String.valueOf(eventId),RequestStatus.PENDING.getREQSTATUS()}, null, null, null);
+                REQUESTS_EVENT_ID+" = ? AND "+REQUESTS_STATUS +" =?", new String[]{String.valueOf(eventId),RequestStatus.PENDING.getReqStatus()}, null, null, null);
 
         if (cursor.moveToFirst()) {
             do {
@@ -699,7 +699,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues values = new ContentValues();
 
-        values.put(REQUESTS_STATUS, newStatus.getREQSTATUS());
+        values.put(REQUESTS_STATUS, newStatus.getReqStatus());
         db.update(TABLE_REQUESTS, values,EVENTS_ID+" = ? AND "+REQUESTS_PARTICPANT_ID+"= ?",
                 new String[]{String.valueOf(eventId), String.valueOf(participantID)});
 

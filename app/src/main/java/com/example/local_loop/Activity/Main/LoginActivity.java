@@ -16,8 +16,8 @@ import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
 import com.example.local_loop.Models.Account;
-import com.example.local_loop.Helper.DatabaseHelper;
-import com.example.local_loop.Helper.InputValidation;
+import com.example.local_loop.Helpers.DatabaseHelper;
+import com.example.local_loop.Helpers.InputValidation;
 import com.example.local_loop.R;
 
 

@@ -1,4 +1,4 @@
-package com.example.local_loop.Helper;
+package com.example.local_loop.Helpers;
 
 public enum ViewMode {
         VIEW, //for intent names
@@ -13,7 +13,7 @@ public enum ViewMode {
 
         //Organizer views
         ORG_EVENTS,
-        ORG_PARTICPANTSLIST, //AttendeeMode
+        ORG_PARTICIPANTS_LIST,
 
         //Admin views
         ADMIN_CATEGORIES,

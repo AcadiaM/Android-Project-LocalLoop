@@ -15,10 +15,10 @@ import androidx.core.view.WindowInsetsCompat;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.example.local_loop.Helper.ViewMode;
+import com.example.local_loop.Helpers.ViewMode;
 import com.example.local_loop.Models.Account;
 import com.example.local_loop.Adapters.UserDisplayAdapter;
-import com.example.local_loop.Helper.DatabaseHelper;
+import com.example.local_loop.Helpers.DatabaseHelper;
 import com.example.local_loop.R;
 
 import java.util.List;

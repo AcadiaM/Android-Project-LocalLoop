@@ -2,14 +2,12 @@ package com.example.local_loop.Activity.Main;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
 
-import com.example.local_loop.Helper.DatabaseHelper;
-import com.example.local_loop.Models.Account;
+import com.example.local_loop.Helpers.DatabaseHelper;
 import com.example.local_loop.R;
 
 public class MainActivity extends AppCompatActivity {

@@ -1,4 +1,4 @@
-package com.example.local_loop.Helper;
+package com.example.local_loop.Helpers;
 
 import android.content.Context;
 import android.util.Patterns;

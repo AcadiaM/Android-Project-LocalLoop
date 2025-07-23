@@ -14,9 +14,9 @@ import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.local_loop.Adapters.DisplayItemAdapter;
-import com.example.local_loop.Helper.DatabaseHelper;
-import com.example.local_loop.Adapters.DisplayItem;
-import com.example.local_loop.Helper.ViewMode;
+import com.example.local_loop.Helpers.DatabaseHelper;
+import com.example.local_loop.Helpers.DisplayItem;
+import com.example.local_loop.Helpers.ViewMode;
 import com.example.local_loop.Models.Account;
 import com.example.local_loop.R;
 import com.example.local_loop.Models.Category;

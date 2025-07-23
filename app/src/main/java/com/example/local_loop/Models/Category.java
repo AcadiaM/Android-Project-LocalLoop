@@ -2,7 +2,7 @@ package com.example.local_loop.Models;
 
 import android.os.Bundle;
 
-import com.example.local_loop.Adapters.DisplayItem;
+import com.example.local_loop.Helpers.DisplayItem;
 
 public class Category implements DisplayItem {
     private final int ID;

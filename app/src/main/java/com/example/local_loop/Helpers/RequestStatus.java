@@ -1,4 +1,4 @@
-package com.example.local_loop.Helper;
+package com.example.local_loop.Helpers;
 
 public enum RequestStatus {
     PENDING("pending"),
@@ -12,7 +12,7 @@ public enum RequestStatus {
         this.status = status;
     }
 
-    public String getREQSTATUS(){
+    public String getReqStatus(){
         return status;
     }
 }

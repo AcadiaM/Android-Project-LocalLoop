@@ -12,10 +12,10 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.example.local_loop.Helper.RequestStatus;
-import com.example.local_loop.Helper.ViewMode;
+import com.example.local_loop.Helpers.RequestStatus;
+import com.example.local_loop.Helpers.ViewMode;
 import com.example.local_loop.Models.Account;
-import com.example.local_loop.Helper.DatabaseHelper;
+import com.example.local_loop.Helpers.DatabaseHelper;
 import com.example.local_loop.R;
 
 import java.util.List;

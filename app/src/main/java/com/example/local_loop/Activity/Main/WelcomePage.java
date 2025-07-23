@@ -19,7 +19,7 @@ import androidx.core.view.WindowInsetsCompat;
 import com.example.local_loop.Activity.Listings.DisplayItemActivity;
 import com.example.local_loop.Activity.Listings.UserDisplayActivity;
 import com.example.local_loop.Activity.Listings.UserEventActivity;
-import com.example.local_loop.Helper.ViewMode;
+import com.example.local_loop.Helpers.ViewMode;
 import com.example.local_loop.Models.Account;
 import com.example.local_loop.R;
 
