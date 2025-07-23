@@ -34,35 +34,12 @@ public class DisplayItemAdapter extends RecyclerView.Adapter<DisplayItemAdapter.
         this.listener = listener;
     }
 
-
     @SuppressLint("NotifyDataSetChanged")
     public void setSelectedItems(List<DisplayItem> selectedItems) {
         this.selectedItems = selectedItems;
         notifyDataSetChanged();
     }
 
-    @SuppressLint("NotifyDataSetChanged")
-    public void setMode(ViewMode newMode){ //replace setEditMode and setDeleteMode
-        this.mode = newMode;
-        notifyDataSetChanged();
-    }
-    public ViewMode getMode(){
-        return mode;
-    }
-
-    @SuppressLint("NotifyDataSetChanged")
-    public void updateItems(List<DisplayItem> newItems) {
-        this.items = newItems;
-        notifyDataSetChanged();
-    }
-
-    @NonNull
-    @Override
-    public ItemViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(parent.getContext())
-                .inflate(R.layout.category_item, parent, false);  // same layout for simplicity
-        return new ItemViewHolder(view);
-    }
 
     @Override
     public void onBindViewHolder(@NonNull ItemViewHolder holder, int position) {
@@ -110,8 +87,24 @@ public class DisplayItemAdapter extends RecyclerView.Adapter<DisplayItemAdapter.
         return mode;
     }
 
+    @SuppressLint("NotifyDataSetChanged")
     public void setViewMode(ViewMode mode){
         this.mode = mode;
+        notifyDataSetChanged();
+    }
+
+    @SuppressLint("NotifyDataSetChanged")
+    public void updateItems(List<DisplayItem> newItems) {
+        this.items = newItems;
+        notifyDataSetChanged();
+    }
+
+    @NonNull
+    @Override
+    public ItemViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+        View view = LayoutInflater.from(parent.getContext())
+                .inflate(R.layout.category_item, parent, false);  // same layout for simplicity
+        return new ItemViewHolder(view);
     }
 
     @Override

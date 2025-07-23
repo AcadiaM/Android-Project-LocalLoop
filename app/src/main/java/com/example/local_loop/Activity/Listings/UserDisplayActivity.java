@@ -29,6 +29,7 @@ public class UserDisplayActivity extends AppCompatActivity {
     private View decorView;
     private ViewMode mode;
     private Account session;
+    private int eventID;
 
     @SuppressWarnings({"CallToPrintStackTrace", "deprecation"})
     @Override
@@ -36,6 +37,7 @@ public class UserDisplayActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_user_display);  // Shared layout
         EdgeToEdge.enable(this);
+        db = new DatabaseHelper(this);
 
         session = getIntent().getParcelableExtra("user", Account.class);
         mode = ViewMode.valueOf(getIntent().getStringExtra(ViewMode.VIEW.name()));
@@ -45,9 +47,8 @@ public class UserDisplayActivity extends AppCompatActivity {
             return;
         }
 
-        db = new DatabaseHelper(this);
-
-        int eventId = getIntent().getIntExtra("eventId", -1);
+        eventID = getIntent().getIntExtra("eventID", -1);
+        Log.d("UserDisplayA", "Event ID is --> " + eventID);
 
         RecyclerView recyclerView = findViewById(R.id.recycler);
         TextView noUsersTextView = findViewById(R.id.noUsersTextView);
@@ -62,7 +63,7 @@ public class UserDisplayActivity extends AppCompatActivity {
                 pageTitleTextView.setText(R.string.userManagement);
                 noUsersTextView.setText(R.string.no_users);
             }else{
-                users = db.getPendingRequestsByEvent(eventId);
+                users = db.getPendingRequestByEvents(eventID);
                 setTitle("Attendees");
                 pageTitleTextView.setText(R.string.attendeeList);
                 noUsersTextView.setText(R.string.no_attendees);
@@ -73,7 +74,7 @@ public class UserDisplayActivity extends AppCompatActivity {
             } else {
                 noUsersTextView.setVisibility(View.GONE);
             }
-            recyclerView.setAdapter(new UserDisplayAdapter(this, users, mode, eventId, noUsersTextView));
+            recyclerView.setAdapter(new UserDisplayAdapter(this, users, mode, eventID, noUsersTextView));
 
         } catch (Exception e) {
             Toast.makeText(this, "Adapter error: " + e.getMessage(), Toast.LENGTH_LONG).show();
@@ -96,6 +97,7 @@ public class UserDisplayActivity extends AppCompatActivity {
         Button backButton = findViewById(R.id.userBackButton);
         backButton.setOnClickListener(v -> onBackPressed());
     }
+
 
     @SuppressWarnings("deprecation")
     @Override

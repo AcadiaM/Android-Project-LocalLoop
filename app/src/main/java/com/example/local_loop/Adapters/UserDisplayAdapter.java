@@ -26,15 +26,15 @@ public class UserDisplayAdapter extends RecyclerView.Adapter<UserDisplayViewHold
     private final List<Account> users;
     private final DatabaseHelper db;
 
-    private final ViewMode mode; //Assuming its checking between Organizer and Admin
-    private final int eventId;  // Only relevant for attendee mode
+    private final ViewMode mode;
+    private final int eventID;  // Only relevant for attendee mode
     TextView noUsersTextView;
 
-    public UserDisplayAdapter(Context context, List<Account> users, ViewMode mode, int eventId, TextView noUsersTextView) {
+    public UserDisplayAdapter(Context context, List<Account> users, ViewMode mode, int eventID, TextView noUsersTextView) {
         this.context = context;
         this.users = users;
         this.mode = mode;
-        this.eventId = eventId;
+        this.eventID = eventID;
         this.noUsersTextView = noUsersTextView;
         this.db = new DatabaseHelper(context);
     }
@@ -43,7 +43,7 @@ public class UserDisplayAdapter extends RecyclerView.Adapter<UserDisplayViewHold
     @Override
     public UserDisplayViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         int layoutId = R.layout.user_list_layout;
-        if (mode == ViewMode.ORG_PARTICPANTSLIST) {
+        if (mode != ViewMode.ADMIN_USERS) {
             layoutId = R.layout.attendee_list_layout;
         }
         return new UserDisplayViewHolder(LayoutInflater.from(parent.getContext()).inflate(layoutId, parent, false));
@@ -58,15 +58,15 @@ public class UserDisplayAdapter extends RecyclerView.Adapter<UserDisplayViewHold
         holder.emailView.setText(user.getEmail());
         holder.typeView.setText(user.getRole());
 
-        if (mode == ViewMode.ORG_PARTICPANTSLIST) {
+        if (mode != ViewMode.ADMIN_USERS) {
             holder.disable.setOnClickListener(v -> {
-                approve(eventId, user);
+                approve(eventID, user);
                 deleteEntry(user);
                 notifyItemRemoved(holder.getAdapterPosition());
             });
 
             holder.delete.setOnClickListener(v -> {
-                refuse(eventId, user);
+                refuse(eventID, user);
                 deleteEntry(user);
                 notifyItemRemoved(holder.getAdapterPosition());
             });

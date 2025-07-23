@@ -8,6 +8,7 @@ import android.database.sqlite.SQLiteOpenHelper;
 import android.util.Log;
 
 import com.example.local_loop.Models.Account;
+import com.example.local_loop.Models.Request;
 import com.example.local_loop.Models.User;
 import com.example.local_loop.Models.Category;
 import com.example.local_loop.Models.Event;
@@ -48,7 +49,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
     //Requests
     private static final String TABLE_REQUESTS = "requests";
-    private static final String REQUEST_ID = "request_id";
+    private static final String REQUEST_ID = "id";
     private static final String REQUESTS_EVENT_ID = "event_id";
     private static final String REQUESTS_PARTICPANT_ID = "attendee_id";
     private static final String REQUESTS_STATUS = "status";
@@ -132,8 +133,6 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     }
 
 
-    // USER FUNCTIONS
-
     /**
      * This function checks if the desired username has already been taken by another user in the database.
      *
@@ -178,7 +177,8 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         values.put("password", user.getPassword());
         values.put("role", user.getRole());
 
-       return db.insert(TABLE_USERS, null, values);
+       long id =  db.insert(TABLE_USERS, null, values);
+        return id;
     }
 
     /**
@@ -221,6 +221,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             admin.setUserID(insertUser(admin));
         }
         cursor.close();
+        db.close();
     }
 
     /**
@@ -231,6 +232,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     public void deleteUser(int userID) {
         SQLiteDatabase db = getWritableDatabase();
         db.delete(TABLE_USERS, USERS_ID+" = ?", new String[]{String.valueOf(userID)});
+        db.close();
     }
 
     /**
@@ -246,6 +248,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         ContentValues values = new ContentValues();
         values.put(USERS_ISACTIVE, status);
         db.update(TABLE_USERS, values, USERS_ID+" = ?", new String[]{String.valueOf(userID)});
+        db.close();
     }
 
     /**
@@ -262,6 +265,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             active = cursor.getInt(0);
         }
         cursor.close();
+        db.close();
         return active;
     }
 
@@ -336,6 +340,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     public void deleteCategory(int id) {
         SQLiteDatabase db = getWritableDatabase();
         db.delete(TABLE_CATEGORIES, CATEGORIES_ID+"=?", new String[]{String.valueOf(id)});
+        db.close();
     }
 
     /**
@@ -390,7 +395,6 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         values.put(EVENTS_CATEGORY_ID, event.getCategoryId());
         values.put(EVENTS_ORGANIZER, event.getOrganizer());
         long id = db.insert(TABLE_EVENTS, null, values);
-        db.close();
         if(id<1){
             Log.d("Event adding", "failed to add to DB");
         }
@@ -416,7 +420,6 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         values.put(EVENTS_CATEGORY_ID, categoryId);
 
         db.update(TABLE_EVENTS, values, EVENTS_ID+"=?", new String[]{String.valueOf(eventId)});
-        db.close();
     }
 
     /**
@@ -427,6 +430,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     public void deleteEvent(int id) {
         SQLiteDatabase db = getWritableDatabase();
         db.delete(TABLE_EVENTS, USERS_ID+"=?", new String[]{String.valueOf(id)});
+        db.close();
     }
 
     /**
@@ -470,7 +474,6 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         Log.d("EventsbyOrg", "this succeeded");
 
         cursor.close();
-        db.close();
         return events;
     }
 
@@ -490,8 +493,11 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                     cursor.getString(cursor.getColumnIndexOrThrow(CATEGORIES_DESCRIPTION))
             );
             cursor.close();
+            db.close();
             return category;
         }
+        cursor.close();
+        db.close();
         return null;
     }
 
@@ -519,6 +525,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             events.add(event);
         }
         cursor.close();
+        db.close();
         return events;
     }
 
@@ -606,8 +613,8 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         ContentValues values = new ContentValues();
         values.put(REQUESTS_EVENT_ID, eventId);
         values.put(REQUESTS_PARTICPANT_ID, participantID);
-        db.insert(TABLE_REQUESTS, null, values);
-        db.close();
+        long x = db.insert(TABLE_REQUESTS, null, values);
+        Log.d("submitReq", "Insert failed? --> " + x);
     }
 
     //Checks if request exist and status!
@@ -615,14 +622,13 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     public RequestStatus getRequestStatus(int eventId, int participantID) {
         SQLiteDatabase db = this.getReadableDatabase();
         Cursor cursor = db.query(TABLE_REQUESTS, new String[]{REQUESTS_STATUS}, REQUESTS_EVENT_ID+" = ? AND "+ REQUESTS_PARTICPANT_ID+" = ?", new String[]{String.valueOf(eventId),String.valueOf(participantID)}, null, null, null);
-        try {
-            if (cursor.moveToFirst()) {
-                String status = cursor.getString(0);
-                cursor.close();
-                return RequestStatus.valueOf(status);
-            }
+
+        if(cursor.moveToFirst()){
+            String statusString = cursor.getString(0);
             cursor.close();
-            return RequestStatus.INACTIVE;
+            return RequestStatus.valueOf(statusString.toUpperCase());
+        }else{
+            return RequestStatus.INACTIVE; //TODO this is running when organizer
         }
     }
 
@@ -659,22 +665,16 @@ public class DatabaseHelper extends SQLiteOpenHelper {
      * @param eventId The ID of the event.
      * @return List of User objects who have requested to join the event and are still pending.
      */
-    public List<Account> getPendingRequestsByEvent(int eventId) {
-
+    public List<Account> getPendingRequestByEvents(int eventId) {
         SQLiteDatabase db = this.getReadableDatabase();
         List<Account> pendingUsers = new ArrayList<>();
 
-        Cursor cursor = db.query(
-                TABLE_REQUESTS,
-                new String[]{REQUESTS_PARTICPANT_ID},
-                EVENTS_ID+" = ? AND "+REQUESTS_STATUS+"= ?",
-                new String[]{String.valueOf(eventId), RequestStatus.PENDING.getREQSTATUS()},
-                null, null, null
-        );
+        Cursor cursor = db.query(TABLE_REQUESTS, new String[]{REQUESTS_PARTICPANT_ID},
+                REQUESTS_EVENT_ID+" = ? AND "+REQUESTS_STATUS +" =?", new String[]{String.valueOf(eventId),RequestStatus.PENDING.getREQSTATUS()}, null, null, null);
 
         if (cursor.moveToFirst()) {
             do {
-                int participantID = cursor.getInt(2);  // attendee_id = userID
+                int participantID = cursor.getInt(0);// attendee_id = userID
                 // Retrieve full User details
                 Account user = getUserFromDB(participantID);
                 if (user != null) {
@@ -683,8 +683,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             } while (cursor.moveToNext());
         }
         cursor.close();
-        db.close();
-
+        Log.d("GetPendingReq", "User list is Empty? --> " + pendingUsers.isEmpty());
         return pendingUsers;
     }
 
@@ -700,7 +699,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues values = new ContentValues();
 
-        values.put(REQUESTS_STATUS, newStatus.getRequestStatus());
+        values.put(REQUESTS_STATUS, newStatus.getREQSTATUS());
         db.update(TABLE_REQUESTS, values,EVENTS_ID+" = ? AND "+REQUESTS_PARTICPANT_ID+"= ?",
                 new String[]{String.valueOf(eventId), String.valueOf(participantID)});
 
@@ -726,22 +725,10 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         }
 
         cursor.close();
+        db.close();
         return session;
     }
 
-
-    //For messages to Users
-    public String getUsername(int userID) {
-        SQLiteDatabase db = this.getReadableDatabase();
-        Cursor cursor = db.query(TABLE_USERS, new String[]{USERS_USERNAME}, USERS_ID+" = ?", new String[]{String.valueOf(userID)}, null, null, null);
-        if (cursor.moveToFirst()) {
-            String status = cursor.getString(0);
-            cursor.close();
-            return status;
-        }
-        cursor.close();
-        return null;
-    }
 
     public  List<Event> getAllEvents() {
         List<Event> events = new ArrayList<>();
@@ -760,11 +747,56 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             events.add(new Event(id, title, description, categoryID, organizer, fee, dateTime));
         }
         cursor.close();
+        db.close();
         return events;
     }
 
+    //This method is to get the value I want displayed when I only know the ID and do not have the object
+    public String getDisplay(int id, String table){
+        String key;
+        switch (table) {
+            case TABLE_USERS:
+                key = USERS_USERNAME;
+                break;
+            case TABLE_EVENTS:
+                key = EVENTS_TITLE;
+                break;
+            case TABLE_CATEGORIES:
+                key = CATEGORIES_NAME;
+                break;
+            default:
+                Log.d("getDisplay", "Invalid Table name");
+                return "";
+        }
 
+        SQLiteDatabase db = this.getReadableDatabase();
+        Cursor cursor = db.query(table, new String[]{key}, "id = ?", new String[]{java.lang.String.valueOf(id)}, null, null, null);
+        if (cursor.moveToFirst()) {
+            String status = cursor.getString(0);
+            cursor.close();
+            return status;
+        }
+        cursor.close();
+        return null;
 
+    }
+
+    public  void getAllRequests() {
+        List<Request> req = new ArrayList<>();
+        SQLiteDatabase db = getReadableDatabase();
+        Cursor cursor = db.query(TABLE_REQUESTS, null, null, null, null, null, null);
+
+        while (cursor.moveToNext()) {
+            int id = cursor.getInt(0);
+            int eventID =cursor.getInt(1);
+            int participantID =  cursor.getInt(2);
+            String status =cursor.getString(3);
+            req.add(new Request(id, eventID, participantID, status));
+        }
+        cursor.close();
+        db.close();
+
+    }
 
 
 }

@@ -67,13 +67,6 @@ public class DisplayItemActivity extends AppCompatActivity {
         String newMode = getIntent().getStringExtra(ViewMode.VIEW.name());
         mode = ViewMode.valueOf(newMode);
 
-        Log.d("DisplayItemActivity","ViewMode: "+mode);
-        if (user == null) {
-            Log.d("USER_EVENT_A","Session is null girlie");
-            finish();
-            return;
-        }
-
         setupButtons();
         setupRecyclerView();
         loadItems();
@@ -143,7 +136,9 @@ public class DisplayItemActivity extends AppCompatActivity {
             Toast.makeText(this, "No items to delete", Toast.LENGTH_SHORT).show();
             return;
         }
-        if(displayItemAdapter.getViewMode() == ViewMode.DELETE){
+        if(displayItemAdapter.getViewMode() != ViewMode.DELETE ){
+            enterDeleteMode();
+        }else{
             for (DisplayItem item : selectedItems) {
                 if (item instanceof Category) {
                     dbHelper.deleteCategory(item.getID());
@@ -155,9 +150,16 @@ public class DisplayItemActivity extends AppCompatActivity {
             exitDeleteMode();
             loadItems();
         }
-        else{
-            enterDeleteMode();
-        }
+    }
+
+    private void enterDeleteMode() {
+        selectedItems.clear();
+        Toast.makeText(this, "Select items to delete", Toast.LENGTH_SHORT).show();
+        addButton.setEnabled(false);
+        editButton.setEnabled(false);
+        removeButton.setImageResource(R.drawable.outline_check_circle_24);
+        displayItemAdapter.setViewMode(ViewMode.DELETE);
+        displayItemAdapter.setSelectedItems(selectedItems);
     }
 
 
@@ -169,16 +171,6 @@ public class DisplayItemActivity extends AppCompatActivity {
         enterEditMode();
     }
 
-    private void enterDeleteMode() {
-        selectedItems.clear();
-        Toast.makeText(this, "Select items to delete", Toast.LENGTH_SHORT).show();
-        addButton.setEnabled(false);
-        editButton.setEnabled(false);
-        removeButton.setImageResource(R.drawable.outline_check_circle_24);
-
-        displayItemAdapter.setViewMode(ViewMode.DELETE);
-        displayItemAdapter.setSelectedItems(selectedItems);
-    }
 
     private void exitDeleteMode() {
         selectedItems.clear();
@@ -200,7 +192,7 @@ public class DisplayItemActivity extends AppCompatActivity {
             items.addAll(dbHelper.getEventsByOrganizer(user.getUserID()));
         }
         if(mode == ViewMode.ADMIN_EVENTS) {
-            items.addAll(dbHelper.getEventsByOrganizer(user.getUserID())); //TODO add all events method in DB
+            items.addAll(dbHelper.getAllEvents());
         }
 
         displayItemAdapter.updateItems(items);

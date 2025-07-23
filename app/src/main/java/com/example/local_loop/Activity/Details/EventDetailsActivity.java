@@ -19,15 +19,15 @@ import com.example.local_loop.Helper.ViewMode;
 import com.example.local_loop.Models.Account;
 import com.example.local_loop.Models.Event;
 import com.example.local_loop.R;
-import com.example.local_loop.Models.Category;
-
-import java.util.Objects;
 
 public class EventDetailsActivity extends AppCompatActivity {
-    DatabaseHelper dBHelper;
+    DatabaseHelper db;
     private ViewMode mode;
     private Account session;
     Event event;
+    private TextView titleText, descriptionText, feeText, dateTimeText, contextInfoText;
+    private Button joinButton, backButton;
+    private RequestStatus status;
 
     @SuppressLint("SetTextI18n")
     @SuppressWarnings("deprecation")
@@ -35,34 +35,26 @@ public class EventDetailsActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_event_details);
+        db = new DatabaseHelper(this);
 
-        dBHelper = new DatabaseHelper(this);
         session = getIntent().getParcelableExtra("user", Account.class);
         mode = ViewMode.valueOf(getIntent().getStringExtra(ViewMode.VIEW.name()));
         Bundle itemBundle = getIntent().getBundleExtra("event");
 
-        if (session == null || itemBundle==null) {
-            Log.d("USER_EVENT_A","Session or bundle is null");
-            finish();
-            return;
+        if(session == null || mode == null || itemBundle == null){
+            Log.d("User/Mode/Bundle Null", this.getLocalClassName());
         }
-
         event = Event.fromBundle(itemBundle);
-        Log.d("EventDetails", event.getID()+" ID from beggining and name --> "+ event.getTitle() + "organizerID --> " + event.getOrganizer());
+        status = db.getRequestStatus(event.getID(), session.getUserID());
 
-        TextView titleText = findViewById(R.id.eventDetailTitle);
-        TextView descriptionText = findViewById(R.id.eventDetailDescription);
-        TextView feeText = findViewById(R.id.eventDetailFee);
-        TextView dateTimeText = findViewById(R.id.eventDetailDateTime);
-        TextView contextInfoText = findViewById(R.id.eventDetailContextInfo);
+        //Initialize
+        titleText = findViewById(R.id.eventDetailTitle);
+        descriptionText = findViewById(R.id.eventDetailDescription);
+        feeText = findViewById(R.id.eventDetailFee);
+        dateTimeText = findViewById(R.id.eventDetailDateTime);
+        contextInfoText = findViewById(R.id.eventDetailContextInfo);
+        joinButton = findViewById(R.id.joinButton);
 
-        Button joinButton = findViewById(R.id.joinButton);
-
-        // Get data passed from intent
-
-        Category category = dBHelper.getCategory(event.getCategoryId());
-        String categoryName = category.getTitle();
-        String organizer = dBHelper.getUsername(event.getOrganizer());
 
         // Set values
         titleText.setText(event.getTitle());
@@ -70,56 +62,85 @@ public class EventDetailsActivity extends AppCompatActivity {
         feeText.setText("Fee: $" + event.getFee());
         dateTimeText.setText("Date/Time: " + event.getDateTime());
 
-        // Set context-based info
-        switch (mode){
-            case ADMIN_EVENTS:
-                contextInfoText.setText("Organizer: " + organizer);
-                joinButton.setEnabled(false);
-                joinButton.setVisibility(View.INVISIBLE);
-                break;
-            case ORG_EVENTS:
-                contextInfoText.setText("Category: " + categoryName);
-                joinButton.setText("Attendee List");
-                joinButton.setOnClickListener(v -> {
-                    Intent intent = new Intent(getApplicationContext(), UserDisplayActivity.class);
-                    intent.putExtra(ViewMode.VIEW.name(), mode.name());
-                    intent.putExtra("user", session);
-                    startActivity(intent);
-                });
-                break;
-            default:
-                contextInfoText.setText("Category: " + categoryName + "\n" + "\n" + "Organizer: " + organizer);
-                RequestStatus status = RequestStatus.valueOf(dBHelper.getRequestStatus());
+        setContextText();
 
-                if(requested){
+        backButton = findViewById(R.id.eventDetailsBackButton);
+        backButton.setOnClickListener(v -> onBackPressed());
 
-                    switch ()
-                }
-                if () {
-                    joinButton.setEnabled(false);
-                    joinButton.setText(dBHelper.getRequestStatus(event.getID(), session.getUserID()));
-                    if (Objects.equals(dBHelper.getRequestStatus(event.getID(), session.getUserID()), "Approved")) {
-                        joinButton.setBackgroundColor(getColor(R.color.dark_green));
-                        joinButton.setTextColor(Color.WHITE);
-                    } else if (Objects.equals(dBHelper.getRequestStatus(event.getID(), session.getUserID()), "Refused")) {
-                        joinButton.setBackgroundColor(getColor(R.color.red));
-                        joinButton.setTextColor(Color.WHITE);
-                    } else {
-                        joinButton.setBackgroundColor(Color.LTGRAY);
-                    }
-                }else {
+    }
+
+    @SuppressLint("SetTextI18n")
+    private void setContextText(){
+        String category = db.getDisplay(event.getCategoryId(), "categories");
+        String organizer = db.getDisplay(event.getOrganizer(), "users");
+
+        if(session.getRole().equals("participant")){
+            contextInfoText.setText("Category: " + category + "\n" + "\n" + "Organizer: " + organizer);  // Or "Unknown Source"
+            joinButton.setEnabled(false);
+            joinButton.setText(status.name());
+
+            switch (status){
+                case PENDING:
+                    joinButton.setBackgroundColor(Color.LTGRAY);
+                    break;
+                case REFUSED:
+                    joinButton.setBackgroundColor(getColor(R.color.red));
+                    joinButton.setTextColor(Color.WHITE);
+                    break;
+                case APPROVED:
+                    joinButton.setBackgroundColor(getColor(R.color.dark_green));
+                    joinButton.setTextColor(Color.WHITE);
+                    break;
+
+                default:
+                    //Inactive
+                    joinButton.setEnabled(true);
                     joinButton.setText("Join");
                     joinButton.setOnClickListener(v -> {
-                        dBHelper.submitRequest(event.getID(), session.getUserID());
+                        Log.d("EventDetails", "Check submission request vals. eventID: "+event.getID() +" userID" + session.getUserID() );
+                        db.submitRequest(event.getID(), session.getUserID());
+                        Log.d("EventDetails", "Check if Join button Status is PENDING --> "+ db.getRequestStatus(event.getID(), session.getUserID()));
                         joinButton.setEnabled(false);
                         joinButton.setBackgroundColor(Color.LTGRAY);
-                        joinButton.setText(dBHelper.getRequestStatus(event.getID(), session.getUserID()));
+                        String msg = db.getRequestStatus(event.getID(), session.getUserID()).toString();
+                        joinButton.setText(msg);
                     });
-                }
-                break;
+                    break;
+            }
+        }else{
+            switch (mode){
+                case ADMIN_EVENTS:
+                    contextInfoText.setText("Organizer: " + organizer);
+                    joinButton.setText("Attendee List");
+                    joinButton.setOnClickListener(v -> {
+                        Intent intent = new Intent(getApplicationContext(), UserDisplayActivity.class);
+                        intent.putExtra(ViewMode.VIEW.name(), mode.name());
+                        intent.putExtra("user", session);
+                        intent.putExtra("eventID", event.getID());
+                        startActivity(intent);
+                    });
+                    break;
+
+                case ORG_EVENTS:
+                    contextInfoText.setText("Category: " + category);
+                    joinButton.setText("Attendee List");
+                    joinButton.setOnClickListener(v -> {
+                        Intent intent = new Intent(getApplicationContext(), UserDisplayActivity.class);
+                        intent.putExtra(ViewMode.VIEW.name(), mode.name());
+                        intent.putExtra("user", session);
+                        intent.putExtra("eventID", event.getID());
+                        startActivity(intent);
+                    });
+                    break;
+
+                default:
+            }
         }
 
-        Button backButton = findViewById(R.id.eventDetailsBackButton);
-        backButton.setOnClickListener(v -> onBackPressed());
+    }
+@Override
+    protected void onDestroy(){
+        super.onDestroy();
+        db.close();
     }
 }

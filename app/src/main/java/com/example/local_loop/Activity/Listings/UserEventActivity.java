@@ -54,12 +54,11 @@ public class UserEventActivity extends AppCompatActivity {
 
         dbHelper = new DatabaseHelper(this);
         user = getIntent().getParcelableExtra("user", Account.class);
-        if (user == null) {
-            Log.d("USER_EVENT_A","Session is null girlie");
-            finish();
-            return;
-        }
         mode = ViewMode.valueOf(getIntent().getStringExtra(ViewMode.VIEW.name()));
+
+        if(user == null || mode == null){
+            Log.d("User/Mode Null", this.getLocalClassName());
+        }
 
         RecyclerView eventRecyclerView = findViewById(R.id.recyclerViewEvents);
         eventRecyclerView.setLayoutManager(new GridLayoutManager(this, 2));
