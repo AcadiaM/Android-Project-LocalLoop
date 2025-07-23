@@ -67,7 +67,6 @@ public class DisplayItemAdapter extends RecyclerView.Adapter<DisplayItemAdapter.
     @Override
     public void onBindViewHolder(@NonNull ItemViewHolder holder, int position) {
         DisplayItem item = items.get(position);
-
         holder.button.setText(item.getTitle());
 
         switch(mode){
@@ -84,6 +83,7 @@ public class DisplayItemAdapter extends RecyclerView.Adapter<DisplayItemAdapter.
 
                 holder.button.setBackgroundColor(selectedItems.contains(item)
                         ? Color.TRANSPARENT : Color.LTGRAY);
+                break;
 
             case EDIT:
                 holder.button.setOnClickListener(v -> {
@@ -91,12 +91,14 @@ public class DisplayItemAdapter extends RecyclerView.Adapter<DisplayItemAdapter.
                 });
 
                 holder.button.setBackgroundColor(Color.LTGRAY);
+                break;
             default:
                 holder.button.setOnClickListener(v -> {
                     if (listener != null) listener.onClick(item);
                 });
 
                 holder.button.setBackgroundColor(Color.TRANSPARENT);
+                break;
         }
 
         holder.button.setOnLongClickListener(v -> {

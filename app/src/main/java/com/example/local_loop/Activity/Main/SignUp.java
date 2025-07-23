@@ -86,7 +86,7 @@ public class SignUp extends AppCompatActivity {
 
     //Button Methods
 
-    public void backButtonPressed(View view) {
+    public void onBackButton(View view) {
         // Handle back button press
         Intent intent = new Intent(SignUp.this, MainActivity.class);
         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);

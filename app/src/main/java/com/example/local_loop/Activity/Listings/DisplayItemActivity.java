@@ -51,7 +51,6 @@ public class DisplayItemActivity extends AppCompatActivity {
 
     private ImageButton addButton, removeButton, editButton;
 
-    private ViewMode AdapterMode;//delete or edit
     private ViewMode mode;
 
     private final List<DisplayItem> selectedItems = new ArrayList<>();
@@ -66,11 +65,9 @@ public class DisplayItemActivity extends AppCompatActivity {
 
         user = getIntent().getParcelableExtra("user", Account.class);
         String newMode = getIntent().getStringExtra(ViewMode.VIEW.name());
-        if(newMode == null){
-            Log.d("USER_EVENT_A","mode is null girlie");
-        }
+        mode = ViewMode.valueOf(newMode);
 
-        mode = ViewMode.valueOf(getIntent().getStringExtra(ViewMode.VIEW.name()));
+        Log.d("DisplayItemActivity","ViewMode: "+mode);
         if (user == null) {
             Log.d("USER_EVENT_A","Session is null girlie");
             finish();
@@ -122,7 +119,6 @@ public class DisplayItemActivity extends AppCompatActivity {
         });
 
         recyclerView.setAdapter(displayItemAdapter);
-        AdapterMode = displayItemAdapter.getMode();
     }
 
     private void openCategoryDetails(Category category) {
@@ -147,7 +143,7 @@ public class DisplayItemActivity extends AppCompatActivity {
             Toast.makeText(this, "No items to delete", Toast.LENGTH_SHORT).show();
             return;
         }
-        if(AdapterMode == ViewMode.DELETE){
+        if(displayItemAdapter.getViewMode() == ViewMode.DELETE){
             for (DisplayItem item : selectedItems) {
                 if (item instanceof Category) {
                     dbHelper.deleteCategory(item.getID());
@@ -190,7 +186,7 @@ public class DisplayItemActivity extends AppCompatActivity {
         editButton.setEnabled(true);
         removeButton.setImageResource(R.drawable.baseline_delete_forever_24);
 
-        displayItemAdapter.setViewMode(ViewMode.EDIT);
+        displayItemAdapter.setViewMode(ViewMode.DEFAULT);
         displayItemAdapter.setSelectedItems(new ArrayList<>());
     }
 
@@ -203,6 +199,10 @@ public class DisplayItemActivity extends AppCompatActivity {
         if(mode == ViewMode.ORG_EVENTS) {
             items.addAll(dbHelper.getEventsByOrganizer(user.getUserID()));
         }
+        if(mode == ViewMode.ADMIN_EVENTS) {
+            items.addAll(dbHelper.getEventsByOrganizer(user.getUserID())); //TODO add all events method in DB
+        }
+
         displayItemAdapter.updateItems(items);
         TextView noCategoriesTextView = findViewById(R.id.noTextView);
 
@@ -210,10 +210,13 @@ public class DisplayItemActivity extends AppCompatActivity {
             switch (mode){
                 case ORG_EVENTS:
                     noCategoriesTextView.setText(R.string.no_events_created);
+                    break;
                 case ADMIN_CATEGORIES:
                     noCategoriesTextView.setText(R.string.no_categories_created);
+                    break;
                 default:
                     noCategoriesTextView.setVisibility(View.VISIBLE);
+                    break;
             }
         }else{
             noCategoriesTextView.setVisibility(View.GONE);
@@ -245,7 +248,7 @@ public class DisplayItemActivity extends AppCompatActivity {
     }
 
     private void showItemDialog(DisplayItem itemToEdit) {
-        boolean isEvent = mode == ViewMode.ADMIN_EVENTS;
+        boolean isEvent = mode != ViewMode.ADMIN_CATEGORIES;
 
         if (isEvent) {
             List<Category> categories = dbHelper.getAllCategories();
@@ -437,7 +440,7 @@ public class DisplayItemActivity extends AppCompatActivity {
         addButton.setEnabled(false);
         removeButton.setEnabled(false);
         editButton.setEnabled(false);
-        displayItemAdapter.setViewMode(ViewMode.DEFAULT);
+        displayItemAdapter.setViewMode(ViewMode.EDIT);
     }
 
     private void exitEditMode() {
@@ -450,7 +453,7 @@ public class DisplayItemActivity extends AppCompatActivity {
     @SuppressWarnings("deprecation")
     @Override
     public void onBackPressed() {
-        switch (AdapterMode){
+        switch (displayItemAdapter.getViewMode()){
             case EDIT:
                 exitDeleteMode();
                 Toast.makeText(this, "Delete mode cancelled", Toast.LENGTH_SHORT).show();

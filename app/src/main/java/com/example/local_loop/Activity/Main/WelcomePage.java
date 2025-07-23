@@ -126,6 +126,9 @@ public class WelcomePage extends AppCompatActivity {
     public void OnEventsButton(View view) {
         Intent intent = new Intent(WelcomePage.this, DisplayItemActivity.class);
         intent.putExtra("user", session);
+        String msg = session.getRole().equals("admin") ?
+                ViewMode.ADMIN_EVENTS.name(): ViewMode.ORG_EVENTS.name();
+        Log.d("WelcomePage-","On Events button and is"+ session.getRole()+". Result:"+msg+".");
         intent.putExtra(ViewMode.VIEW.name(), session.getRole().equals("admin") ?
                 ViewMode.ADMIN_EVENTS.name(): ViewMode.ORG_EVENTS.name());
         startActivity(intent);

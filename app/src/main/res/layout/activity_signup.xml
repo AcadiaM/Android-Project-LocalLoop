@@ -265,6 +265,7 @@
         android:layout_marginBottom="24dp"
         android:backgroundTint="@color/black"
         android:contentDescription="@string/back_button"
+        android:onClick="onBackButton"
         android:gravity="center"
         android:text=""
         android:textSize="20sp"
