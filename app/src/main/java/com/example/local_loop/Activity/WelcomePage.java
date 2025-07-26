@@ -1,5 +1,10 @@
 package com.example.local_loop.Activity;
 
+import static com.example.local_loop.Details.EventDetailsActivity.EXTRA_SOURCE;
+import static com.example.local_loop.Details.EventDetailsActivity.SOURCE_ADMIN;
+import static com.example.local_loop.Details.EventDetailsActivity.SOURCE_ORGANIZER;
+import static com.example.local_loop.Details.EventDetailsActivity.SOURCE_PARTICIPANT;
+
 import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.os.Bundle;
@@ -15,16 +20,16 @@ import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
-import com.example.local_loop.Account.Account;
+import com.example.local_loop.CreateAccount.User;
 import com.example.local_loop.Displays.DisplayItemActivity;
 import com.example.local_loop.Displays.UserDisplayActivity;
 import com.example.local_loop.Displays.UserEventActivity;
-import com.example.local_loop.Helpers.MODE;
+import com.example.local_loop.Login.LoginActivity;
 import com.example.local_loop.R;
 
 public class WelcomePage extends AppCompatActivity {
     private View decorView;
-    private Account session;
+    private User user;
 
 
     @SuppressLint("SetTextI18n")
@@ -35,8 +40,8 @@ public class WelcomePage extends AppCompatActivity {
         EdgeToEdge.enable(this);
         setContentView(R.layout.activity_welcome_page);
 
-        session = getIntent().getParcelableExtra("user", Account.class);
-        if (session == null) {
+        user = getIntent().getParcelableExtra("user", User.class);
+        if (user == null) {
             Log.d("WelcomePage","Session is null girlie");
             finish();
             return;
@@ -47,8 +52,8 @@ public class WelcomePage extends AppCompatActivity {
         Button button2 = findViewById(R.id.secondButton);
         Button button3 = findViewById(R.id.thirdButton);
 
-        String role = session.getRole();
-        String welcomeMessage = "Welcome " + session.getFirstName() + ".\nYou are logged in as " + role + ".";
+        String role = user.getRole();
+        String welcomeMessage = "Welcome " + user.getFirstName() + ".\nYou are logged in as " + role + ".";
         welcomeTextView.setText(welcomeMessage);
 
         switch(role){
@@ -109,31 +114,35 @@ public class WelcomePage extends AppCompatActivity {
     //ADMIN BUTTONS
     public void OnListCategoriesButton(View view) {
         Intent intent = new Intent(WelcomePage.this, DisplayItemActivity.class);
-        intent.putExtra("user", session);
+        intent.putExtra(EXTRA_SOURCE,SOURCE_ADMIN);
+        intent.putExtra("user", user);
         startActivity(intent);
     }
     public void OnUsersButton(View view) {
         Intent intent = new Intent(WelcomePage.this, UserDisplayActivity.class);
-        intent.putExtra("user", session);
+        intent.putExtra(EXTRA_SOURCE,SOURCE_ADMIN);
+        intent.putExtra("user", user);
         startActivity(intent);
     }
     public void OnEventsButton(View view) {
         Intent intent = new Intent(WelcomePage.this, DisplayItemActivity.class);
-        intent.putExtra("user", session);
+        intent.putExtra(EXTRA_SOURCE,SOURCE_ORGANIZER);
+        intent.putExtra("user", user);
         startActivity(intent);
     }
 
     //Participant
     public void OnBrowseEventsButton(View view){
         Intent intent = new Intent(WelcomePage.this, UserEventActivity.class);
-        intent.putExtra("user", session);
-        intent.putExtra("isBrowsing",MODE.BROWSING);
+        intent.putExtra(EXTRA_SOURCE,SOURCE_PARTICIPANT);
+        intent.putExtra("user", user);
         startActivity(intent);
     }
     public void OnMyEventsButton(View view){
         Intent intent = new Intent(WelcomePage.this, UserEventActivity.class);
-        intent.putExtra("user", session);
-        intent.putExtra("myEvents",MODE.MYEVENTS);
+        intent.putExtra(EXTRA_SOURCE,SOURCE_PARTICIPANT);
+        intent.putExtra("user", user);
+        intent.putExtra("isMyEventsMode", true);
         startActivity(intent);
     }
 

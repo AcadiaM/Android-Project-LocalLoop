@@ -28,6 +28,7 @@ import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.local_loop.AFIX.DisplayItemAdapter;
+import com.example.local_loop.CreateAccount.User;
 import com.example.local_loop.Details.CategoryDetailsActivity;
 import com.example.local_loop.Details.EventDetailsActivity;
 import com.example.local_loop.Helpers.DatabaseHelper;
@@ -69,7 +70,9 @@ public class DisplayItemActivity extends AppCompatActivity {
         dbHelper = new DatabaseHelper(this);
 
         source = getIntent().getStringExtra(EXTRA_SOURCE);
-        organizerUsername = getIntent().getStringExtra("username");
+        User user = getIntent().getParcelableExtra("user", User.class);
+        assert user != null;
+        organizerUsername = user.getUsername();
 
         setupButtons();
         setupRecyclerView();

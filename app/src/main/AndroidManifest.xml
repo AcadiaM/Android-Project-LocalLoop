@@ -17,23 +17,12 @@
             android:name=".Details.CategoryDetailsActivity"
             android:exported="false" />
         <activity
-            android:name=".Welcome.OrganizerWelcomePage"
-            android:exported="false" />
-        <activity
             android:name=".Activity.WelcomePage"
             android:exported="false" />
         <activity
-            android:name=".Activity.WelcomePage"
-            android:exported="false" />
-        <activity
-            android:name=".Activity.SignUp"
-            android:exported="false" />
-        <activity
-            android:name=".Event.EventActivity"
+            android:name=".CreateAccount.SignUp"
             android:exported="false" />
         <activity android:name=".Displays.UserEventActivity"
-            android:exported="false" />
-        <activity android:name=".Event.UserMyEvent"
             android:exported="false" />
         <activity
             android:name=".Displays.DisplayItemActivity"
@@ -42,10 +31,7 @@
             android:name=".Displays.UserDisplayActivity"
             android:exported="false" />
         <activity
-            android:name=".AttendeeList.AttendeeList"
-            android:exported="false" />
-        <activity
-            android:name=".Activity.LoginActivity"
+            android:name=".Login.LoginActivity"
             android:exported="false"
             android:label="@string/title_activity_login" />
         <activity

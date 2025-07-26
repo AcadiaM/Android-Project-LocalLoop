@@ -20,6 +20,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.local_loop.CreateAccount.User;
 import com.example.local_loop.Details.EventDetailsActivity;
 import com.example.local_loop.AFIX.DisplayItemAdapter;
 import com.example.local_loop.Helpers.DatabaseHelper;
@@ -52,7 +53,9 @@ public class UserEventActivity extends AppCompatActivity {
         setContentView(R.layout.activity_event_user_list);  // Use shared layout
 
         dbHelper = new DatabaseHelper(this);
-        username = getIntent().getStringExtra("username");
+        User user = getIntent().getParcelableExtra("user", User.class);
+        assert user != null;
+        username = user.getUsername();
         isMyEventsMode = getIntent().getBooleanExtra("isMyEventsMode", false);
 
         RecyclerView eventRecyclerView = findViewById(R.id.recyclerViewEvents);
@@ -60,6 +63,7 @@ public class UserEventActivity extends AppCompatActivity {
 
         searchBar = findViewById(R.id.searchBar);
         categorySpinner = findViewById(R.id.categorySpinner);
+        TextView noEventsUserTextView = findViewById(R.id.noEventsUserTextView);
         TextView titleTextView = findViewById(R.id.events);
 
         // Handle UI visibility
@@ -67,6 +71,7 @@ public class UserEventActivity extends AppCompatActivity {
             searchBar.setVisibility(View.GONE);
             categorySpinner.setVisibility(View.GONE);
             // Set the title or any text view you want:
+            noEventsUserTextView.setText(R.string.no_events_joined);
             titleTextView.setText(R.string.my_events);
         } else {
             setupCategorySpinner();

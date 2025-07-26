@@ -1,4 +1,4 @@
-package com.example.local_loop.database;
+package com.example.local_loop.Helpers;
 
 import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
@@ -7,9 +7,9 @@ import android.content.ContentValues;
 import android.database.Cursor;
 import android.util.Log;
 
-import com.example.local_loop.Category.Category;
+import com.example.local_loop.UserContent.Category;
 import com.example.local_loop.CreateAccount.User;
-import com.example.local_loop.Event.Event;
+import com.example.local_loop.UserContent.Event;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -175,18 +175,6 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     public String getRoleByUsername(String username) {
         SQLiteDatabase db = this.getReadableDatabase();
         Cursor cursor = db.query(TABLE_USERS, new String[]{"role"}, "username = ?", new String[]{username}, null, null, null);
-        if (cursor.moveToFirst()) {
-            String role = cursor.getString(0);
-            cursor.close();
-            return role;
-        }
-        cursor.close();
-        return null;
-    }
-
-    public String getFirstByUsername(String username) {
-        SQLiteDatabase db = this.getReadableDatabase();
-        Cursor cursor = db.query(TABLE_USERS, new String[]{"firstName"}, "username = ?", new String[]{username}, null, null, null);
         if (cursor.moveToFirst()) {
             String role = cursor.getString(0);
             cursor.close();

@@ -2,8 +2,8 @@ package com.example.local_loop.CreateAccount;
 
 import com.example.local_loop.Login.LoginActivity;
 import com.example.local_loop.R;
-import com.example.local_loop.Welcome.WelcomePage;
-import com.example.local_loop.database.DatabaseHelper;
+import com.example.local_loop.Activity.WelcomePage;
+import com.example.local_loop.Helpers.DatabaseHelper;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -113,23 +113,14 @@ public class SignUp extends AppCompatActivity {
         }
         else{
             User newUser;
-            if(role.equalsIgnoreCase("Organizer")){
-                role = "organizer";
-                newUser = new User(first,last, user, email, password, role);
-            }
-            else {
-                role = "participant";
-                newUser = new User(first,last, user, email, password, role);
-            }
+            role = role.toLowerCase();
+            newUser = new User(first,last, user, email, password, role);
 
             boolean successful = dbHelper.insertUser(newUser);
             if(successful){
                 Intent intent = new Intent(getApplicationContext(), WelcomePage.class);
                 intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
-                intent.putExtra("firstname", first);
-                intent.putExtra("username", user);
-                intent.putExtra("userType", role);
-
+                intent.putExtra("user", newUser);
                 Toast.makeText(SignUp.this, "Welcome " + first + "! You are logged in as " + role + ".", Toast.LENGTH_SHORT).show();
 
                 startActivity(intent);

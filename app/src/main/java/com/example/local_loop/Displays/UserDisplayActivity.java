@@ -18,7 +18,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.local_loop.AFIX.UserDisplayAdapter;
-import com.example.local_loop.Account.User;
+import com.example.local_loop.CreateAccount.User;
 import com.example.local_loop.Helpers.DatabaseHelper;
 import com.example.local_loop.R;
 

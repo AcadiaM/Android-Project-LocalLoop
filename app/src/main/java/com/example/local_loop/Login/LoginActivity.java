@@ -19,9 +19,10 @@ import android.widget.ProgressBar;
 import android.widget.Toast;
 
 import com.example.local_loop.CreateAccount.SignUp;
+import com.example.local_loop.CreateAccount.User;
 import com.example.local_loop.R;
-import com.example.local_loop.Welcome.WelcomePage;
-import com.example.local_loop.database.DatabaseHelper;
+import com.example.local_loop.Activity.WelcomePage;
+import com.example.local_loop.Helpers.DatabaseHelper;
 import com.example.local_loop.databinding.ActivityLoginBinding;
 import com.google.android.material.textfield.TextInputLayout;
 
@@ -164,14 +165,12 @@ public class LoginActivity extends AppCompatActivity {
     }
 
     private void updateUiWithUser(LoginViewModel.LoggedInUserView loggedInUser) {
-        String firstname = db.getFirstByUsername(loggedInUser.getDisplayName());
         String userType = db.getRoleByUsername(loggedInUser.getDisplayName());
+        User user = db.getUserByUsername(loggedInUser.getDisplayName());
         userType = userType.trim().toLowerCase();
         Toast.makeText(this, "UserType: " + userType, Toast.LENGTH_LONG).show();
         Intent intent = new Intent(getApplicationContext(), WelcomePage.class);
-        intent.putExtra("firstname", firstname);
-        intent.putExtra("username", loggedInUser.getDisplayName());
-        intent.putExtra("userType", userType);
+        intent.putExtra("user", user);
         startActivity(intent);
     }
 

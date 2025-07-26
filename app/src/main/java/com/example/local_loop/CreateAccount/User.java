@@ -1,9 +1,11 @@
 package com.example.local_loop.CreateAccount;
 
+import java.io.Serializable;
+
 /**
  * A User class representing all types of users: Admin, Participant, and Organizer.
  */
-public class User {
+public class User implements Serializable {
 
     private final String firstName, lastName, username, email, password, role;
 
