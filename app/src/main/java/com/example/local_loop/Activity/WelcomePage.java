@@ -109,8 +109,6 @@ public class WelcomePage extends AppCompatActivity {
         finish();
     }
 
-    //TODO --> Fix DisplayItemActivity and UserDisplayActivity to take parcelable
-
     //ADMIN BUTTONS
     public void OnListCategoriesButton(View view) {
         Intent intent = new Intent(WelcomePage.this, DisplayItemActivity.class);

@@ -9,6 +9,7 @@ import android.widget.Button;
 import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.content.ContextCompat;
 
 import com.example.local_loop.Displays.UserDisplayActivity;
 import com.example.local_loop.Helpers.DatabaseHelper;
@@ -42,6 +43,7 @@ public class EventDetailsActivity extends AppCompatActivity {
         TextView contextInfoText = findViewById(R.id.eventDetailContextInfo);
 
         Button joinButton = findViewById(R.id.joinButton);
+        Button functionButton = findViewById(R.id.functionButton);
 
         // Get data passed from intent
         int eventID = getIntent().getIntExtra("eventId", -1);
@@ -70,10 +72,13 @@ public class EventDetailsActivity extends AppCompatActivity {
         if (SOURCE_ADMIN.equals(source)) {
             contextInfoText.setText("Organizer: " + organizer);
             joinButton.setEnabled(false);
+            functionButton.setEnabled(false);
             joinButton.setVisibility(View.INVISIBLE);
+            functionButton.setVisibility(View.INVISIBLE);
         } else if (SOURCE_ORGANIZER.equals(source)) {
             contextInfoText.setText("Category: " + categoryName);
-            joinButton.setText("Attendee List");
+            joinButton.setText("Manage Requests");
+            functionButton.setText("Attendee List");
             joinButton.setOnClickListener(v -> {
                 Intent intent = new Intent(getApplicationContext(), UserDisplayActivity.class);
                 intent.putExtra(EXTRA_SOURCE, source);
@@ -87,12 +92,47 @@ public class EventDetailsActivity extends AppCompatActivity {
                 intent.putExtra("organizer", organizer);
                 startActivity(intent);
             });
-
+            functionButton.setOnClickListener(v -> {
+                Intent intent = new Intent(getApplicationContext(), UserDisplayActivity.class);
+                intent.putExtra(EXTRA_SOURCE, SOURCE_PARTICIPANT);
+                intent.putExtra("sourceContext", getIntent().getStringExtra("sourceContext"));
+                intent.putExtra("eventId", eventID);
+                intent.putExtra("title", title);
+                intent.putExtra("description", description);
+                intent.putExtra("fee", fee);
+                intent.putExtra("datetime", datetime);
+                intent.putExtra("categoryId", categoryID);
+                intent.putExtra("organizer", organizer);
+                startActivity(intent);
+            });
         } else {
             contextInfoText.setText("Category: " + categoryName + "\n" + "\n" + "Organizer: " + organizer);  // Or "Unknown Source"
             if (dBHelper.hasJoinRequest(eventID, attendeeID)) {
                 joinButton.setEnabled(false);
                 joinButton.setText(dBHelper.getStatus(eventID, attendeeID));
+                if (dBHelper.getStatus(eventID,attendeeID).equals("Refused")){
+                    functionButton.setVisibility(View.GONE);
+                }
+                else {
+                    functionButton.setText("Remove Request");
+                    functionButton.setBackgroundColor(getColor(R.color.red));
+                    functionButton.setOnClickListener(v -> {
+                        dBHelper.deleteRequest(eventID, attendeeID);
+                        joinButton.setEnabled(true);
+                        joinButton.setBackgroundColor(ContextCompat.getColor(this, android.R.color.holo_blue_dark));
+                        joinButton.setText("Join");
+                        functionButton.setVisibility(View.GONE);
+                        setResult(RESULT_OK);
+                        joinButton.setOnClickListener(v1 -> {
+                            dBHelper.submitJoinRequest(eventID, attendeeID);
+                            joinButton.setEnabled(false);
+                            joinButton.setBackgroundColor(Color.LTGRAY);
+                            joinButton.setText(dBHelper.getStatus(eventID, attendeeID));
+                            functionButton.setVisibility(View.VISIBLE);
+                            setResult(RESULT_OK);
+                        });
+                    });
+                }
                 if (Objects.equals(dBHelper.getStatus(eventID, attendeeID), "Approved")) {
                     joinButton.setBackgroundColor(getColor(R.color.dark_green));
                     joinButton.setTextColor(Color.WHITE);
@@ -101,14 +141,28 @@ public class EventDetailsActivity extends AppCompatActivity {
                     joinButton.setTextColor(Color.WHITE);
                 } else {
                     joinButton.setBackgroundColor(Color.LTGRAY);
+
                 }
             } else {
                 joinButton.setText("Join");
+                functionButton.setVisibility(View.GONE);
                 joinButton.setOnClickListener(v -> {
                     dBHelper.submitJoinRequest(eventID, attendeeID);
                     joinButton.setEnabled(false);
                     joinButton.setBackgroundColor(Color.LTGRAY);
                     joinButton.setText(dBHelper.getStatus(eventID, attendeeID));
+                    functionButton.setVisibility(View.VISIBLE);
+                    functionButton.setBackgroundColor(getColor(R.color.red));
+                    functionButton.setText("Remove Request");
+                    setResult(RESULT_OK);
+                    functionButton.setOnClickListener(v1 -> {
+                        dBHelper.deleteRequest(eventID, attendeeID);
+                        joinButton.setEnabled(true);
+                        joinButton.setBackgroundColor(ContextCompat.getColor(this, android.R.color.holo_blue_dark));
+                        joinButton.setText("Join");
+                        functionButton.setVisibility(View.GONE);
+                        setResult(RESULT_OK);
+                    });
                 });
             }
         }

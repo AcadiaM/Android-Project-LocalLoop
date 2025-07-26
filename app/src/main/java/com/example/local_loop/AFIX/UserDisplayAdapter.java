@@ -1,5 +1,8 @@
 package com.example.local_loop.AFIX;
 
+import static com.example.local_loop.Details.EventDetailsActivity.SOURCE_ADMIN;
+import static com.example.local_loop.Details.EventDetailsActivity.SOURCE_ORGANIZER;
+
 import android.content.Context;
 import android.content.res.ColorStateList;
 import android.graphics.Color;
@@ -10,6 +13,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
+import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.local_loop.CreateAccount.User;
@@ -18,20 +22,21 @@ import com.example.local_loop.R;
 
 
 import java.util.List;
+import java.util.Objects;
 
 public class UserDisplayAdapter extends RecyclerView.Adapter<UserDisplayViewHolder> {
 
     private final Context context;
     private final List<User> users;
     private final DatabaseHelper db;
-    private final boolean isAttendeeMode;
+    private final String source;
     private final int eventId;  // Only relevant for attendee mode
     TextView noUsersTextView;
 
-    public UserDisplayAdapter(Context context, List<User> users, boolean isAttendeeMode, int eventId, TextView noUsersTextView) {
+    public UserDisplayAdapter(Context context, List<User> users, String source, int eventId, TextView noUsersTextView) {
         this.context = context;
         this.users = users;
-        this.isAttendeeMode = isAttendeeMode;
+        this.source = source;
         this.eventId = eventId;
         this.noUsersTextView = noUsersTextView;
         this.db = new DatabaseHelper(context);
@@ -40,10 +45,7 @@ public class UserDisplayAdapter extends RecyclerView.Adapter<UserDisplayViewHold
     @NonNull
     @Override
     public UserDisplayViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        int layoutId = R.layout.user_list_layout;
-        if (isAttendeeMode) {
-            layoutId = R.layout.attendee_list_layout;
-        }
+        int layoutId = R.layout.attendee_list_layout;
         return new UserDisplayViewHolder(LayoutInflater.from(parent.getContext()).inflate(layoutId, parent, false));
     }
 
@@ -56,7 +58,7 @@ public class UserDisplayAdapter extends RecyclerView.Adapter<UserDisplayViewHold
         holder.emailView.setText(user.getEmail());
         holder.typeView.setText(user.getRole());
 
-        if (isAttendeeMode) {
+        if (source.equals(SOURCE_ORGANIZER)) {
             holder.disable.setOnClickListener(v -> {
                 approve(eventId, user.getUsername());
                 deleteEntry(user.getEmail());
@@ -69,7 +71,10 @@ public class UserDisplayAdapter extends RecyclerView.Adapter<UserDisplayViewHold
                 notifyItemRemoved(holder.getAdapterPosition());
             });
 
-        } else {
+        } else if (source.equals(SOURCE_ADMIN)){
+            holder.disable.setIcon(Objects.requireNonNull(ContextCompat.getDrawable(holder.itemView.getContext(), R.drawable.disableicon)));
+            holder.delete.setIcon(Objects.requireNonNull(ContextCompat.getDrawable(holder.itemView.getContext(), R.drawable.deleteicon)));
+            holder.delete.setIconTint(ColorStateList.valueOf(Color.BLACK));
             holder.delete.setOnClickListener(v -> deleteUser(user.getEmail(), holder.getAdapterPosition()));
 
             holder.disable.setOnClickListener(v -> toggleUserActiveStatus(holder, user.getUsername(), holder.getAdapterPosition()));
@@ -81,6 +86,13 @@ public class UserDisplayAdapter extends RecyclerView.Adapter<UserDisplayViewHold
                 holder.disable.setIconTint(ColorStateList.valueOf(Color.BLACK));
                 holder.disable.setHint("User is not disabled.");
             }
+        } else {
+            holder.delete.setOnClickListener(v -> {
+                        refuse(eventId, user.getUsername());
+                        deleteEntry(user.getEmail());
+                        notifyItemRemoved(holder.getAdapterPosition());
+                    });
+            holder.disable.setVisibility(View.GONE);
         }
     }
 

@@ -22,7 +22,6 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.local_loop.CreateAccount.User;
 import com.example.local_loop.Details.EventDetailsActivity;
-import com.example.local_loop.AFIX.DisplayItemAdapter;
 import com.example.local_loop.Helpers.DatabaseHelper;
 import com.example.local_loop.Helpers.DisplayItem;
 import com.example.local_loop.R;
@@ -30,11 +29,13 @@ import com.example.local_loop.UserContent.Category;
 import com.example.local_loop.UserContent.Event;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 public class UserEventActivity extends AppCompatActivity {
 
-    private DisplayItemAdapter eventAdapter;
+    private DisplayItemActivity.DisplayItemAdapter eventAdapter;
     private DatabaseHelper dbHelper;
     private String username;
     private boolean isMyEventsMode;
@@ -77,7 +78,7 @@ public class UserEventActivity extends AppCompatActivity {
             setupCategorySpinner();
             setupSearchBar();
         }
-        eventAdapter = new DisplayItemAdapter(new ArrayList<>(), new DisplayItemAdapter.OnItemClickListener() {
+        eventAdapter = new DisplayItemActivity.DisplayItemAdapter(new ArrayList<>(), new DisplayItemActivity.DisplayItemAdapter.OnItemClickListener() {
             @Override
             public void onClick(DisplayItem item) {
                 if (item instanceof Event) {
@@ -93,7 +94,7 @@ public class UserEventActivity extends AppCompatActivity {
                     intent.putExtra("datetime", event.getDateTime());
                     intent.putExtra("categoryId", event.getCategoryId());
                     intent.putExtra("organizer", event.getOrganizer());
-                    startActivity(intent);
+                    startActivityForResult(intent, 100);
                 }
                 // Do something with event
             }
@@ -141,6 +142,25 @@ public class UserEventActivity extends AppCompatActivity {
             String selectedCategory = categorySpinner.getSelectedItem().toString();
             if (selectedCategory.equals("All")) selectedCategory = "";
             events = dbHelper.searchEvents(query, selectedCategory);
+            List<Event> joinedEvents = dbHelper.getEventsUserRequested(username);
+            List<Event> filteredEvents = new ArrayList<>();
+
+            // Build a set of joined IDs for fast lookup
+            Set<Integer> joinedIds = new HashSet<>();
+            for (Event joined : joinedEvents) {
+                joinedIds.add(joined.getID());
+            }
+
+            // Filter only events not joined
+            for (Event e : events) {
+                if (!joinedIds.contains(e.getID())) {
+                    filteredEvents.add(e);
+                }
+            }
+
+            // Use filtered list
+            events = filteredEvents;
+
         }
 
         TextView emptyView = findViewById(R.id.noEventsUserTextView);
@@ -181,13 +201,31 @@ public class UserEventActivity extends AppCompatActivity {
         }
 
         List<Event> events = dbHelper.searchEvents(query, selectedCategory);
+        List<Event> joinedEvents = dbHelper.getEventsUserRequested(username);
+        List<Event> filteredEvents = new ArrayList<>();
+
+        // Build a set of joined IDs for fast lookup
+        Set<Integer> joinedIds = new HashSet<>();
+        for (Event joined : joinedEvents) {
+            joinedIds.add(joined.getID());
+        }
+
+        // Filter only events not joined
+        for (Event e : events) {
+            if (!joinedIds.contains(e.getID())) {
+                filteredEvents.add(e);
+            }
+        }
+
+        // Use filtered list
+        events = filteredEvents;
+
         TextView noEventsUserTextView = findViewById(R.id.noEventsUserTextView);
-        if (events == null || events.isEmpty()) {
+        if (events.isEmpty()) {
             noEventsUserTextView.setVisibility(View.VISIBLE);
         } else {
             noEventsUserTextView.setVisibility(View.GONE);
         }
-        assert events != null;
         Toast.makeText(this, "Loading " + events.size() + " events for: " + username, Toast.LENGTH_SHORT).show();
         List<DisplayItem> displayItems = new ArrayList<>(events);
         eventAdapter.updateItems(displayItems);
@@ -233,4 +271,13 @@ public class UserEventActivity extends AppCompatActivity {
             }
         });
     }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == 100) {
+            loadEvents(); // or loadEventsForUser() if you're using search
+        }
+    }
+
 }

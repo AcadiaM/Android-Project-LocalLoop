@@ -4,6 +4,7 @@ import static com.example.local_loop.Details.EventDetailsActivity.EXTRA_SOURCE;
 import static com.example.local_loop.Details.EventDetailsActivity.SOURCE_ADMIN;
 import static com.example.local_loop.Details.EventDetailsActivity.SOURCE_ORGANIZER;
 
+import android.annotation.SuppressLint;
 import android.app.AlertDialog;
 import android.app.DatePickerDialog;
 import android.app.TimePickerDialog;
@@ -15,6 +16,7 @@ import android.os.Bundle;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ImageButton;
@@ -22,12 +24,12 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.example.local_loop.AFIX.DisplayItemAdapter;
 import com.example.local_loop.CreateAccount.User;
 import com.example.local_loop.Details.CategoryDetailsActivity;
 import com.example.local_loop.Details.EventDetailsActivity;
@@ -47,7 +49,6 @@ import java.util.Locale;
 import java.util.Objects;
 
 public class DisplayItemActivity extends AppCompatActivity {
-
     private DatabaseHelper dbHelper;
     private DisplayItemAdapter displayItemAdapter;
 
@@ -121,6 +122,107 @@ public class DisplayItemActivity extends AppCompatActivity {
         recyclerView.setAdapter(displayItemAdapter);
     }
 
+    // --- INNER CLASS FOR ADAPTER ---
+    public static class DisplayItemAdapter extends RecyclerView.Adapter<DisplayItemAdapter.ItemViewHolder> {
+        public interface OnItemClickListener {
+            void onClick(DisplayItem item);
+            void onLongClick(DisplayItem item);
+            void onRenameClick(DisplayItem item);
+        }
+
+        private List<DisplayItem> items;
+        private final OnItemClickListener listener;
+
+        private boolean deleteMode = false;
+        private boolean editMode = false;
+
+        private List<DisplayItem> selectedItems = new ArrayList<>();
+
+        public DisplayItemAdapter(List<DisplayItem> items, OnItemClickListener listener) {
+            this.items = items;
+            this.listener = listener;
+        }
+
+        @SuppressLint("NotifyDataSetChanged")
+        public void setSelectedItems(List<DisplayItem> selectedItems) {
+            this.selectedItems = selectedItems;
+            notifyDataSetChanged();
+        }
+
+        @SuppressLint("NotifyDataSetChanged")
+        public void setDeleteMode(boolean enabled) {
+            this.deleteMode = enabled;
+            notifyDataSetChanged();
+        }
+
+        @SuppressLint("NotifyDataSetChanged")
+        public void setEditMode(boolean enabled) {
+            this.editMode = enabled;
+            notifyDataSetChanged();
+        }
+
+        @SuppressLint("NotifyDataSetChanged")
+        public void updateItems(List<DisplayItem> newItems) {
+            this.items = newItems;
+            notifyDataSetChanged();
+        }
+
+        @NonNull
+        @Override
+        public ItemViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+            View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.category_item, parent, false);
+            return new ItemViewHolder(view);
+        }
+
+        @Override
+        public void onBindViewHolder(@NonNull ItemViewHolder holder, int position) {
+            DisplayItem item = items.get(position);
+            holder.button.setText(item.getName());
+
+            if (deleteMode) {
+                holder.button.setOnClickListener(v -> {
+                    if (selectedItems.contains(item)) {
+                        selectedItems.remove(item);
+                        holder.button.setBackgroundColor(Color.LTGRAY);
+                    } else {
+                        selectedItems.add(item);
+                        holder.button.setBackgroundColor(Color.TRANSPARENT);
+                    }
+                });
+                holder.button.setBackgroundColor(selectedItems.contains(item) ? Color.TRANSPARENT : Color.LTGRAY);
+            } else if (editMode) {
+                holder.button.setOnClickListener(v -> {
+                    if (listener != null) listener.onRenameClick(item);
+                });
+                holder.button.setBackgroundColor(Color.LTGRAY);
+            } else {
+                holder.button.setOnClickListener(v -> {
+                    if (listener != null) listener.onClick(item);
+                });
+                holder.button.setBackgroundColor(Color.TRANSPARENT);
+            }
+
+            holder.button.setOnLongClickListener(v -> {
+                if (listener != null) listener.onLongClick(item);
+                return true;
+            });
+        }
+
+        @Override
+        public int getItemCount() {
+            return items.size();
+        }
+
+        public static class ItemViewHolder extends RecyclerView.ViewHolder {
+            Button button;
+
+            public ItemViewHolder(@NonNull View itemView) {
+                super(itemView);
+                button = itemView.findViewById(R.id.categoryButton);
+            }
+        }
+
+    }
     private void openCategoryDetails(Category category) {
         Intent intent = new Intent(this, CategoryDetailsActivity.class);
         intent.putExtra(EXTRA_SOURCE, getIntent().getStringExtra(EXTRA_SOURCE));
@@ -539,5 +641,6 @@ public class DisplayItemActivity extends AppCompatActivity {
         dialogTitle.setGravity(Gravity.CENTER);
         return dialogTitle;
     }
-
+    // --- REST OF DisplayItemActivity (same as what you posted) ---
+    // ... You can continue to paste or integrate the rest of DisplayItemActivity here ...
 }

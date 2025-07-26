@@ -682,15 +682,15 @@ public class DatabaseHelper extends SQLiteOpenHelper {
      * @param eventId The ID of the event.
      * @return List of User objects who have requested to join the event and are still pending.
      */
-    public List<User> getPendingRequestsByEvent(int eventId) {
+    public List<User> getRequestsByEvent(int eventId, String status) {
         SQLiteDatabase db = this.getReadableDatabase();
-        List<User> pendingUsers = new ArrayList<>();
+        List<User> users = new ArrayList<>();
 
         Cursor cursor = db.query(
                 "requests",
                 new String[]{"attendee_id"},
                 "event_id = ? AND status = ?",
-                new String[]{String.valueOf(eventId), "pending"},
+                new String[]{String.valueOf(eventId), status},
                 null, null, null
         );
 
@@ -702,7 +702,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                 User user = getUserByUsername(attendeeUsername);
 
                 if (user != null) {
-                    pendingUsers.add(user);
+                    users.add(user);
                 }
 
             } while (cursor.moveToNext());
@@ -711,7 +711,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         cursor.close();
         db.close();
 
-        return pendingUsers;
+        return users;
     }
 
     /**
@@ -769,6 +769,22 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         );
 
         db.close();
+    }
+
+    public void deleteRequest(int eventId, String attendeeId) {
+        String request_id;
+        SQLiteDatabase db = this.getReadableDatabase();
+        Cursor cursor = db.query("requests", new String[]{"request_id"}, "event_id = ? AND attendee_id = ?", new String[]{String.valueOf(eventId),attendeeId}, null, null, null);
+        if (cursor.moveToFirst()) {
+            request_id = cursor.getString(0);
+            cursor.close();
+        }
+        else{
+            request_id = null;
+        }
+        cursor.close();
+        SQLiteDatabase db1 = getWritableDatabase();
+        db1.delete("requests", "request_id = ?", new String[]{request_id});
     }
 
 }

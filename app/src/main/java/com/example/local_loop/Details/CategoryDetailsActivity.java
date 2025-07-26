@@ -15,7 +15,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.example.local_loop.AFIX.DisplayItemAdapter;
+import com.example.local_loop.Displays.DisplayItemActivity;
 import com.example.local_loop.Helpers.DatabaseHelper;
 import com.example.local_loop.Helpers.DisplayItem;
 import com.example.local_loop.R;
@@ -68,7 +68,7 @@ public class CategoryDetailsActivity extends AppCompatActivity {
             noEventsTextView.setVisibility(View.GONE);
         }
         eventRecyclerView.setLayoutManager(new GridLayoutManager(this,2));
-        DisplayItemAdapter eventAdapter = getDisplayItemAdapter(events);
+        DisplayItemActivity.DisplayItemAdapter eventAdapter = getDisplayItemAdapter(events);
 
         eventRecyclerView.setAdapter(eventAdapter);
 
@@ -85,12 +85,12 @@ public class CategoryDetailsActivity extends AppCompatActivity {
     }
 
     @NonNull
-    private DisplayItemAdapter getDisplayItemAdapter(List<Event> events) {
+    private DisplayItemActivity.DisplayItemAdapter getDisplayItemAdapter(List<Event> events) {
         assert events != null;
         List<DisplayItem> displayItems = new ArrayList<>(events);  // Events implement DisplayItem
         // Optional: Handle long press if needed
         // Not needed in CategoryDetailsActivity
-        return new DisplayItemAdapter(displayItems, new DisplayItemAdapter.OnItemClickListener() {
+        return new DisplayItemActivity.DisplayItemAdapter(displayItems, new DisplayItemActivity.DisplayItemAdapter.OnItemClickListener() {
             @Override
             public void onClick(DisplayItem item) {
                 if (item instanceof Event) {

@@ -98,6 +98,19 @@
         app:layout_constraintTop_toBottomOf="@+id/eventDetailContextInfo"
         tools:ignore="TextContrastCheck" />
 
+    <Button
+        android:id="@+id/functionButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="150dp"
+        android:layout_marginTop="25dp"
+        android:layout_marginEnd="150dp"
+        android:backgroundTint="@color/black"
+        android:text="@string/unknown"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/joinButton" />
+
     <com.google.android.material.button.MaterialButton
         android:id="@+id/eventDetailsBackButton"
         android:layout_width="wrap_content"
