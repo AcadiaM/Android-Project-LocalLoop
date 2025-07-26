@@ -224,7 +224,7 @@ public class DisplayItemActivity extends AppCompatActivity {
 
 
     private void showItemOptions(DisplayItem item) {
-        String itemName = (item instanceof Category) ? item.getName() : ((Event) item).getName();
+        String itemName = item.getName();
         String[] options = {"Rename", "Delete"};
 
         new AlertDialog.Builder(this)
@@ -357,7 +357,7 @@ public class DisplayItemActivity extends AppCompatActivity {
 
                 if (isEvent) {
                     boolean nameExists = dbHelper.eventTitleExists(name);
-                    if (nameExists && (itemToEdit == null || !name.equals(((Event) itemToEdit).getName()))) {
+                    if (nameExists && (itemToEdit == null || !name.equals(itemToEdit.getName()))) {
                         nameLayout.setError("Event title already exists.");
                         valid = false;
                     }

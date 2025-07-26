@@ -8,7 +8,6 @@ import android.database.Cursor;
 import android.util.Log;
 
 import com.example.local_loop.Category.Category;
-import com.example.local_loop.CreateAccount.Admin;
 import com.example.local_loop.CreateAccount.User;
 import com.example.local_loop.Event.Event;
 
@@ -223,7 +222,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         SQLiteDatabase db = this.getWritableDatabase();
         Cursor cursor = db.query("users", null, "username = ?", new String[]{"admin"}, null, null, null);
         if (cursor.getCount() == 0) {
-            User admin = Admin.getAdmin();
+            User admin = User.getAdmin();
             insertUser(admin);
         }
         cursor.close();

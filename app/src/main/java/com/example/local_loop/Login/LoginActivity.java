@@ -44,8 +44,8 @@ public class LoginActivity extends AppCompatActivity {
         ActivityLoginBinding binding = ActivityLoginBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
 
-        loginViewModel = new ViewModelProvider(this, new LoginViewModelFactory(this))
-                .get(LoginViewModel.class);
+        loginViewModel = new ViewModelProvider(this).get(LoginViewModel.class);
+
 
         final EditText usernameEditText = binding.username;
         final EditText passwordEditText = binding.password;
@@ -124,7 +124,7 @@ public class LoginActivity extends AppCompatActivity {
         passwordEditText.setOnEditorActionListener((v, actionId, event) -> {
             if (actionId == EditorInfo.IME_ACTION_DONE) {
                 loginViewModel.login(Objects.requireNonNull(usernameEditText.getText()).toString(),
-                        Objects.requireNonNull(passwordEditText.getText()).toString());
+                        Objects.requireNonNull(passwordEditText.getText()).toString(), db);
             }
             return false;
         });
@@ -133,8 +133,12 @@ public class LoginActivity extends AppCompatActivity {
         loginButton.setOnClickListener(v -> {
             loadingProgressBar.setVisibility(View.VISIBLE);
             if (db.isActive(Objects.requireNonNull(usernameEditText.getText()).toString()) == 1) {
-                loginViewModel.login(usernameEditText.getText().toString(),
-                        Objects.requireNonNull(passwordEditText.getText()).toString());
+                loginViewModel.login(
+                        Objects.requireNonNull(usernameEditText.getText()).toString(),
+                        Objects.requireNonNull(passwordEditText.getText()).toString(),
+                        db
+                );
+
             } else {
                 Toast.makeText(LoginActivity.this, "Error: account is disabled.", Toast.LENGTH_LONG).show();
                 loadingProgressBar.setVisibility(View.GONE);
@@ -159,17 +163,18 @@ public class LoginActivity extends AppCompatActivity {
         startActivity(intent);
     }
 
-    private void updateUiWithUser(LoggedInUserView loggedInUser) {
+    private void updateUiWithUser(LoginViewModel.LoggedInUserView loggedInUser) {
         String firstname = db.getFirstByUsername(loggedInUser.getDisplayName());
         String userType = db.getRoleByUsername(loggedInUser.getDisplayName());
         userType = userType.trim().toLowerCase();
         Toast.makeText(this, "UserType: " + userType, Toast.LENGTH_LONG).show();
         Intent intent = new Intent(getApplicationContext(), WelcomePage.class);
         intent.putExtra("firstname", firstname);
-        intent.putExtra("username", loggedInUser.getDisplayName());// Pass the username to the WelcomePage
-        intent.putExtra("userType", userType); // Pass the userType to the WelcomePage
+        intent.putExtra("username", loggedInUser.getDisplayName());
+        intent.putExtra("userType", userType);
         startActivity(intent);
     }
+
 
     private void showLoginFailed(@StringRes Integer errorString) {
         Toast.makeText(getApplicationContext(), errorString, Toast.LENGTH_SHORT).show();
