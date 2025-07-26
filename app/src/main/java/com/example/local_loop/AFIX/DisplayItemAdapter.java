@@ -1,6 +1,4 @@
-package com.example.local_loop.Category;
-
-import com.example.local_loop.R;
+package com.example.local_loop.AFIX;
 
 import android.annotation.SuppressLint;
 import android.graphics.Color;
@@ -11,6 +9,9 @@ import android.widget.Button;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
+
+import com.example.local_loop.Helpers.DisplayItem;
+import com.example.local_loop.R;
 
 import java.util.ArrayList;
 import java.util.List;

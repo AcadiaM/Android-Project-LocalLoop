@@ -1,35 +1,35 @@
-package com.example.local_loop.Event;
+package com.example.local_loop.Displays;
 
-import static com.example.local_loop.Event.EventDetailsActivity.EXTRA_SOURCE;
+import static com.example.local_loop.Details.EventDetailsActivity.EXTRA_SOURCE;
 
 import android.content.Intent;
+import android.os.Bundle;
+import android.os.Handler;
+import android.os.Looper;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.View;
-import android.os.Bundle;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
-import android.widget.TextView;
-import android.widget.Toast;
 import android.widget.EditText;
 import android.widget.Spinner;
-import android.os.Handler;
-import android.os.Looper;
+import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-
-import com.example.local_loop.Category.Category;
-import com.example.local_loop.Category.DisplayItem;
-import com.example.local_loop.Category.DisplayItemAdapter;
+import com.example.local_loop.Details.EventDetailsActivity;
+import com.example.local_loop.AFIX.DisplayItemAdapter;
+import com.example.local_loop.Helpers.DatabaseHelper;
+import com.example.local_loop.Helpers.DisplayItem;
 import com.example.local_loop.R;
-import com.example.local_loop.database.DatabaseHelper;
+import com.example.local_loop.UserContent.Category;
+import com.example.local_loop.UserContent.Event;
 
 import java.util.ArrayList;
 import java.util.List;
-
 
 public class UserEventActivity extends AppCompatActivity {
 
@@ -90,7 +90,7 @@ public class UserEventActivity extends AppCompatActivity {
                     intent.putExtra("organizer", event.getOrganizer());
                     startActivity(intent);
                 }
-                    // Do something with event
+                // Do something with event
             }
 
             @Override

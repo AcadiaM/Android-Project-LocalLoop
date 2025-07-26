@@ -1,4 +1,4 @@
-package com.example.local_loop.UserDisplay;
+package com.example.local_loop.AFIX;
 
 import android.content.Context;
 import android.content.res.ColorStateList;
@@ -12,9 +12,9 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.example.local_loop.CreateAccount.User;
+import com.example.local_loop.Account.User;
+import com.example.local_loop.Helpers.DatabaseHelper;
 import com.example.local_loop.R;
-import com.example.local_loop.database.DatabaseHelper;
 
 
 import java.util.List;

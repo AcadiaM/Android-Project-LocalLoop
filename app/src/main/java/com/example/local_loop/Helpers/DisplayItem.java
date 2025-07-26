@@ -1,4 +1,4 @@
-package com.example.local_loop.Category;
+package com.example.local_loop.Helpers;
 
 public interface DisplayItem {
     int getID();

@@ -1,4 +1,4 @@
-package com.example.local_loop.Event;
+package com.example.local_loop.Details;
 
 import android.annotation.SuppressLint;
 import android.content.Intent;
@@ -10,10 +10,10 @@ import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
 
-import com.example.local_loop.Category.Category;
+import com.example.local_loop.Displays.UserDisplayActivity;
+import com.example.local_loop.Helpers.DatabaseHelper;
 import com.example.local_loop.R;
-import com.example.local_loop.UserDisplay.UserDisplayActivity;
-import com.example.local_loop.database.DatabaseHelper;
+import com.example.local_loop.UserContent.Category;
 
 import java.util.Objects;
 

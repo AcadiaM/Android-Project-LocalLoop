@@ -1,6 +1,7 @@
-package com.example.local_loop.Category;
+package com.example.local_loop.Details;
 
-import static com.example.local_loop.Event.EventDetailsActivity.EXTRA_SOURCE;
+
+import static com.example.local_loop.Details.EventDetailsActivity.EXTRA_SOURCE;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -14,13 +15,17 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.example.local_loop.Event.Event;
-import com.example.local_loop.Event.EventDetailsActivity;
+import com.example.local_loop.AFIX.DisplayItemAdapter;
+import com.example.local_loop.Helpers.DatabaseHelper;
+import com.example.local_loop.Helpers.DisplayItem;
 import com.example.local_loop.R;
-import com.example.local_loop.database.DatabaseHelper;
+import com.example.local_loop.UserContent.Category;
+import com.example.local_loop.UserContent.Event;
 
 import java.util.ArrayList;
 import java.util.List;
+
+
 
 public class CategoryDetailsActivity extends AppCompatActivity {
     DatabaseHelper dbHelper;

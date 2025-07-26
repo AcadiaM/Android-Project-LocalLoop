@@ -1,7 +1,7 @@
-package com.example.local_loop.UserDisplay;
+package com.example.local_loop.AFIX;
 
-import static com.example.local_loop.Event.EventDetailsActivity.EXTRA_SOURCE;
-import static com.example.local_loop.Event.EventDetailsActivity.SOURCE_ORGANIZER;
+import static com.example.local_loop.Details.EventDetailsActivity.EXTRA_SOURCE;
+import static com.example.local_loop.Details.EventDetailsActivity.SOURCE_ORGANIZER;
 
 import android.os.Bundle;
 import android.view.View;
@@ -17,15 +17,15 @@ import androidx.core.view.WindowInsetsCompat;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.example.local_loop.CreateAccount.User;
+import com.example.local_loop.Account.User;
+import com.example.local_loop.Helpers.DatabaseHelper;
 import com.example.local_loop.R;
-import com.example.local_loop.database.DatabaseHelper;
 
 import java.util.List;
 
 public class UserDisplayActivity extends AppCompatActivity {
 
-    DatabaseHelper db;
+    private DatabaseHelper db;
     private View decorView;
 
     @SuppressWarnings({"CallToPrintStackTrace", "deprecation"})

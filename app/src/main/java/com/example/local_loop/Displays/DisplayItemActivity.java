@@ -1,37 +1,40 @@
-package com.example.local_loop.Category;
+package com.example.local_loop.Displays;
 
-import static com.example.local_loop.Event.EventDetailsActivity.EXTRA_SOURCE;
-import static com.example.local_loop.Event.EventDetailsActivity.SOURCE_ADMIN;
-import static com.example.local_loop.Event.EventDetailsActivity.SOURCE_ORGANIZER;
+import static com.example.local_loop.Details.EventDetailsActivity.EXTRA_SOURCE;
+import static com.example.local_loop.Details.EventDetailsActivity.SOURCE_ADMIN;
+import static com.example.local_loop.Details.EventDetailsActivity.SOURCE_ORGANIZER;
 
+import android.app.AlertDialog;
 import android.app.DatePickerDialog;
 import android.app.TimePickerDialog;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.Typeface;
+import android.os.Bundle;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
-
-import android.content.Intent;
-import android.os.Bundle;
 import android.widget.ArrayAdapter;
-import android.widget.Spinner;
-import android.widget.TextView;
 import android.widget.Button;
 import android.widget.ImageButton;
+import android.widget.Spinner;
+import android.widget.TextView;
 import android.widget.Toast;
 
-import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.example.local_loop.Event.Event;
-import com.example.local_loop.Event.EventDetailsActivity;
+import com.example.local_loop.AFIX.DisplayItemAdapter;
+import com.example.local_loop.Details.CategoryDetailsActivity;
+import com.example.local_loop.Details.EventDetailsActivity;
+import com.example.local_loop.Helpers.DatabaseHelper;
+import com.example.local_loop.Helpers.DisplayItem;
 import com.example.local_loop.R;
-import com.example.local_loop.database.DatabaseHelper;
+import com.example.local_loop.UserContent.Category;
+import com.example.local_loop.UserContent.Event;
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.android.material.textfield.TextInputLayout;
 
