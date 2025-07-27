@@ -57,7 +57,7 @@ public class WelcomePage extends AppCompatActivity {
         welcomeTextView.setText(welcomeMessage);
 
         switch(role){
-            case "participant":
+            case "Participant":
                 button1.setText("Browse Events");
                 button1.setOnClickListener(this::OnBrowseEventsButton);
                 button2.setText("My Events");
@@ -65,7 +65,7 @@ public class WelcomePage extends AppCompatActivity {
                 button3.setVisibility(View.INVISIBLE);
                 button3.setEnabled(false);
                 break;
-            case "organizer":
+            case "Organizer":
                 button1.setText("Event Management");
                 button1.setOnClickListener(this::OnEventsButton);
                 button2.setVisibility(View.INVISIBLE);
@@ -73,7 +73,7 @@ public class WelcomePage extends AppCompatActivity {
                 button3.setVisibility(View.INVISIBLE);
                 button3.setEnabled(false);
                 break;
-            case "admin":
+            case "Admin":
                 button1.setOnClickListener(this::OnUsersButton);
                 button2.setOnClickListener(this::OnListCategoriesButton);
                 button3.setOnClickListener(this::OnEventsButton);

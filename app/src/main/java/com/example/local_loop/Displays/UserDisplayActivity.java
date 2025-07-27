@@ -4,7 +4,6 @@ import static com.example.local_loop.Details.EventDetailsActivity.EXTRA_SOURCE;
 import static com.example.local_loop.Details.EventDetailsActivity.SOURCE_ORGANIZER;
 import static com.example.local_loop.Details.EventDetailsActivity.SOURCE_PARTICIPANT;
 
-import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
@@ -58,8 +57,8 @@ public class UserDisplayActivity extends AppCompatActivity {
             if (SOURCE_ORGANIZER.equals(getIntent().getStringExtra(EXTRA_SOURCE))) {
                 users = db.getRequestsByEvent(eventId, "pending");
                 setTitle("Request List");
-                pageTitleTextView.setText(R.string.attendeeList);
-                noUsersTextView.setText(R.string.no_attendees);
+                pageTitleTextView.setText(R.string.requestManagement);
+                noUsersTextView.setText(R.string.no_requests);
             } else if (SOURCE_PARTICIPANT.equals(getIntent().getStringExtra(EXTRA_SOURCE))) {
                 users = db.getRequestsByEvent(eventId, "Approved");
                 setTitle("Attendee List");

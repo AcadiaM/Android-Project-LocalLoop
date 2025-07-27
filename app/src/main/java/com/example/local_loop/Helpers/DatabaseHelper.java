@@ -289,7 +289,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         List<User> users = new ArrayList<>();
         SQLiteDatabase db = this.getReadableDatabase();
 
-        Cursor cursor = db.query(TABLE_USERS, null, "role != ?", new String[]{"admin"}, null, null, null);
+        Cursor cursor = db.query(TABLE_USERS, null, "role != ?", new String[]{"Admin"}, null, null, null);
 
         if (cursor.moveToFirst()) {
             do {

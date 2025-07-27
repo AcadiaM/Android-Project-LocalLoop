@@ -22,7 +22,7 @@ public class User implements Serializable {
 
     public static User getAdmin(){
         if(admin == null){
-            admin = new User("admin", "admin", "admin", "admin", "XPI76SZUqyCjVxgnUjm0", "admin");
+            admin = new User("admin", "admin", "admin", "admin", "XPI76SZUqyCjVxgnUjm0", "Admin");
         }
         return admin;
     }

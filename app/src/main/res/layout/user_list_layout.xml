@@ -6,7 +6,7 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:padding="24dp"
-    tools:context=".Displays.UserDisplayActivity">
+    tools:context=".AttendeeList.AttendeeList">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -140,31 +140,31 @@
 
             <com.google.android.material.button.MaterialButton
                 android:id="@+id/disable"
-                android:layout_width="45dp"
-                android:layout_height="45dp"
+                android:layout_width="wrap_content"
+                android:layout_height="48dp"
                 android:backgroundTint="@android:color/transparent"
-                android:hint="@string/hint_disable"
+                android:hint="@string/hint_approve"
                 android:text=""
                 android:textSize="20sp"
-                app:icon="@drawable/disableicon"
+                app:icon="@drawable/baseline_group_add_24"
                 app:iconGravity="textStart"
                 app:iconPadding="0dp"
                 app:iconSize="40dp"
-                app:iconTint="@color/black" />
+                app:iconTint="@color/dark_green" />
 
             <com.google.android.material.button.MaterialButton
                 android:id="@+id/delete"
-                android:layout_width="45dp"
-                android:layout_height="45dp"
+                android:layout_width="wrap_content"
+                android:layout_height="48dp"
                 android:backgroundTint="@android:color/transparent"
-                android:hint="@string/hint_delete"
+                android:hint="@string/hint_refuse"
                 android:text=""
                 android:textSize="20sp"
-                app:icon="@drawable/deleteicon"
+                app:icon="@drawable/baseline_group_remove_24"
                 app:iconGravity="textStart"
                 app:iconPadding="0dp"
                 app:iconSize="40dp"
-                app:iconTint="@color/black" />
+                app:iconTint="@color/red" />
 
         </LinearLayout>
 
@@ -173,5 +173,4 @@
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>
-
 

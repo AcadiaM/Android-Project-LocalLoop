@@ -45,6 +45,7 @@
     <string name ="search_events">Search for an Event</string>
     <string name="categoriesManagement">Categories Management</string>
     <string name="userManagement">User Management</string>
+    <string name="requestManagement">Request Management</string>
     <string name="eventManagement">Event Management</string>
     <string name="my_events">My Events</string>
     <string name="attendeeList">Attendee List</string>
@@ -74,6 +75,7 @@
         <item name="colorAccent">@android:color/holo_blue_dark</item>
     </style>
 
+    <string name="no_requests">No Requests Made Yet!</string>
     <string name="no_attendees">No Attendees Joined Yet!</string>
     <string name="no_users">No Users Created Yet!</string>
     <string name="no_events_created">No Events Created Yet!</string>

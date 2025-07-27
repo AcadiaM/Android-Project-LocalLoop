@@ -45,7 +45,7 @@ public class UserDisplayAdapter extends RecyclerView.Adapter<UserDisplayViewHold
     @NonNull
     @Override
     public UserDisplayViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        int layoutId = R.layout.attendee_list_layout;
+        int layoutId = R.layout.user_list_layout;
         return new UserDisplayViewHolder(LayoutInflater.from(parent.getContext()).inflate(layoutId, parent, false));
     }
 
@@ -87,6 +87,8 @@ public class UserDisplayAdapter extends RecyclerView.Adapter<UserDisplayViewHold
                 holder.disable.setHint("User is not disabled.");
             }
         } else {
+            holder.delete.setIcon(Objects.requireNonNull(ContextCompat.getDrawable(holder.itemView.getContext(), R.drawable.outline_cancel_24)));
+            holder.delete.setIconTint(ColorStateList.valueOf(Color.RED));
             holder.delete.setOnClickListener(v -> {
                         refuse(eventId, user.getUsername());
                         deleteEntry(user.getEmail());
