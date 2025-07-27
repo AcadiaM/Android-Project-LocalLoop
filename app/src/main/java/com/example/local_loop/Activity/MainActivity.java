@@ -1,7 +1,5 @@
 package com.example.local_loop.Activity;
 
-import com.example.local_loop.CreateAccount.SignUp;
-import com.example.local_loop.Login.LoginActivity;
 import com.example.local_loop.R;
 import com.example.local_loop.Helpers.DatabaseHelper;
 
@@ -46,15 +44,15 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void OnSignButton(View view) {
-        Intent intent = new Intent(MainActivity.this, LoginActivity.class);
+        Intent intent = new Intent(MainActivity.this, AuthActivity.class);
+        intent.putExtra("showLogin", true);
         startActivity(intent);
     }
     public void OnCreateButton(View view) {
-        // Application Context and Activity
-        Intent intent = new Intent(MainActivity.this, SignUp.class);
+        Intent intent = new Intent(MainActivity.this, AuthActivity.class);
         startActivity(intent);
-
     }
+
 
     //this method is called when the activity gains or loses focus
     @SuppressWarnings("deprecation")

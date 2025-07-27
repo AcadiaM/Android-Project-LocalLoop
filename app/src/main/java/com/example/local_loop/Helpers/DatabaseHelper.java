@@ -160,7 +160,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
      */
     public boolean checkLogin(String username, String password) {
         SQLiteDatabase db = this.getReadableDatabase();
-        Cursor cursor = db.query(TABLE_USERS, null, "username = ? AND password = ? AND active = ?", new String[]{username, password, "1"}, null, null, null);
+        Cursor cursor = db.query(TABLE_USERS, null, "username = ? AND password = ?", new String[]{username, password}, null, null, null);
         boolean exists = cursor.getCount() > 0;
         cursor.close();
         return exists;

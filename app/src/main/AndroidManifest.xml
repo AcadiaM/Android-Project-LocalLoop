@@ -20,7 +20,7 @@
             android:name=".Activity.WelcomePage"
             android:exported="false" />
         <activity
-            android:name=".CreateAccount.SignUp"
+            android:name=".Activity.AuthActivity"
             android:exported="false" />
         <activity android:name=".Displays.UserEventActivity"
             android:exported="false" />
@@ -30,10 +30,6 @@
         <activity
             android:name=".Displays.UserDisplayActivity"
             android:exported="false" />
-        <activity
-            android:name=".Login.LoginActivity"
-            android:exported="false"
-            android:label="@string/title_activity_login" />
         <activity
             android:name=".Activity.MainActivity"
             android:exported="true">

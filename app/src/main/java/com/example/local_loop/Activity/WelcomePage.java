@@ -24,7 +24,6 @@ import com.example.local_loop.CreateAccount.User;
 import com.example.local_loop.Displays.DisplayItemActivity;
 import com.example.local_loop.Displays.UserDisplayActivity;
 import com.example.local_loop.Displays.UserEventActivity;
-import com.example.local_loop.Login.LoginActivity;
 import com.example.local_loop.R;
 
 public class WelcomePage extends AppCompatActivity {
@@ -103,7 +102,8 @@ public class WelcomePage extends AppCompatActivity {
     public void OnLogoutButton(View view) {
         // Clear the user session and redirect to login
         Toast.makeText(this, "Logging out...", Toast.LENGTH_SHORT).show();
-        Intent intent = new Intent(WelcomePage.this, LoginActivity.class);
+        Intent intent = new Intent(WelcomePage.this, AuthActivity.class);
+        intent.putExtra("showLogin", true);
         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
         startActivity(intent);
         finish();
