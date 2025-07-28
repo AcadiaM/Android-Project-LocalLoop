@@ -11,7 +11,7 @@ import android.widget.TextView;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.ContextCompat;
 
-import com.example.local_loop.Displays.UserDisplayActivity;
+import com.example.local_loop.Activity.UserDisplayActivity;
 import com.example.local_loop.Helpers.DatabaseHelper;
 import com.example.local_loop.R;
 import com.example.local_loop.UserContent.Category;

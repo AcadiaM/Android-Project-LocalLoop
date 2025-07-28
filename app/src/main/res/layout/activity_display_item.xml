@@ -7,66 +7,73 @@
     android:layout_height="match_parent"
     android:background="@color/white"
     android:padding="24dp"
-    tools:context=".Displays.DisplayItemActivity">
+    tools:context=".Activity.DisplayItemActivity">
 
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/recyclerView"
+    <TextView
+        android:id="@+id/events"
         android:layout_width="0dp"
-        android:layout_height="0dp"
-        android:layout_marginStart="10dp"
-        android:layout_marginTop="70dp"
-        android:layout_marginEnd="10dp"
-        app:layout_constraintBottom_toBottomOf="parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:gravity="center"
+        android:text="@string/event"
+        android:textColor="@android:color/holo_blue_dark"
+        android:textSize="30sp"
+        android:textStyle="bold"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintStart_toStartOf="@+id/searchBar"
         app:layout_constraintTop_toTopOf="parent" />
 
-    <!-- Button to add a new category -->
-
-    <!-- Button to remove a new category -->
-
     <ImageButton
-        android:id="@+id/addButton"
+        android:id="@+id/editDisplayButton"
         android:layout_width="48dp"
         android:layout_height="48dp"
-        android:layout_marginTop="26dp"
-        android:layout_marginEnd="16dp"
-        android:layout_marginBottom="20dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginEnd="8dp"
         android:background="?attr/selectableItemBackgroundBorderless"
-        android:contentDescription="@string/add_category"
-        app:layout_constraintBottom_toTopOf="@+id/recyclerView"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:srcCompat="@drawable/outline_add_box_24" />
+        android:visibility="gone"
+        app:layout_constraintEnd_toStartOf="@id/removeDisplayButton"
+        app:layout_constraintTop_toBottomOf="@id/events"
+        app:srcCompat="@drawable/outline_box_edit_24" />
 
     <ImageButton
-        android:id="@+id/removeButton"
+        android:id="@+id/removeDisplayButton"
         android:layout_width="48dp"
         android:layout_height="48dp"
-        android:layout_marginTop="26dp"
-        android:layout_marginBottom="20dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginEnd="8dp"
         android:background="?attr/selectableItemBackgroundBorderless"
-        android:contentDescription="@string/remove_category"
-        app:layout_constraintBottom_toTopOf="@+id/recyclerView"
-        app:layout_constraintEnd_toStartOf="@+id/addButton"
-        app:layout_constraintTop_toTopOf="parent"
+        android:visibility="gone"
+        app:layout_constraintTop_toBottomOf="@id/events"
+        app:layout_constraintEnd_toStartOf="@id/addDisplayButton"
         app:srcCompat="@drawable/baseline_delete_forever_24" />
 
     <ImageButton
-        android:id="@+id/editButton"
+        android:id="@+id/addDisplayButton"
         android:layout_width="48dp"
         android:layout_height="48dp"
-        android:layout_marginTop="26dp"
-        android:layout_marginBottom="20dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginEnd="8dp"
         android:background="?attr/selectableItemBackgroundBorderless"
-        android:contentDescription="@string/edit_category"
-        app:layout_constraintBottom_toTopOf="@+id/recyclerView"
-        app:layout_constraintEnd_toStartOf="@+id/removeButton"
-        app:layout_constraintTop_toTopOf="parent"
-        app:srcCompat="@drawable/outline_box_edit_24" />
+        android:visibility="gone"
+        app:layout_constraintTop_toBottomOf="@id/events"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:srcCompat="@drawable/outline_add_box_24" />
+
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/recyclerViewEvents"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_marginTop="60dp"
+        android:layout_marginBottom="30dp"
+        app:layout_constraintBottom_toTopOf="@+id/browseEventBackButton"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/addDisplayButton" />
+
 
     <com.google.android.material.button.MaterialButton
-        android:id="@+id/backButton"
+        android:id="@+id/browseEventBackButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
@@ -83,18 +90,43 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.063"
         app:layout_constraintStart_toStartOf="parent"
-        />
+        tools:ignore="RedundantDescriptionCheck" />
 
-    <TextView
-        android:id="@+id/noTextView"
+    <EditText
+        android:id="@+id/searchBar"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/unknown"
+        android:autofillHints=""
+        android:drawableStart="@android:drawable/ic_menu_search"
+        android:hint="@string/search_events"
+        android:inputType=""
+        android:padding="10dp"
+        android:textColorHint="@android:color/black"
+        app:layout_constraintEnd_toStartOf="@+id/categorySpinner"
+        app:layout_constraintStart_toStartOf="@id/recyclerViewEvents"
+        app:layout_constraintTop_toBottomOf="@id/events"
+        app:layout_constraintWidth_percent="0.65" />
+
+    <Spinner
+        android:id="@+id/categorySpinner"
+        android:layout_width="120dp"
+        android:layout_height="48dp"
+        android:popupBackground="@color/white"
+        app:layout_constraintBottom_toBottomOf="@id/searchBar"
+        app:layout_constraintEnd_toEndOf="@id/recyclerViewEvents"
+        app:layout_constraintStart_toEndOf="@id/searchBar"
+        app:layout_constraintWidth_percent="0.35" />
+
+    <TextView
+        android:id="@+id/noEventsUserTextView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/no_events_found"
         android:visibility="invisible"
-        app:layout_constraintBottom_toBottomOf="@+id/recyclerView"
-        app:layout_constraintEnd_toEndOf="@+id/recyclerView"
-        app:layout_constraintStart_toStartOf="@+id/recyclerView"
-        app:layout_constraintTop_toTopOf="@+id/recyclerView" />
+        app:layout_constraintBottom_toBottomOf="@+id/recyclerViewEvents"
+        app:layout_constraintEnd_toEndOf="@+id/recyclerViewEvents"
+        app:layout_constraintStart_toStartOf="@+id/recyclerViewEvents"
+        app:layout_constraintTop_toTopOf="@+id/recyclerViewEvents" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

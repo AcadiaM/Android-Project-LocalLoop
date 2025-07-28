@@ -8,7 +8,7 @@ import android.database.Cursor;
 import android.util.Log;
 
 import com.example.local_loop.UserContent.Category;
-import com.example.local_loop.CreateAccount.User;
+import com.example.local_loop.UserContent.User;
 import com.example.local_loop.UserContent.Event;
 
 import java.util.ArrayList;

@@ -20,10 +20,7 @@ import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
-import com.example.local_loop.CreateAccount.User;
-import com.example.local_loop.Displays.DisplayItemActivity;
-import com.example.local_loop.Displays.UserDisplayActivity;
-import com.example.local_loop.Displays.UserEventActivity;
+import com.example.local_loop.UserContent.User;
 import com.example.local_loop.R;
 
 public class WelcomePage extends AppCompatActivity {
@@ -131,13 +128,13 @@ public class WelcomePage extends AppCompatActivity {
 
     //Participant
     public void OnBrowseEventsButton(View view){
-        Intent intent = new Intent(WelcomePage.this, UserEventActivity.class);
+        Intent intent = new Intent(WelcomePage.this, DisplayItemActivity.class);
         intent.putExtra(EXTRA_SOURCE,SOURCE_PARTICIPANT);
         intent.putExtra("user", user);
         startActivity(intent);
     }
     public void OnMyEventsButton(View view){
-        Intent intent = new Intent(WelcomePage.this, UserEventActivity.class);
+        Intent intent = new Intent(WelcomePage.this, DisplayItemActivity.class);
         intent.putExtra(EXTRA_SOURCE,SOURCE_PARTICIPANT);
         intent.putExtra("user", user);
         intent.putExtra("isMyEventsMode", true);

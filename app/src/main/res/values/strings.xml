@@ -42,7 +42,7 @@
     <string name="add_event">Add an Event</string>
     <string name="edit_event">Edit Event</string>
     <string name="remove_event">Remove an Event</string>
-    <string name ="search_events">Search for an Event</string>
+    <string name ="search_events">Search for Events</string>
     <string name="categoriesManagement">Categories Management</string>
     <string name="userManagement">User Management</string>
     <string name="requestManagement">Request Management</string>

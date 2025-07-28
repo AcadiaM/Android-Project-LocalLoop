@@ -16,7 +16,7 @@ import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 import androidx.lifecycle.ViewModelProvider;
 
-import com.example.local_loop.CreateAccount.User;
+import com.example.local_loop.UserContent.User;
 import com.example.local_loop.Helpers.DatabaseHelper;
 import com.example.local_loop.R;
 import com.google.android.material.textfield.TextInputLayout;
@@ -162,6 +162,11 @@ public class AuthActivity extends AppCompatActivity {
         TextView title = findViewById(R.id.textViewTitle);
         title.setText(isLogin ? R.string.sign_in : R.string.account_creation);
         setTopMargin(usernameLayout, isLogin ? 16 : 8);
+
+        // 🧼 Clear all fields when switching modes
+        clearInputs(usernameInput, passwordInput, firstNameInput, lastNameInput, emailInput, roleInput);
+        actionButton.setEnabled(false);
+
     }
 
     private void attemptLogin() {
@@ -232,6 +237,14 @@ public class AuthActivity extends AppCompatActivity {
         }
         return valid;
     }
+
+    private void clearInputs(EditText... inputs) {
+        for (EditText input : inputs) {
+            input.setText("");
+            input.setError(null);
+        }
+    }
+
 
     @SuppressWarnings("deprecation")
     private int hideSystemBars() {

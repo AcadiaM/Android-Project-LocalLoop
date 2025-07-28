@@ -1,0 +1,224 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+    <LinearLayout
+        android:orientation="vertical"
+        android:padding="25dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <!-- EVENT SECTION -->
+        <LinearLayout
+            android:id="@+id/eventSection"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:visibility="gone">
+
+            <!-- Category Spinner -->
+            <com.google.android.material.card.MaterialCardView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:layout_marginBottom="16dp"
+                app:cardCornerRadius="8dp"
+                app:cardElevation="2dp"
+                app:strokeColor="@android:color/darker_gray"
+                app:strokeWidth="1dp">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@color/white"
+                    android:orientation="vertical"
+                    android:padding="12dp">
+
+                    <TextView
+                        android:id="@+id/categorySpinnerLabel"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginBottom="4dp"
+                        android:text="@string/select_category"
+                        android:textColor="@color/black"
+                        android:textStyle="bold" />
+
+                    <Spinner
+                        android:id="@+id/eventCategorySpinner"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:popupBackground="@color/white"
+                        android:spinnerMode="dropdown" />
+                </LinearLayout>
+            </com.google.android.material.card.MaterialCardView>
+
+            <!-- Event Title -->
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/eventTitleLayout"
+                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="@string/event_name"
+                app:boxStrokeColor="@android:color/holo_blue_dark"
+                app:cursorColor="@color/black"
+                app:errorEnabled="true"
+                app:helperTextTextColor="@color/design_default_color_error"
+                app:hintTextColor="@android:color/holo_blue_dark">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/eventTitleInput"
+                    android:layout_width="match_parent"
+                    android:layout_height="60dp"
+                    android:backgroundTint="@android:color/holo_green_light"
+                    android:inputType="textPersonName"
+                    android:textColor="@color/black"
+                    android:textColorHighlight="@color/material_dynamic_neutral_variant90"
+                    android:textColorHint="@color/black" />
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <!-- Event Description -->
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/eventDescriptionLayout"
+                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:hint="@string/event_description"
+                app:boxStrokeColor="@android:color/holo_blue_dark"
+                app:cursorColor="@color/black"
+                app:errorEnabled="true"
+                app:helperTextTextColor="@color/design_default_color_error"
+                app:hintTextColor="@android:color/holo_blue_dark">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/eventDescriptionInput"
+                    android:layout_width="match_parent"
+                    android:layout_height="100dp"
+                    android:backgroundTint="@android:color/holo_green_light"
+                    android:gravity="top|start"
+                    android:inputType="textMultiLine"
+                    android:maxLines="6"
+                    android:minLines="4"
+                    android:textColor="@color/black"
+                    android:textColorHighlight="@color/material_dynamic_neutral_variant90"
+                    android:textColorHint="@color/black" />
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <!-- Event Fee -->
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/eventFeeLayout"
+                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:hint="@string/fee"
+                app:boxStrokeColor="@android:color/holo_blue_dark"
+                app:cursorColor="@color/black"
+                app:errorEnabled="true"
+                app:helperTextTextColor="@color/design_default_color_error"
+                app:hintTextColor="@android:color/holo_blue_dark">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/eventFeeInput"
+                    android:layout_width="match_parent"
+                    android:layout_height="60dp"
+                    android:backgroundTint="@android:color/holo_green_light"
+                    android:inputType="numberDecimal"
+                    android:textColor="@color/black"
+                    android:textColorHighlight="@color/material_dynamic_neutral_variant90"
+                    android:textColorHint="@color/black" />
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <!-- Event Date & Time -->
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/eventDateTimeLayout"
+                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:hint="@string/date_and_time"
+                app:boxStrokeColor="@android:color/holo_blue_dark"
+                app:cursorColor="@color/black"
+                app:errorEnabled="true"
+                app:helperTextTextColor="@color/design_default_color_error"
+                app:hintTextColor="@android:color/holo_blue_dark">
+
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/eventDateTimeInput"
+                    android:layout_width="match_parent"
+                    android:layout_height="60dp"
+                    android:backgroundTint="@android:color/holo_green_light"
+                    android:clickable="true"
+                    android:focusable="false"
+                    android:inputType="none"
+                    android:textColor="@color/black"
+                    android:textColorHighlight="@color/material_dynamic_neutral_variant90"
+                    android:textColorHint="@color/black" />
+            </com.google.android.material.textfield.TextInputLayout>
+        </LinearLayout>
+
+        <!-- CATEGORY SECTION -->
+        <LinearLayout
+            android:id="@+id/categorySection"
+            android:orientation="vertical"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:visibility="gone">
+
+            <com.google.android.material.textfield.TextInputLayout
+                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                android:id="@+id/categoryNameLayout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="@string/category_name"
+                app:boxStrokeColor="@android:color/holo_blue_dark"
+                app:cursorColor="@color/black"
+                app:errorEnabled="true"
+                app:helperTextTextColor="@color/design_default_color_error"
+                app:hintTextColor="@android:color/holo_blue_dark">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/categoryNameInput"
+                    android:layout_width="match_parent"
+                    android:layout_height="60dp"
+                    android:backgroundTint="@android:color/holo_blue_light"
+                    android:inputType="textPersonName"
+                    android:textColor="@color/black"
+                    android:textColorHighlight="@color/material_dynamic_neutral_variant90"
+                    android:textColorHint="@color/black" />
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <com.google.android.material.textfield.TextInputLayout
+                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                android:id="@+id/categoryDescriptionLayout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:layout_marginBottom="8dp"
+                android:hint="@string/category_description"
+                app:boxStrokeColor="@android:color/holo_blue_dark"
+                app:cursorColor="@color/black"
+                app:errorEnabled="true"
+                app:helperTextTextColor="@color/design_default_color_error"
+                app:hintTextColor="@android:color/holo_blue_dark">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/categoryDescriptionInput"
+                    android:layout_width="match_parent"
+                    android:layout_height="120dp"
+                    android:inputType="textMultiLine"
+                    android:minLines="4"
+                    android:maxLines="6"
+                    android:gravity="top|start"
+                    android:textColor="@color/black"
+                    android:backgroundTint="@android:color/holo_blue_light"
+                    android:textColorHighlight="@color/material_dynamic_neutral_variant90"
+                    android:textColorHint="@color/black" />
+            </com.google.android.material.textfield.TextInputLayout>
+        </LinearLayout>
+
+    </LinearLayout>
+</ScrollView>

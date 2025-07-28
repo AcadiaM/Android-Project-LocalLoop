@@ -1,4 +1,4 @@
-package com.example.local_loop.CreateAccount;
+package com.example.local_loop.UserContent;
 
 import java.io.Serializable;
 

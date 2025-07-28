@@ -4,7 +4,7 @@ import com.example.local_loop.Helpers.DisplayItem;
 
 public class Event implements DisplayItem {
     private int id;
-    private final String name;
+    private String name;
     private final String description;
     private final int categoryId;
     private final String organizer;
@@ -27,6 +27,8 @@ public class Event implements DisplayItem {
     public void setId(int id) { this.id = id; }
     @Override
     public String getName() { return name; }
+    @Override
+    public void setName(String name) {this.name = name;}
     public String getDescription() { return description; }
     public int getCategoryId() { return categoryId; }
     public String getOrganizer() { return this.organizer; }

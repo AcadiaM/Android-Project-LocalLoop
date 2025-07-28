@@ -4,7 +4,7 @@ import com.example.local_loop.Helpers.DisplayItem;
 
 public class Category implements DisplayItem {
     private final int ID;
-    private final String NAME;
+    private String NAME;
     private final String DESCRIPTION;
 
     public Category(int ID, String name, String description) {
@@ -18,6 +18,8 @@ public class Category implements DisplayItem {
 
     @Override
     public String getName() { return NAME; }
+    @Override
+    public void setName(String NAME) {this.NAME = NAME;}
     public String getDescription() { return DESCRIPTION; }
 
 

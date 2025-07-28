@@ -22,13 +22,11 @@
         <activity
             android:name=".Activity.AuthActivity"
             android:exported="false" />
-        <activity android:name=".Displays.UserEventActivity"
+        <activity
+            android:name=".Activity.DisplayItemActivity"
             android:exported="false" />
         <activity
-            android:name=".Displays.DisplayItemActivity"
-            android:exported="false" />
-        <activity
-            android:name=".Displays.UserDisplayActivity"
+            android:name=".Activity.UserDisplayActivity"
             android:exported="false" />
         <activity
             android:name=".Activity.MainActivity"
