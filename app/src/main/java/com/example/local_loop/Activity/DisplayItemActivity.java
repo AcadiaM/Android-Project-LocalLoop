@@ -602,7 +602,12 @@ public class DisplayItemActivity extends AppCompatActivity {
                     String desc = descInput.getText().toString().trim();
 
                     if (name.isEmpty() || desc.isEmpty()) {
-                        Toast.makeText(this, "All fields required", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(this, "All Fields Required", Toast.LENGTH_SHORT).show();
+                        return;
+                    }
+
+                    if (existingItem == null && dbHelper.categoryNameExists(name)){
+                        Toast.makeText(this, "This Category Field Already Exists", Toast.LENGTH_SHORT).show();
                         return;
                     }
 
@@ -683,6 +688,10 @@ public class DisplayItemActivity extends AppCompatActivity {
 
                     if (title.isEmpty() || desc.isEmpty() || feeStr.isEmpty() || datetime.isEmpty()) {
                         Toast.makeText(this, "All fields required", Toast.LENGTH_SHORT).show();
+                        return;
+                    }
+                    if (existingItem == null && dbHelper.eventTitleExists(title)){
+                        Toast.makeText(this, "Event Title Already Exists", Toast.LENGTH_SHORT).show();
                         return;
                     }
 

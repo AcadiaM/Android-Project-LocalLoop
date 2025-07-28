@@ -114,8 +114,15 @@ public class AuthActivity extends AppCompatActivity {
     }
 
     private void setupFieldListeners() {
-        passwordInput.addTextChangedListener(new SimpleTextWatcher(s -> passwordLayout.setEndIconMode(
-                    s.length() >= 6 ? TextInputLayout.END_ICON_PASSWORD_TOGGLE : TextInputLayout.END_ICON_NONE)));
+        passwordInput.addTextChangedListener(new SimpleTextWatcher(s -> {
+            if (s.length() >= 6) {
+                passwordLayout.setEndIconMode(TextInputLayout.END_ICON_PASSWORD_TOGGLE);
+                passwordInput.setError(null);
+            } else {
+                passwordLayout.setEndIconMode(TextInputLayout.END_ICON_NONE);
+                passwordInput.setError("Password must be at least 6 chars");
+            }
+        }));
 
         TextWatcher watcher = new SimpleTextWatcher(s -> loginViewModel.loginDataChanged(
                 usernameInput.getText().toString(), passwordInput.getText().toString()
