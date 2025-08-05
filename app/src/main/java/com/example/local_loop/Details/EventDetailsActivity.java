@@ -59,7 +59,6 @@ public class EventDetailsActivity extends AppCompatActivity {
         Category category = dBHelper.getCategoryById(categoryID);
         String categoryName = category.getName();
 
-        // Optional: context-dependent values
         String source = getIntent().getStringExtra(EXTRA_SOURCE);
 
         // Set values

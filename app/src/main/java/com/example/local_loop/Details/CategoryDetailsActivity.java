@@ -87,9 +87,7 @@ public class CategoryDetailsActivity extends AppCompatActivity {
     @NonNull
     private DisplayItemActivity.DisplayItemAdapter getDisplayItemAdapter(List<Event> events) {
         assert events != null;
-        List<DisplayItem> displayItems = new ArrayList<>(events);  // Events implement DisplayItem
-        // Optional: Handle long press if needed
-        // Not needed in CategoryDetailsActivity
+        List<DisplayItem> displayItems = new ArrayList<>(events);
         return new DisplayItemActivity.DisplayItemAdapter(displayItems, new DisplayItemActivity.DisplayItemAdapter.OnItemClickListener() {
             @Override
             public void onClick(DisplayItem item) {
