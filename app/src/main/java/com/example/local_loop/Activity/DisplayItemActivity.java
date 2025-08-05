@@ -48,6 +48,7 @@ import com.example.local_loop.R;
 import com.example.local_loop.UserContent.Category;
 import com.example.local_loop.UserContent.Event;
 import com.google.android.material.textfield.TextInputEditText;
+import com.google.android.material.textfield.TextInputLayout;
 
 import java.text.SimpleDateFormat;
 import java.util.*;
@@ -577,11 +578,15 @@ public class DisplayItemActivity extends AppCompatActivity {
         if (source.equals(SOURCE_ADMIN)) {
             categorySection.setVisibility(View.VISIBLE);
             eventSection.setVisibility(View.GONE);
-            EditText nameInput = dialogView.findViewById(R.id.categoryNameInput);
-            EditText descInput = dialogView.findViewById(R.id.categoryDescriptionInput);
+            TextInputLayout nameLayout = dialogView.findViewById(R.id.categoryNameLayout);
+            EditText nameInput = nameLayout.getEditText();
+            TextInputLayout descLayout = dialogView.findViewById(R.id.categoryDescriptionLayout);
+            EditText descInput = descLayout.getEditText();
 
             if (existingItem != null) {
+                assert nameInput != null;
                 nameInput.setText(existingItem.getName());
+                assert descInput != null;
                 descInput.setText(existingItem.getDescription());
             }
 
@@ -598,18 +603,31 @@ public class DisplayItemActivity extends AppCompatActivity {
                 Button cancelButton = dialog.getButton(AlertDialog.BUTTON_NEGATIVE);
 
                 confirmButton.setOnClickListener(v -> {
+                    assert nameInput != null;
                     String name = nameInput.getText().toString().trim();
+                    assert descInput != null;
                     String desc = descInput.getText().toString().trim();
 
-                    if (name.isEmpty() || desc.isEmpty()) {
-                        Toast.makeText(this, "All Fields Required", Toast.LENGTH_SHORT).show();
-                        return;
+                    boolean hasError = false;
+
+                    if (name.isEmpty()) {
+                        nameLayout.setError("Category Name is Required!");
+                        hasError = true;
+                    } else if (dbHelper.categoryNameExists(name) && (existingItem == null || !name.equals(existingItem.getName()))) {
+                        nameLayout.setError("Category name already exists");
+                        hasError = true;
+                    } else {
+                        nameLayout.setError(null);
                     }
 
-                    if (existingItem == null && dbHelper.categoryNameExists(name)){
-                        Toast.makeText(this, "This Category Field Already Exists", Toast.LENGTH_SHORT).show();
-                        return;
+                    if (desc.isEmpty()) {
+                        descLayout.setError("Category Description is Required!");
+                        hasError = true;
+                    } else {
+                        descLayout.setError(null);
                     }
+
+                    if (hasError) return;
 
                     if (existingItem == null) {
                         dbHelper.addCategory(name, desc);
@@ -633,10 +651,14 @@ public class DisplayItemActivity extends AppCompatActivity {
         else {
             categorySection.setVisibility(View.GONE);
             eventSection.setVisibility(View.VISIBLE);
-            EditText titleInput = dialogView.findViewById(R.id.eventTitleInput);
-            EditText descInput = dialogView.findViewById(R.id.eventDescriptionInput);
-            EditText feeInput = dialogView.findViewById(R.id.eventFeeInput);
-            TextView dateTimeInput = dialogView.findViewById(R.id.eventDateTimeInput);
+            TextInputLayout titleLayout = dialogView.findViewById(R.id.eventTitleLayout);
+            EditText titleInput = titleLayout.getEditText();
+            TextInputLayout descLayout = dialogView.findViewById(R.id.eventDescriptionLayout);
+            EditText descInput = descLayout.getEditText();
+            TextInputLayout feeLayout = dialogView.findViewById(R.id.eventFeeLayout);
+            EditText feeInput = feeLayout.getEditText();
+            TextInputLayout dateTimeLayout = dialogView.findViewById(R.id.eventDateTimeLayout);
+            EditText dateTimeInput = dateTimeLayout.getEditText();
             Spinner categorySpinner = dialogView.findViewById(R.id.eventCategorySpinner);
 
             List<Category> categories = dbHelper.getAllCategories();
@@ -653,9 +675,13 @@ public class DisplayItemActivity extends AppCompatActivity {
             categorySpinner.setAdapter(spinnerAdapter);
 
             if (existingItem != null) {
+                assert titleInput != null;
                 titleInput.setText(existingItem.getName());
+                assert descInput != null;
                 descInput.setText(existingItem.getDescription());
+                assert feeInput != null;
                 feeInput.setText(String.valueOf(((Event) existingItem).getFee()));
+                assert dateTimeInput != null;
                 dateTimeInput.setText(((Event) existingItem).getDateTime());
 
                 for (int i = 0; i < categories.size(); i++) {
@@ -666,6 +692,7 @@ public class DisplayItemActivity extends AppCompatActivity {
                 }
             }
 
+            assert dateTimeInput != null;
             dateTimeInput.setOnClickListener(v -> showDateTimePicker((TextInputEditText) dateTimeInput));
 
             AlertDialog dialog = new AlertDialog.Builder(this)
@@ -681,19 +708,49 @@ public class DisplayItemActivity extends AppCompatActivity {
                 Button cancelButton = dialog.getButton(AlertDialog.BUTTON_NEGATIVE);
 
                 confirmButton.setOnClickListener(v -> {
+                    assert titleInput != null;
                     String title = titleInput.getText().toString().trim();
+                    assert descInput != null;
                     String desc = descInput.getText().toString().trim();
+                    assert feeInput != null;
                     String feeStr = feeInput.getText().toString().trim();
                     String datetime = dateTimeInput.getText().toString().trim();
 
-                    if (title.isEmpty() || desc.isEmpty() || feeStr.isEmpty() || datetime.isEmpty()) {
-                        Toast.makeText(this, "All fields required", Toast.LENGTH_SHORT).show();
-                        return;
+                    boolean hasError = false;
+
+                    if (title.isEmpty()) {
+                        titleLayout.setError("Event Name is Required!");
+                        hasError = true;
+                    } else if (dbHelper.eventTitleExists(title) && (existingItem == null || !title.equals(existingItem.getName()))) {
+                        titleLayout.setError("Event title already exists");
+                        hasError = true;
+                    } else {
+                        titleLayout.setError(null);
                     }
-                    if (existingItem == null && dbHelper.eventTitleExists(title)){
-                        Toast.makeText(this, "Event Title Already Exists", Toast.LENGTH_SHORT).show();
-                        return;
+
+                    if (desc.isEmpty()) {
+                        descLayout.setError("Event Description is Required!");
+                        hasError = true;
+                    } else {
+                        descLayout.setError(null);
                     }
+
+                    if (feeStr.isEmpty()) {
+                        feeLayout.setError("Event Fee is Required!");
+                        hasError = true;
+                    } else {
+                        feeLayout.setError(null);
+                    }
+
+                    if (datetime.isEmpty()) {
+                        dateTimeLayout.setError("Event Date/Time is Required!");
+                        hasError = true;
+                    } else {
+                        dateTimeLayout.setError(null);
+                    }
+
+                    if (hasError) return;
+
 
                     int categoryId = categories.get(categorySpinner.getSelectedItemPosition()).getID();
                     double fee = Double.parseDouble(feeStr);
